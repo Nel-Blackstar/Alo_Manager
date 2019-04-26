@@ -1,0 +1,82 @@
+<!-- Menu d'administration -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="admin">
+    <li><a data-th-href="@{/admin}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+    <li>
+        <a class="dropmenu" href="#"><i class="icon-cogs"></i><span class="hidden-tablet"> Configurations </span></a>
+        <ul>
+            <li><a class="submenu" data-th-href="@{/admin/personnels}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Personnel </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/users}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Utilisateurs </span></a></li>
+        </ul>
+    </li>
+    <li>
+        <a class="dropmenu" href="#"><i class="icon-shopping-cart"></i><span class="hidden-tablet"> Stock </span></a>
+        <ul>
+            <li><a class="submenu" data-th-href="@{/admin/produits}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Produits </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/fournisseurs}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Fournisseurs </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/entrees}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Entrees </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/sorties}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Sorties </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/ventes}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Ventes </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/clients/find-client}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Rechercher un client </span></a></li>
+        </ul>
+    </li>
+    <li>
+        <a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Statistiques </span></a>
+        <ul>
+            <li><a class="submenu" href="submenu2.html"><i class="icon-angle-right"></i><span class="hidden-tablet"> Personnels </span></a></li>
+            <li><a class="submenu" href="submenu3.html"><i class="icon-angle-right"></i><span class="hidden-tablet"> Apprenants </span></a></li>
+            <li><a class="submenu" href="submenu3.html"><i class="icon-angle-right"></i><span class="hidden-tablet"> Utilisateurs </span></a></li>
+        </ul>
+    </li>
+</ul>
+<!-- Fin menu d'administration -->
+
+<!-- Menu de apprenant -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="apprenant">
+    <li><a data-th-href="@{/reception}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+    <li><a data-th-href="@{/reception/reservations}"><i class="icon-building"></i><span class="hidden-tablet"> Apprenant</span></a></li>
+    <li><a data-th-href="@{/reception/logements}"><i class="icon-adjust"></i><span class="hidden-tablet"> Personnel</span></a></li>
+    <li><a data-th-href="@{/reception/factures}"><i class="icon-file-alt"></i><span class="hidden-tablet"> Comptable</span></a></li>
+    <li>
+        <a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Statistiques </span></a>
+        <ul>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Journalier </span></a></li>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Hebdomadaire </span></a></li>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Mensuel </span></a></li>
+        </ul>
+    </li>
+</ul>
+<!-- Menu du personnel -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="personnel">
+    <li><a data-th-href="@{/personnels}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+</ul>
+<!-- Fin menu du personnel -->
+
+<!-- Menu du client -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="client">
+    <li><a data-th-href="@{/clients}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+</ul>
+<!-- Fin menu du client -->
+
+<!-- Menu du personnel -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="partenaire">
+    <li><a data-th-href="@{/partenaires}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+</ul>
+<!-- Fin menu du personnel -->
+
+
+<!-- Menu de comptable -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="comptabilite">
+    <li><a data-th-href="@{/restaurant}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+    <li><a data-th-href="@{/restaurant/ligne-ventes}"><i class="icon-building"></i><span class="hidden-tablet"> Lignes de Ventes</span></a></li>
+    <li><a data-th-href="@{/restaurant/ventes}"><i class="icon-adjust"></i><span class="hidden-tablet"> Ventes</span></a></li>
+    <li><a data-th-href="@{/restaurant/factures}"><i class="icon-file-alt"></i><span class="hidden-tablet"> Factures</span></a></li>
+    <li>
+        <a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Statistiques </span></a>
+        <ul>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Journalier </span></a></li>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Hebdomadaire </span></a></li>
+            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Mensuel </span></a></li>
+        </ul>
+    </li>
+</ul>
+<!-- Fin menu de comptable -->

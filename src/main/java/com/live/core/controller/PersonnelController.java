@@ -1,0 +1,253 @@
+package com.live.core.controller;
+
+import com.live.core.entities.Personnel;
+import com.live.core.entities.Roles;
+import com.live.core.entities.Users;
+import com.live.core.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/admin")
+public class PersonnelController extends InitiateController {
+    @Autowired
+    PersonnelService personnelService;
+    @Autowired
+    UsersService usersService;
+    @Autowired
+    LiveService liveService;
+    @Autowired
+    ILiveManager iLiveManager;
+    @Autowired
+    RolesService rolesService;
+
+    // Objet de cryptage et decryptage des mots de passe
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    //management des utilisateurs
+
+    /** Ajout d'un user
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("/users/ajouter-user")
+    public String formUser(Model model) {
+        chargerLive(model);
+        // Charger la liste des rôles disponibles et déposer dans le model
+        model.addAttribute("listeRoles", rolesService.findAll());
+
+        model.addAttribute("state", "get");
+        model.addAttribute("users", new Users());
+        return "administration/utilisateurs/create";
+    }
+
+    //gestion des userss
+
+    /**
+     * <b> methode d'ajout d'un utilisateur </b>
+     * @param model
+     * @param users utilisateur a ajouter
+     * @return
+     */
+    @PostMapping(value = "/users/ajouter-user")
+    public String ajouterUser(Model model, Users users, @RequestParam("role") String role) {
+        //model.addAttribute("user", iHotelManager.userConnecte());
+        chargerLive(model);
+
+        Users user = new Users();
+        user.setLogin(users.getLogin());
+        user.setActive(true);
+        user.setUsername(users.getUsername());
+
+        // Crypter le mot de passe utilisateur
+        user.setPassword(encoder.encode(users.getPassword()));
+
+        // Enregistrer l'utilisateur
+        Users savedUser = usersService.save(user);
+
+        // Attribuer les rôles à l'utilisateur
+        Roles roles = rolesService.findOne(role);
+        if(roles != null){
+            // Le rôle selectionné existe dans le système
+            savedUser.addRole(roles);
+            usersService.save(savedUser);
+        }
+
+        model.addAttribute("state", "post");
+        model.addAttribute("info",user.getLogin() +" - "+user.getUsername());
+        return "redirect:/admin/users";
+    }
+
+    /**
+     *     <b> Consultation d'un utilisateur </b>
+     * @param model
+     * @param id identifiant de l'users
+     * @return
+     */
+    @RequestMapping("/users/consulter-user/{id}")
+    public String consulterUser(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+
+        // Retrouver l'users à consulter et le placer dans le modèle
+        Users users = usersService.findOne(id);
+        model.addAttribute("users", users);
+        return "administration/consulter-user";
+    }
+
+    // Modification des informations sur l'users
+
+    /**
+     *     <b>  Modification des informations sur l'utilisateur</b>
+     * @param model
+     * @param id identifiant de l'utilisateur
+     * @return
+     */
+    @RequestMapping("/users/editer-user/{id}")
+    public String editerUser(Model model, @PathVariable("id") long id) {
+        Users users = usersService.findOne(id);
+        model.addAttribute("state", "get");
+        model.addAttribute("users", users);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "administration/ajouter-user";
+    }
+
+    // Suppression d'une users
+    @RequestMapping("/users/supprimer-user/{id}")
+    public String supprimerUser(Model model, @PathVariable("id") long id) {
+        usersService.delete(usersService.findOne(id));
+        List<Users> listeUsers
+                = usersService.findAll();
+        model.addAttribute("listeUsers", listeUsers);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "redirect:/admin/users";
+    }
+
+    /**
+     * Rechercher de l'ensemble des utilisateurs du systeme
+     * @param model
+     * @return
+     */
+    @RequestMapping("/users")
+    public String listUsers(Model model) {
+        model.addAttribute("listeUsers", usersService.findAll());
+        //model.addAttribute("user", iHotelManager.userConnecte());
+        chargerLive(model);
+
+        return "administration/utilisateurs/index";
+    }
+
+    //management du personnel
+
+    /** Ajout d'un personnel
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("/personnels/ajouter-personnel")
+    public String formPersonnel(Model model) {
+        //model.addAttribute("user", iHotelManager.userConnecte());
+        chargerLive(model);
+
+        model.addAttribute("state", "get");
+        model.addAttribute("personnel", new Personnel());
+        return "administration/personnels/create";
+    }
+
+    //gestion des personnelss
+
+    /**
+     * <b> methode d'ajout d'un utilisateur </b>
+     * @param model
+     * @param personnel personnel a ajouter
+     * @return
+     */
+    @GetMapping(value = "/personnels/ajouter-personnel")
+    public String ajouterPersonnel(Model model, Personnel personnel) {
+        //model.addAttribute("personnel", iHotelManager.userConnecte());
+        chargerLive(model);
+        Personnel personnel1 = personnelService.save(personnel);
+        model.addAttribute("state", "post");
+        model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
+        return "redirect:/admin/personnels";
+    }
+
+    /**
+     *     <b> Consultation des information d'un personnel du system  </b>
+     * @param model
+     * @param id identified of personnel
+     * @return
+     */
+    @RequestMapping("/personnels/consulter-personnel/{id}")
+    public String consulterPersonnel(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+
+        // Retrouver l'personnels à consulter et le placer dans le modèle
+        Personnel personnel = personnelService.findOne(id);
+        model.addAttribute("personnel", personnel);
+        return "administration/consulter-personnel";
+    }
+
+    // Modification des informations sur l'personnels
+
+    /**
+     *     <b>  Modification des informations sur l'utilisateur</b>
+     * @param model
+     * @param id identified of personnel
+     * @return
+     */
+    @RequestMapping("/personnels/editer-personnel/{id}")
+    public String editerPersonnel(Model model, @PathVariable("id") long id) {
+        Personnel personnel = personnelService.findOne(id);
+        model.addAttribute("state", "get");
+        model.addAttribute("personnel", personnel);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "administration/ajouter-personnel";
+    }
+
+    /** Suppression d'un personnel
+     *
+     * @param model
+     * @param id identified of personnel person
+     * @return
+     */
+    @RequestMapping("/personnels/supprimer-personnel/{id}")
+    public String supprimerPersonnel(Model model, @PathVariable("id") long id) {
+        personnelService.delete(personnelService.findOne(id));
+        List<Personnel> listePersonnels
+                = personnelService.findAll();
+        model.addAttribute("listePersonnels", listePersonnels);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "redirect:/admin/personnels";
+    }
+
+    /**
+     * Rechercher de l'ensemble des utilisateurs du systeme
+     * @param model
+     * @return
+     */
+    @RequestMapping("/personnels")
+    public String listPersonnel(Model model) {
+        model.addAttribute("listePersonnels", personnelService.findAll());
+        //model.addAttribute("user", iHotelManager.userConnecte());
+        chargerLive(model);
+
+        return "administration/personnels/index";
+    }
+
+}

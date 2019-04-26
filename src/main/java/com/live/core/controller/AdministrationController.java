@@ -1,0 +1,139 @@
+package com.live.core.controller;
+
+import com.live.core.entities.Live;
+import com.live.core.service.ILiveManager;
+import com.live.core.service.LiveService;
+import com.live.core.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+@Controller
+@RequestMapping(value = "/admin")
+public class AdministrationController {
+    @Autowired
+    LiveService liveService;
+
+    @Autowired
+    ILiveManager iLiveManager;
+    @Autowired
+    UsersService usersService;
+
+    // Rechercher l'autoecole et charger dans le modèle s'il existe, sinon, charger un autoecole par défaut
+    public void chargerLive(Model model) {
+        List<Live> lives = liveService.findAll();
+
+        if (!lives.isEmpty()) {
+            model.addAttribute("lives", lives.get(0));
+        } else {
+            Live default_live = new Live();
+            model.addAttribute("live", default_live);
+        }
+    }
+
+    // Ajout d'une autoecole
+    @RequestMapping("/ajouter-auto-ecole")
+    public String formHotel(Model model) {
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+
+        model.addAttribute("state", "get");
+        model.addAttribute("live", new Live());
+        return "administration/auto_ecole/ajouter-auto_ecole";
+    }
+
+    //gestion des hotels
+
+    /**
+     * <b> methode d'ajout d'un auto-ecole</b>
+     * @param model
+     * @param live
+     * @return
+     */
+    @PostMapping(value = "/ajouter-autoecole")
+    public String ajouterHotel(Model model, Live live) {
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        Live hotel1 = liveService.save(live);
+        model.addAttribute("state", "post");
+        model.addAttribute("info",live.getNom());
+        return "redirect:/admin/auto_ecoles";
+    }
+
+    /**
+     *     <b> Consultation d'un auto-ecole associes a ces batiments et ces etages</b>
+     * @param model
+     * @param id identifiant de l'auto-ecole
+     * @return
+     */
+    @RequestMapping("/consulter-auto-ecole/{id}")
+    public String consulterLive(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+
+        // Retrouver l'hotel à consulter et la placer dans le modèle
+        Live live = liveService.findOne(id);
+        model.addAttribute("live", live);
+
+        return "auto-ecoles/consulter-auto-ecole";
+    }
+
+    // Modification des informations sur l'auto-ecole
+
+    /**
+     *     <b>  Modification des informations sur l'auto-ecole </b>
+     * @param model
+     * @param id identifiant de l'auto-ecole
+     * @return
+     */
+    @RequestMapping("/editer-auto-ecole/{id_auto_ecole}")
+    public String editerHotel(Model model, @PathVariable("id") long id) {
+        Live live = liveService.findOne(id);
+        model.addAttribute("state", "get");
+        model.addAttribute("live", live);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "auto-ecoles/ajouter-auto-ecole";
+    }
+
+    // Suppression d'une auto-ecole
+    @RequestMapping("/supprimer-auto-ecole/{id}")
+    public String supprimerHotel(Model model, @PathVariable("id") long id) {
+        liveService.delete(liveService.findOne(id));
+        List<Live> lives = liveService.findAll();
+        model.addAttribute("lives", lives);
+
+        model.addAttribute("user", iLiveManager.userConnecte());
+        chargerLive(model);
+        return "redirect:/admin/auto-ecoles";
+    }
+
+    /**
+     * Rechercher de l'ensemble des hotels
+     * @param model
+     * @return
+     */
+    @RequestMapping("/auto-ecoles")
+    public String detailHotel(Model model) {
+
+        List<Live> lives = liveService.findAll();
+        if(!lives.isEmpty()){
+
+            // Récupérer le premier hotel existant
+            model.addAttribute("lives", lives.get(0));
+        }else{
+            // Aucun hotel n'est enregistré
+            Live live_fictif = new Live();
+            live_fictif.setNom("Auto ecole par defaut");
+            model.addAttribute("live", live_fictif);
+        }
+
+        return "administration/auto-ecoles/index";
+    }
+}

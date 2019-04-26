@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link href="/css/metro-all.css?ver=@@b-version" rel="stylesheet">
+    <link href="/css/start.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+
+    <title>LiveMaster | Accueil</title>
+</head>
+<body class="fg-white h-vh-100 m4-cloak parallax-body">
+
+<div class="container-fluid start-screen h-100">
+
+    <h1 class="start-screen-title">Africa Live Opportunity</h1>
+
+    <div class="tiles-area clear">
+        <div class="tiles-grid tiles-group size-1 fg-brown" data-group-title="Administration" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a data-role="tile" class="bg-brown" data-th-href="@{/admin}">
+                <span class="mif-cogs icon mif-4x"></span><br>
+                <span class="branding-bar">Administration</span>
+            </a>
+        </div>
+
+        <div class="tiles-grid tiles-group size-1 fg-teal" data-group-title="Apprenant"  sec:authorize="hasRole('ROLE_APPRENANT')">
+            <a data-role="tile" class="bg-teal" data-th-href="@{/apprenants}">
+                <span class="mif-users icon mif-4x"></span><br>
+                <span class="branding-bar">Apprenant</span>
+            </a>
+        </div>
+
+        <div class="tiles-grid tiles-group size-1 fg-red" data-group-title="Personnel"  sec:authorize="hasRole('ROLE_PERSONNEL')">
+            <a data-role="tile" class="bg-red" data-th-href="@{/personnels}">
+                <span class="mif-user icon mif-4x"></span><br>
+                <span class="branding-bar">Personnel</span>
+            </a>
+        </div>
+
+        <div class="tiles-grid tiles-group size-1 fg-amber" data-group-title="Comptabilité"  sec:authorize="hasRole('ROLE_COMPTABLE')">
+            <a data-role="tile" class="bg-amber" data-th-href="@{/comptabilites}">
+                <span class="mif-list-numbered icon mif-4x"></span><br>
+                <span class="branding-bar">Comptabilté</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/metro.js"></script>
+<script src="/js/start.js"></script>
+
+</body>
+</html>

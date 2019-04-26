@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+    <link href="/css/metro-all.css?ver=@@b-version" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+
+    <title>HManager | Login</title>
+
+    <style>
+        .login-form {
+            width: 350px;
+            height: auto;
+            top: 25%;
+        }
+    </style>
+</head>
+<body class="h-vh-100 parallax-body">
+
+<form data-th-action="@{/login}" method="post"
+      class="login-form bg-white p-6 mx-auto border bd-default win-shadow"
+      data-role="validator"
+      data-clear-invalid="2000"
+      data-on-error-form="invalidForm"
+      data-on-validate-form="validateForm">
+
+    <div class="text-center" data-th-if="${param.error}">
+        <p class="fg-red">Login ou mot de passe incorrect !</p>
+    </div>
+    <div class="text-center" data-th-if="${param.logout}">
+        <p class="fg-green">Vous êtes déconnecté !</p>
+    </div>
+
+    <span class="mif-lock mif-4x place-right" style="margin-top: -10px;"></span>
+    <h2 class="text-light">Connectez-vous</h2>
+    <hr class="thin mt-4 mb-4 bg-white">
+    <div class="form-group">
+        <input type="text" name="username" data-role="input" data-prepend="<span class='mif-user'>" placeholder="Login" data-validate="required">
+    </div>
+    <div class="form-group">
+        <input type="password" name="password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Mot de passe" data-validate="required minlength=4">
+    </div>
+    <div class="form-group mt-10">
+        <input type="checkbox" data-role="checkbox" data-caption="Se souvenir de moi" class="place-right">
+        <button type="submit" class="button primary">Connexion</button>
+    </div>
+    <div class="form-group mt-10 text-center">
+        <hr class="thin bg-gray">
+        <p style="font-size: 0.7em">&copy; 2019 Live Opportunity Manager, Tous droits réservés.</p>
+    </div>
+</form>
+
+
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/metro.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        function invalidForm(){
+            var form  = $(this);
+            form.addClass("ani-ring");
+            setTimeout(function(){
+                form.removeClass("ani-ring");
+            }, 1000);
+        }
+        function validateForm(){
+            $(".login-form").animate({
+                opacity: 0
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
