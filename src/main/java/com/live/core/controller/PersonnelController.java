@@ -154,7 +154,7 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @RequestMapping("/personnels/ajouter-personnel")
+    @GetMapping("/personnels/ajouter-personnel")
     public String formPersonnel(Model model) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
@@ -172,7 +172,7 @@ public class PersonnelController extends InitiateController {
      * @param personnel personnel a ajouter
      * @return
      */
-    @GetMapping(value = "/personnels/ajouter-personnel")
+    @PostMapping(value = "/personnels/ajouter-personnel")
     public String ajouterPersonnel(Model model, Personnel personnel) {
         //model.addAttribute("personnel", iHotelManager.userConnecte());
         chargerLive(model);

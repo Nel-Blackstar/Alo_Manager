@@ -19,14 +19,20 @@ public class IndexController {
     }
 
     // Acces à l'interface des apprenants
-    @GetMapping("/apprenants")
-    public String reception(Model model) {
-        return "apprenants/apprenant";
+    @GetMapping("/rh")
+    public String rh(Model model) {
+        return "rh/ressources";
+    }
+
+    // Acces à l'interface des apprenants
+    @GetMapping("/moniteurs")
+    public String moniteur(Model model) {
+        return "moniteurs/moniteurs";
     }
 
     // Acces à l'interface du personnel
     @GetMapping("/personnels")
-    public String restaurant(Model model) {
+    public String personnel(Model model) {
         return "personnels/personnel";
     }
 

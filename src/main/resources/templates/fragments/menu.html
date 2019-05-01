@@ -5,6 +5,7 @@
         <a class="dropmenu" href="#"><i class="icon-cogs"></i><span class="hidden-tablet"> Configurations </span></a>
         <ul>
             <li><a class="submenu" data-th-href="@{/admin/personnels}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Personnel </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/users}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Apprenants </span></a></li>
             <li><a class="submenu" data-th-href="@{/admin/users}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Utilisateurs </span></a></li>
         </ul>
     </li>
@@ -12,7 +13,7 @@
         <a class="dropmenu" href="#"><i class="icon-shopping-cart"></i><span class="hidden-tablet"> Stock </span></a>
         <ul>
             <li><a class="submenu" data-th-href="@{/admin/produits}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Produits </span></a></li>
-            <li><a class="submenu" data-th-href="@{/admin/fournisseurs}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Fournisseurs </span></a></li>
+            <li><a class="submenu" data-th-href="@{/admin/fournisseurs}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Partenaires </span></a></li>
             <li><a class="submenu" data-th-href="@{/admin/entrees}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Entrees </span></a></li>
             <li><a class="submenu" data-th-href="@{/admin/sorties}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Sorties </span></a></li>
             <li><a class="submenu" data-th-href="@{/admin/ventes}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Ventes </span></a></li>
@@ -30,8 +31,8 @@
 </ul>
 <!-- Fin menu d'administration -->
 
-<!-- Menu de apprenant -->
-<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="apprenant">
+<!-- Menu de ressources humaines -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="rh">
     <li><a data-th-href="@{/reception}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
     <li><a data-th-href="@{/reception/reservations}"><i class="icon-building"></i><span class="hidden-tablet"> Apprenant</span></a></li>
     <li><a data-th-href="@{/reception/logements}"><i class="icon-adjust"></i><span class="hidden-tablet"> Personnel</span></a></li>
@@ -51,17 +52,11 @@
 </ul>
 <!-- Fin menu du personnel -->
 
-<!-- Menu du client -->
-<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="client">
-    <li><a data-th-href="@{/clients}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+<!-- Menu du moniteur -->
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="moniteur">
+    <li><a data-th-href="@{/moniteurs}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
 </ul>
-<!-- Fin menu du client -->
-
-<!-- Menu du personnel -->
-<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="partenaire">
-    <li><a data-th-href="@{/partenaires}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
-</ul>
-<!-- Fin menu du personnel -->
+<!-- Fin menu du moniteur -->
 
 
 <!-- Menu de comptable -->
