@@ -2,6 +2,7 @@ package com.live.core.entities;
 
 import com.live.common.entities.Detail;
 import com.live.common.entities.LiveEntity;
+import com.live.paie.entities.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +17,12 @@ public class Personnel extends LiveEntity {
     private String telephone_2;
     private String numero_cni;
     private Character sexe;
+    private String matricule;
+    private String adresse;
+    private String situationFamiliale;
+    private int nombreEnfant;
+    private String compteBancaire;
+    private String numeroCNPS;
 
     @Temporal(TemporalType.DATE)
     private Date date_naissance;
@@ -27,16 +34,44 @@ public class Personnel extends LiveEntity {
     @OneToOne(targetEntity = Users.class)
     private Users user;
 
-    // List Detail
     @OneToMany(targetEntity = Detail.class)
     List<Detail> details;
 
+    @OneToMany(targetEntity = Contrat.class)
+    private List<Contrat> contrats;
 
+    @OneToMany(targetEntity = Prets.class)
+    private List<Prets> prets;
+
+    @OneToOne(targetEntity = Banque.class)
+    private Banque banque;
+
+    @OneToMany(targetEntity = Credits.class)
+    private List<Credits> credits;
+
+    @OneToMany(targetEntity = Avances.class)
+    private List<Avances> avances;
+
+    @OneToMany(targetEntity = PrimesVariables.class)
+    private List<PrimesVariables> primesVariables;
+
+    @OneToMany(targetEntity = PrimesFixes.class)
+    private List<PrimesFixes> primesFixes;
+
+    @OneToMany(targetEntity = BulletinPaie.class)
+    private List<BulletinPaie> bulletinPaie;
+
+    @ManyToOne(optional = true, targetEntity = Entreprise.class)
+    private Entreprise entreprise;
+
+    @OneToMany(targetEntity = Conge.class)
+    private List<Conge> conge;
     public Personnel() {
     }
 
     public Personnel(String nom, String prenom, String email, String telephone_1, String telephone_2, String numero_cni, Character sexe,
-                     Date date_naissance, String lieu_naissance, String fonction) {
+                     String matricule, String adresse, String situationFamiliale, int nombreEnfant, String compteBancaire, String numeroCNPS,
+                     Date date_naissance, String lieu_naissance, String fonction, String photo) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -44,9 +79,16 @@ public class Personnel extends LiveEntity {
         this.telephone_2 = telephone_2;
         this.numero_cni = numero_cni;
         this.sexe = sexe;
+        this.matricule = matricule;
+        this.adresse = adresse;
+        this.situationFamiliale = situationFamiliale;
+        this.nombreEnfant = nombreEnfant;
+        this.compteBancaire = compteBancaire;
+        this.numeroCNPS = numeroCNPS;
         this.date_naissance = date_naissance;
         this.lieu_naissance = lieu_naissance;
         this.fonction = fonction;
+        this.photo = photo;
     }
 
     public String getNom() {
@@ -151,5 +193,133 @@ public class Personnel extends LiveEntity {
 
     public void setDetails(List<Detail> details) {
         this.details = details;
+    }
+
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getSituationFamiliale() {
+        return situationFamiliale;
+    }
+
+    public void setSituationFamiliale(String situationFamiliale) {
+        this.situationFamiliale = situationFamiliale;
+    }
+
+    public int getNombreEnfant() {
+        return nombreEnfant;
+    }
+
+    public void setNombreEnfant(int nombreEnfant) {
+        this.nombreEnfant = nombreEnfant;
+    }
+
+    public String getCompteBancaire() {
+        return compteBancaire;
+    }
+
+    public void setCompteBancaire(String compteBancaire) {
+        this.compteBancaire = compteBancaire;
+    }
+
+    public String getNumeroCNPS() {
+        return numeroCNPS;
+    }
+
+    public void setNumeroCNPS(String numeroCNPS) {
+        this.numeroCNPS = numeroCNPS;
+    }
+
+    public List<Contrat> getContrats() {
+        return contrats;
+    }
+
+    public void setContrats(List<Contrat> contrats) {
+        this.contrats = contrats;
+    }
+
+    public List<Prets> getPrets() {
+        return prets;
+    }
+
+    public void setPrets(List<Prets> prets) {
+        this.prets = prets;
+    }
+
+    public Banque getBanque() {
+        return banque;
+    }
+
+    public void setBanque(Banque banque) {
+        this.banque = banque;
+    }
+
+    public List<Credits> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(List<Credits> credits) {
+        this.credits = credits;
+    }
+
+    public List<Avances> getAvances() {
+        return avances;
+    }
+
+    public void setAvances(List<Avances> avances) {
+        this.avances = avances;
+    }
+
+    public List<PrimesVariables> getPrimesVariables() {
+        return primesVariables;
+    }
+
+    public void setPrimesVariables(List<PrimesVariables> primesVariables) {
+        this.primesVariables = primesVariables;
+    }
+
+    public List<PrimesFixes> getPrimesFixes() {
+        return primesFixes;
+    }
+
+    public void setPrimesFixes(List<PrimesFixes> primesFixes) {
+        this.primesFixes = primesFixes;
+    }
+
+    public List<BulletinPaie> getBulletinPaie() {
+        return bulletinPaie;
+    }
+
+    public void setBulletinPaie(List<BulletinPaie> bulletinPaie) {
+        this.bulletinPaie = bulletinPaie;
+    }
+
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
+
+    public List<Conge> getConge() {
+        return conge;
+    }
+
+    public void setConge(List<Conge> conge) {
+        this.conge = conge;
     }
 }
