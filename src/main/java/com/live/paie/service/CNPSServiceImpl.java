@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CNPSServiceImpl implements CNPSService {
     @Autowired
-    CNPSRepository cnpsRepository;
+    private CNPSRepository cnpsRepository;
     @Override
     public CNPS save(CNPS cnps) {
         return cnpsRepository.save(cnps);

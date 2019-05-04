@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AncienneteServiceImpl implements AncienneteService {
     @Autowired
-    AncienneteRepository ancienneteRepository;
+    private AncienneteRepository ancienneteRepository;
     @Override
     public Anciennete save(Anciennete anciennete) {
         return ancienneteRepository.save(anciennete);

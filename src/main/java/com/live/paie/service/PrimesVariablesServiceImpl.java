@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class PrimesVariablesServiceImpl implements PrimesVariablesService {
     @Autowired
-    PrimesVariablesRepository primesVariablesRepository;
+    private PrimesVariablesRepository primesVariablesRepository;
     @Override
     public PrimesVariables save(PrimesVariables primesVariables) {
         return primesVariablesRepository.save(primesVariables);

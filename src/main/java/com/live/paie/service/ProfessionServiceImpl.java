@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ProfessionServiceImpl implements ProfessionService {
     @Autowired
-    ProfessionRepository professionRepository;
+    private ProfessionRepository professionRepository;
     @Override
     public Profession save(Profession profession) {
         return professionRepository.save(profession);

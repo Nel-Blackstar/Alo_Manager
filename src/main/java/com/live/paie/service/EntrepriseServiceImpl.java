@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class EntrepriseServiceImpl implements EntrepriseService {
     @Autowired
-    EntrepriseRepository entrepriseRepository;
+    private EntrepriseRepository entrepriseRepository;
     @Override
     public Entreprise save(Entreprise entreprise) {
         return entrepriseRepository.save(entreprise);

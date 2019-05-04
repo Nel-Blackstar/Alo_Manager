@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class LivrePaieServiceimpl implements LivrePaieService {
     @Autowired
-    LivrePaieRepository livrePaieRepository;
+    private LivrePaieRepository livrePaieRepository;
     @Override
     public LivrePaie save(LivrePaie livrePaie) {
         return livrePaieRepository.save(livrePaie);

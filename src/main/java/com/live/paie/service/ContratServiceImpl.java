@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class ContratServiceImpl implements ContratService {
     @Autowired
-    ContratRepository contratRepository;
+    private ContratRepository contratRepository;
 
     @Override
     public Contrat save(Contrat contrat) {

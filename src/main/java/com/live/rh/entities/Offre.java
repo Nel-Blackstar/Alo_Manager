@@ -1,9 +1,7 @@
 package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
-import com.live.core.entities.Apprenant;
 import com.live.core.entities.Partenaire;
-import com.live.moniteur.entities.SessionFormation;
 
 import javax.persistence.*;
 import java.util.Date;

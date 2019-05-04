@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AMOServiceImpl implements AMOService {
     @Autowired
-    AMORepository amoRepository;
+    private AMORepository amoRepository;
     @Override
     public AMO save(AMO amo) {
         return amoRepository.save(amo);

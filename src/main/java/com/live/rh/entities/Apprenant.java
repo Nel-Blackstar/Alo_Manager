@@ -1,4 +1,4 @@
-package com.live.core.entities;
+package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
 import com.live.moniteur.entities.Diplome;

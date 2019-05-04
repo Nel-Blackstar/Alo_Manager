@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class BulletinPaieServiceImpl implements BulletinPaieService {
     @Autowired
-    BulletinPaieRepository bulletinPaieRepository;
+    private BulletinPaieRepository bulletinPaieRepository;
     @Override
     public BulletinPaie save(BulletinPaie bulletinPaie) {
         return bulletinPaieRepository.save(bulletinPaie);

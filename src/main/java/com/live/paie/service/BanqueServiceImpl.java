@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class BanqueServiceImpl implements BanqueService {
     @Autowired
-    BanqueRepository banqueRepository;
+    private BanqueRepository banqueRepository;
     @Override
     public Banque save(Banque banque) {
         return banqueRepository.save(banque);

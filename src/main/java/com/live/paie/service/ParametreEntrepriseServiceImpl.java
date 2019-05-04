@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ParametreEntrepriseServiceImpl implements ParametreEntrepriseService {
     @Autowired
-    ParametreEntrepriseRepository parametreEntrepriseRepository;
+    private ParametreEntrepriseRepository parametreEntrepriseRepository;
     @Override
     public ParametreEntreprise save(ParametreEntreprise parametreEntreprise) {
         return parametreEntrepriseRepository.save(parametreEntreprise);

@@ -1,7 +1,7 @@
 package com.live.moniteur.entities;
 
 import com.live.common.entities.LiveEntity;
-import com.live.core.entities.Apprenant;
+import com.live.rh.entities.Apprenant;
 
 import javax.persistence.*;
 import java.util.Date;

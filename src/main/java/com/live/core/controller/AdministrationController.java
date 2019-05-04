@@ -4,9 +4,12 @@ import com.live.core.entities.Live;
 import com.live.core.service.ILiveManager;
 import com.live.core.service.LiveService;
 import com.live.core.service.UsersService;
+import com.live.paie.entities.Banque;
+import com.live.paie.service.BanqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,8 @@ public class AdministrationController {
     ILiveManager iLiveManager;
     @Autowired
     UsersService usersService;
+    @Autowired
+    BanqueService banqueService;
 
     // Rechercher l'autoecole et charger dans le modèle s'il existe, sinon, charger un autoecole par défaut
     public void chargerLive(Model model) {
@@ -37,7 +42,7 @@ public class AdministrationController {
     }
 
     // Ajout d'une autoecole
-    @RequestMapping("/ajouter-auto-ecole")
+    @GetMapping("/ajouter-auto-ecole")
     public String formHotel(Model model) {
         model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
@@ -71,7 +76,7 @@ public class AdministrationController {
      * @param id identifiant de l'auto-ecole
      * @return
      */
-    @RequestMapping("/consulter-auto-ecole/{id}")
+    @GetMapping("/consulter-auto-ecole/{id}")
     public String consulterLive(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
@@ -91,7 +96,7 @@ public class AdministrationController {
      * @param id identifiant de l'auto-ecole
      * @return
      */
-    @RequestMapping("/editer-auto-ecole/{id_auto_ecole}")
+    @GetMapping("/editer-auto-ecole/{id_auto_ecole}")
     public String editerHotel(Model model, @PathVariable("id") long id) {
         Live live = liveService.findOne(id);
         model.addAttribute("state", "get");
@@ -103,7 +108,7 @@ public class AdministrationController {
     }
 
     // Suppression d'une auto-ecole
-    @RequestMapping("/supprimer-auto-ecole/{id}")
+    @GetMapping("/supprimer-auto-ecole/{id}")
     public String supprimerHotel(Model model, @PathVariable("id") long id) {
         liveService.delete(liveService.findOne(id));
         List<Live> lives = liveService.findAll();
@@ -119,7 +124,7 @@ public class AdministrationController {
      * @param model
      * @return
      */
-    @RequestMapping("/auto-ecoles")
+    @GetMapping("/auto-ecoles")
     public String detailHotel(Model model) {
 
         List<Live> lives = liveService.findAll();
@@ -136,4 +141,43 @@ public class AdministrationController {
 
         return "administration/auto-ecoles/index";
     }
+
+    /**
+     * Rechercher de l'ensemble des banques du systeme
+     * @param model
+     * @return
+     */
+    @GetMapping("/banques")
+    public String listBanques(Model model) {
+        model.addAttribute("banques", banqueService.findAll());
+        return "administration/banques/index";
+    }
+
+    /** Ajout d'une banque
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("/ajouter-banque")
+    public String formBanque(Model model) {
+
+        model.addAttribute("state", "get");
+        model.addAttribute("banque", new Banque());
+        return "administration/banques/create";
+    }
+
+    /**
+     * <b> methode d'ajout d'une banque </b>
+     * @param model
+     * @param banque banque a ajouter
+     * @return
+     */
+    @PostMapping(value = "/ajouter-banque")
+    public String ajouterBanque(Model model, Banque banque) {
+        Banque banqueToSave = banqueService.save(banque);
+        model.addAttribute("state", "post");
+        model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
+        return "redirect:/admin/banques";
+    }
+
 }

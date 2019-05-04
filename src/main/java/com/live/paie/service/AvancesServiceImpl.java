@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AvancesServiceImpl implements AvancesService {
     @Autowired
-    AvancesRepository avancesRepository;
+    private AvancesRepository avancesRepository;
     @Override
     public Avances save(Avances avances) {
         return avancesRepository.save(avances);

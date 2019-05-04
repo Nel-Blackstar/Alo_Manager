@@ -1,6 +1,6 @@
-package com.live.core.service;
+package com.live.rh.service;
 
-import com.live.core.entities.Apprenant;
+import com.live.rh.entities.Apprenant;
 
 import java.util.List;
 

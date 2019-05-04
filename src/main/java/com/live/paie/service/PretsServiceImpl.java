@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class PretsServiceImpl implements PretsService {
     @Autowired
-    PretsRepository pretsRepository;
+    private PretsRepository pretsRepository;
     @Override
     public Prets save(Prets prets) {
         return pretsRepository.save(prets);

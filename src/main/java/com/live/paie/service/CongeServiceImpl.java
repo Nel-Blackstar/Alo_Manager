@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CongeServiceImpl implements CongeService {
     @Autowired
-    CongeRepository congeRepository;
+    private CongeRepository congeRepository;
     @Override
     public Conge save(Conge conge) {
         return congeRepository.save(conge);

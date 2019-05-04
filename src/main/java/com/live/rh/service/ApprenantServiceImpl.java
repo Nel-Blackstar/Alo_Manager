@@ -1,7 +1,7 @@
-package com.live.core.service;
+package com.live.rh.service;
 
-import com.live.core.entities.Apprenant;
-import com.live.core.repository.ApprenantRepository;
+import com.live.rh.entities.Apprenant;
+import com.live.rh.repository.ApprenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ApprenantServiceImpl implements ApprenantService{
     @Autowired
-    ApprenantRepository apprenantRepository;
+    private ApprenantRepository apprenantRepository;
     @Override
     public Apprenant save(Apprenant apprenant) {
         return apprenantRepository.save(apprenant);

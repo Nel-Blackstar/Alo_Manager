@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class MutuelleServiceImpl implements MutuelleService {
     @Autowired
-    MutuelleRepository mutuelleRepository;
+    private MutuelleRepository mutuelleRepository;
     @Override
     public Mutuelle save(Mutuelle mutuelle) {
         return mutuelleRepository.save(mutuelle);

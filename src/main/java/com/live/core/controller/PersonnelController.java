@@ -4,6 +4,7 @@ import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
 import com.live.core.entities.Users;
 import com.live.core.service.*;
+import com.live.paie.service.BanqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,8 @@ public class PersonnelController extends InitiateController {
     ILiveManager iLiveManager;
     @Autowired
     RolesService rolesService;
-
+    @Autowired
+    BanqueService banqueService;
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -43,6 +45,7 @@ public class PersonnelController extends InitiateController {
 
         model.addAttribute("state", "get");
         model.addAttribute("personnel", new Personnel());
+        model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/create";
     }
 
@@ -139,7 +142,7 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @RequestMapping("/users/ajouter-user")
+    @GetMapping("/users/ajouter-user")
     public String formUser(Model model) {
         chargerLive(model);
         // Charger la liste des rôles disponibles et déposer dans le model
@@ -241,7 +244,7 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @RequestMapping("/users")
+    @GetMapping("/users")
     public String listUsers(Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         //model.addAttribute("user", iHotelManager.userConnecte());

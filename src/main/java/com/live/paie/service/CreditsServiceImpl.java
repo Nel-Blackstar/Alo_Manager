@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CreditsServiceImpl implements CreditsService {
     @Autowired
-    CreditsRepository creditsRepository;
+    private CreditsRepository creditsRepository;
     @Override
     public Credits save(Credits credits) {
         return creditsRepository.save(credits);

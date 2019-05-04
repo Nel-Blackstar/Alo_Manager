@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class ChargesPatronalesServiceImpl implements ChargesPatronalesService {
     @Autowired
-    ChargesPatronalesRepository chargesPatronalesRepository;
+    private ChargesPatronalesRepository chargesPatronalesRepository;
     @Override
     public ChargesPatronales save(ChargesPatronales chargesPatronales) {
         return chargesPatronalesRepository.save(chargesPatronales);

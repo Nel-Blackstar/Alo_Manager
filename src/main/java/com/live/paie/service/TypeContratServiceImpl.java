@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class TypeContratServiceImpl implements TypeContratService {
     @Autowired
-    TypeContratRepository typeContratRepository;
+    private TypeContratRepository typeContratRepository;
     @Override
     public TypeContrat save(TypeContrat typeContrat) {
         return typeContratRepository.save(typeContrat);

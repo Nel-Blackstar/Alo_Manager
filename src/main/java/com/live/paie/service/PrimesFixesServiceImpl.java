@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class PrimesFixesServiceImpl implements PrimesFixesService {
     @Autowired
-    PrimesFixesRepository primesFixesRepository;
+    private PrimesFixesRepository primesFixesRepository;
     @Override
     public PrimesFixes save(PrimesFixes primesFixes) {
         return primesFixesRepository.save(primesFixes);
