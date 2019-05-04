@@ -36,4 +36,5 @@ public class ChargesPatronales extends LiveEntity {
     public void setType(String type) {
         this.type = type;
     }
+
 }

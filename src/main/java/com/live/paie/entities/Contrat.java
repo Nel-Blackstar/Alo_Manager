@@ -85,4 +85,20 @@ public class Contrat extends LiveEntity {
     public void setSalaireBase(float salaireBase) {
         this.salaireBase = salaireBase;
     }
+
+    public TypeContrat getTypeContrat() {
+        return typeContrat;
+    }
+
+    public void setTypeContrat(TypeContrat typeContrat) {
+        this.typeContrat = typeContrat;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
 }

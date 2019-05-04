@@ -42,4 +42,5 @@ public class ParametreEntreprise extends LiveEntity {
     public void setTauxTravailMinimum(float tauxTravailMinimum) {
         this.tauxTravailMinimum = tauxTravailMinimum;
     }
+
 }

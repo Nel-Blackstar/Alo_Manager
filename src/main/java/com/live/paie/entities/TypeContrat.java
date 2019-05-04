@@ -37,4 +37,12 @@ public class TypeContrat extends LiveEntity {
     public void setNomType(String nomType) {
         this.nomType = nomType;
     }
+
+    public List<Contrat> getContrats() {
+        return contrats;
+    }
+
+    public void setContrats(List<Contrat> contrats) {
+        this.contrats = contrats;
+    }
 }

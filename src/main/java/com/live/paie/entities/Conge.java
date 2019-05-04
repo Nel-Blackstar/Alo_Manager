@@ -39,4 +39,20 @@ public class Conge extends LiveEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
+
+    public TypeConge getTypeConge() {
+        return typeConge;
+    }
+
+    public void setTypeConge(TypeConge typeConge) {
+        this.typeConge = typeConge;
+    }
 }

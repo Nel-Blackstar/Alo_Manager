@@ -32,4 +32,5 @@ public class Mutuelle extends LiveEntity {
     public void setTauxPatronal(float tauxPatronal) {
         this.tauxPatronal = tauxPatronal;
     }
+
 }

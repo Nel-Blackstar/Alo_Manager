@@ -56,4 +56,12 @@ public class Entreprise extends LiveEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
 }

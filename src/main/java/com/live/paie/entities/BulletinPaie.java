@@ -77,4 +77,12 @@ public class BulletinPaie extends LiveEntity {
     public void setNbreCongesPayes(Long nbreCongesPayes) {
         this.nbreCongesPayes = nbreCongesPayes;
     }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
 }
