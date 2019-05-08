@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Banques</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">Banques</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Nouvelle banque</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une nouvelle banque</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <form class="form-horizontal" data-th-action="@{/admin/ajouter-banque}" method="post"  data-th-object="${banque}">
+                        <fieldset>
+                            <div class="control-group">
+                                <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
+                                <div class="controls">
+                                    <input type="text" class="span6 typeahead" id="nom" data-th-field="*{nom}" >
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="telephone">Telephone<span class="text-danger">*</span> </label>
+                                <div class="controls">
+                                    <input type="text" class="span6 typeahead" id="telephone" data-th-field="*{telephone}" >
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="adresse">Addresse </label>
+                                <div class="controls">
+                                    <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" >
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="fax">Fax </label>
+                                <div class="controls">
+                                    <input type="text" class="span6 typeahead" id="fax" data-th-field="*{fax}" >
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                <button type="reset" class="btn">Annuler</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+
+    </div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>
+
+

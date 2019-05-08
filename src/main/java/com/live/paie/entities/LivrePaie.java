@@ -26,4 +26,5 @@ public class LivrePaie extends LiveEntity {
     public void setDateSaisie(Date dateSaisie) {
         this.dateSaisie = dateSaisie;
     }
+
 }

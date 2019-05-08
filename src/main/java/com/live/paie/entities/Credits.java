@@ -46,4 +46,12 @@ public class Credits extends LiveEntity {
     public void setTauxInteret(Long tauxInteret) {
         this.tauxInteret = tauxInteret;
     }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
 }

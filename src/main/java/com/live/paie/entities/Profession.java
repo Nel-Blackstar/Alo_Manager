@@ -12,8 +12,6 @@ public class Profession extends LiveEntity {
     String nom;
     @OneToMany(targetEntity = Contrat.class)
     private List<Contrat> contrats;
-    @ManyToOne(optional = true, targetEntity = CIMR.class)
-    private CIMR cimr;
 
     public Profession() {
     }
@@ -28,5 +26,13 @@ public class Profession extends LiveEntity {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public List<Contrat> getContrats() {
+        return contrats;
+    }
+
+    public void setContrats(List<Contrat> contrats) {
+        this.contrats = contrats;
     }
 }

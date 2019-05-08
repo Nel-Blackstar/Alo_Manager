@@ -42,4 +42,5 @@ public class CNPS extends LiveEntity {
     public void setTauxPatronal(float tauxPatronal) {
         this.tauxPatronal = tauxPatronal;
     }
+
 }

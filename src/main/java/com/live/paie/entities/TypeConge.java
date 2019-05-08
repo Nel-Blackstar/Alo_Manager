@@ -26,4 +26,12 @@ public class TypeConge extends LiveEntity {
     public void setType(String type) {
         this.type = type;
     }
+
+    public List<Conge> getConges() {
+        return conges;
+    }
+
+    public void setConges(List<Conge> conges) {
+        this.conges = conges;
+    }
 }

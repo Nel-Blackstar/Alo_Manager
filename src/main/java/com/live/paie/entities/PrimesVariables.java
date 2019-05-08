@@ -66,4 +66,12 @@ public class PrimesVariables extends LiveEntity {
     public void setExoneree(boolean exoneree) {
         this.exoneree = exoneree;
     }
+
+    public Personnel getPersonnel() {
+        return personnel;
+    }
+
+    public void setPersonnel(Personnel personnel) {
+        this.personnel = personnel;
+    }
 }
