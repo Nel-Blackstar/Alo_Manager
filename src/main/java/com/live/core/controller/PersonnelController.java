@@ -1,9 +1,13 @@
 package com.live.core.controller;
 
+import com.live.core.entities.Live;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
 import com.live.core.entities.Users;
+import com.live.rh.entities.Apprenant;
+import com.live.rh.service.ApprenantService;
 import com.live.core.service.*;
+import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +32,8 @@ public class PersonnelController extends InitiateController {
     RolesService rolesService;
     @Autowired
     BanqueService banqueService;
+    @Autowired
+    ApprenantService apprenantService;
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -251,5 +257,77 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
 
         return "administration/utilisateurs/index";
+    }
+    /**
+     * Rechercher de l'ensemble des Apprenants du systeme
+     * @param model
+     * @return
+     */
+    @GetMapping("/apprenants")
+    public String listApprenant(Model model) {
+    	model.addAttribute("listeApprenant", apprenantService.findAll());
+        return "administration/apprenants/index";
+    }
+    /** 
+    * Méthode d'ajout d'un Apprenant get
+    * @param model
+    * @return
+    */
+    @RequestMapping("/ajouter-apprenant")
+    public String formApprenant(Model model) {
+
+       model.addAttribute("state", "get");
+       model.addAttribute("apprenant", new Apprenant());
+       return "administration/apprenants/create";
+    }
+    /**
+     * Méthode d'ajout d'un Apprenant post
+     * @param model
+     * @return
+     */
+    @PostMapping(value = "/ajouter-apprenant")
+    public String ajouterApprenant(Model model, Apprenant apprenant) {
+        Apprenant apprenantToSave = apprenantService.save(apprenant);
+        model.addAttribute("state", "post");
+        model.addAttribute("info",apprenantToSave.getNom()+" - "+apprenantToSave.getTelephone_1());
+        return "redirect:/admin/apprenants";
+    }
+    /**
+     * Modification des informations sur un Apprenant
+     * @param model
+     * @param id identifiant de l'apprenant
+     * @return
+     */
+    @RequestMapping("/update-apprenant/{id}")
+    public String editeApprenant(Model model,@PathVariable long id) {
+    	Apprenant apprenant = apprenantService.findOne(id);
+    	model.addAttribute("apprenant", apprenant);
+    	return "administration/apprenants/update";
+
+    }
+    /**
+     * Modification des informations sur un Apprenant
+     * @param model methode post
+     * @param id identifiant de l'apprenant
+     * @return
+     */
+    @PostMapping(value = "/update-apprenant")
+    public String saveUpdateApprenant(Apprenant apprenant) {
+    	apprenantService.save(apprenant);
+    	return "redirect:/admin/apprenants";
+
+    }
+    /**
+     * Suppression d'un apprenant
+     * @param model
+     * @param id identifiant de l'apprenant
+     * @return
+     */
+    @RequestMapping("/delete-apprenant/{id}")
+    public String deleteApprenant(@PathVariable long id) {
+    	Apprenant apprenant = apprenantService.findOne(id);
+    	apprenantService.delete(apprenant);
+    	return "redirect:/admin/apprenants";
+
     }
 }

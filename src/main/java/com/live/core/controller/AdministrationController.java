@@ -6,6 +6,9 @@ import com.live.core.service.LiveService;
 import com.live.core.service.UsersService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
+import com.live.rh.entities.Apprenant;
+import com.live.rh.service.ApprenantService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +31,8 @@ public class AdministrationController {
     UsersService usersService;
     @Autowired
     BanqueService banqueService;
+    @Autowired
+    ApprenantService apprenantService;
 
     // Rechercher l'autoecole et charger dans le modèle s'il existe, sinon, charger un autoecole par défaut
     public void chargerLive(Model model) {
@@ -179,5 +184,42 @@ public class AdministrationController {
         model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
         return "redirect:/admin/banques";
     }
+    /**
+    * Modification de la banque
+    * @param model
+    * @param id identifiant de la banque
+    * @return
+    */
+    @RequestMapping("/update-banque/{id}")
+    public String editeBanque(Model model,@PathVariable long id) {
+   	Banque banque = banqueService.findOne(id);
+   	model.addAttribute("banque", banque);
+   	return "administration/banques/update";
 
+   }
+   /**
+    * Modification des informations sur une banque
+    * @param model methode post
+    * @param id identifiant de la banquet
+    * @return
+    */
+    @PostMapping(value = "/update-banque")
+    public String saveUpdateBanque(Banque banque) {
+   	banqueService.save(banque);
+   	return "redirect:/admin/banques";
+
+   }
+    /**
+     * Suppression d'une banque
+     * @param model
+     * @param id identifiant de la banque
+     * @return
+     */
+    @RequestMapping("/delete-banque/{id}")
+    public String deleteBanque(@PathVariable long id) {
+    	Banque banque = banqueService.findOne(id);
+    	banqueService.delete(banque);
+    	return "redirect:/admin/banques";
+
+    }
 }
