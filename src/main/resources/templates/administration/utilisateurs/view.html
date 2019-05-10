@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Utilisateurs</title>
 </head>
 <body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#" data-th-href="@{/admin/users/}">Utilisateurs</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Information sur l'utilisateur</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Profil</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content" >
+                    <h2 class="text-center">Recapitulatif des information sur l'utilisateur</h2>
+                    <div class="text-center" data-th-if="${info}">
+                        <p class="fg-red" data-th-text="${info}">Info</p>
+                    </div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+    </div>
+    <!-- end: Content -->
+</div>
+<div data-layout-fragment="extra-js">
+    <script type="text/javascript">
 
+</div>
 </body>
 </html>
+
+

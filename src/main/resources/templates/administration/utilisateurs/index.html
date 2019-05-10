@@ -12,10 +12,10 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="index.html">Administration</a>
+                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><a href="#">Utilisateurs</a></li>
+            <li><a href="#" data-th-href="@{/admin/users/}">Utilisateurs</a></li>
         </ul>
 
         <div style="margin-bottom: 7px">
@@ -60,9 +60,9 @@
                             </td>
                             <td data-th-object="${users.roles}">roles</td>
                             <td>
-                                <a href="#" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                <a href="#" data-th-href="@{'/admin/users/consulter-user/'+${users.login} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
+                                <a href="#" data-th-href="@{'/admin/users/editer-user/'+${users.login} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/users/supprimer-user/'+${users.login} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

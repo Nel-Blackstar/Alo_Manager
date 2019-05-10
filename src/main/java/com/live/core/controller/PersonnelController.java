@@ -4,6 +4,8 @@ import com.live.core.entities.Live;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
 import com.live.core.entities.Users;
+import com.live.core.repository.PersonnelRepository;
+import com.live.core.repository.UsersRepository;
 import com.live.rh.entities.Apprenant;
 import com.live.rh.service.ApprenantService;
 import com.live.core.service.*;
@@ -20,6 +22,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class PersonnelController extends InitiateController {
+    @Autowired
+    UsersRepository usersRepository;
+    @Autowired
+    PersonnelRepository personnelRepository;
     @Autowired
     PersonnelService personnelService;
     @Autowired
@@ -154,7 +160,8 @@ public class PersonnelController extends InitiateController {
         // Charger la liste des rôles disponibles et déposer dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
         //chargement de la liste du personnel
-        model.addAttribute("listePersonnels", personnelService.findAll());
+        List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
+        model.addAttribute("listePersonnels",listePersonnels);
         model.addAttribute("state", "get");
         model.addAttribute("users", new Users());
         return "administration/utilisateurs/create";
@@ -198,18 +205,17 @@ public class PersonnelController extends InitiateController {
     /**
      *     <b> Consultation d'un utilisateur </b>
      * @param model
-     * @param id identifiant de l'users
+     * @param login identifiant de l'users
      * @return
      */
     @RequestMapping("/users/consulter-user/{id}")
-    public String consulterUser(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", iLiveManager.userConnecte());
+    public String consulterUser(Model model, @PathVariable("id") String login) {
+        //model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
-
         // Retrouver l'users à consulter et le placer dans le modèle
-        Users users = usersService.findOne(id);
+        Users users = usersRepository.findUsersByLogin(login);;
         model.addAttribute("users", users);
-        return "administration/consulter-user";
+        return "administration/utilisateurs/view";
     }
 
     // Modification des informations sur l'users
@@ -217,29 +223,52 @@ public class PersonnelController extends InitiateController {
     /**
      *     <b>  Modification des informations sur l'utilisateur</b>
      * @param model
-     * @param id identifiant de l'utilisateur
+     * @param login identifiant de l'utilisateur
      * @return
      */
-    @RequestMapping("/users/editer-user/{id}")
-    public String editerUser(Model model, @PathVariable("id") long id) {
-        Users users = usersService.findOne(id);
+    @GetMapping("/users/editer-user/{id}")
+    public String editerUser(Model model, @PathVariable("id") String login) {
+        Users users = usersRepository.findUsersByLogin(login);
         model.addAttribute("state", "get");
         model.addAttribute("users", users);
-
-        model.addAttribute("user", iLiveManager.userConnecte());
+        model.addAttribute("listePersonnels", personnelService.findAll());
+        model.addAttribute("listeRoles", rolesService.findAll());
+        //model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
-        return "administration/ajouter-user";
+        return "administration/utilisateurs/update";
+    }
+
+    @PostMapping(value = "/users/editer-user/{login]")
+    public String editUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp,@PathVariable("login") String login) {
+        //model.addAttribute("user", iHotelManager.userConnecte());
+        chargerLive(model);
+
+        Users user = usersRepository.findUsersByLogin(login);
+        user.setLogin(users.getLogin());
+        user.setActive(true);
+        user.setUsername(users.getUsername());
+
+        // Crypter le mot de passe utilisateur
+        user.setPassword(encoder.encode(users.getPassword()));
+
+        // Attribuer les rôles à l'utilisateur
+        Roles roles = rolesService.findOne(role);
+        if(roles != null){
+            // Enregistrer l'utilisateur
+            Users savedUser = usersService.save(user);
+            // Le rôle selectionné existe dans le système
+            //savedUser.addRole(roles);
+            usersService.save(savedUser);
+        }
+        model.addAttribute("state", "post");
+        model.addAttribute("info",user.getLogin() +" - "+user.getUsername());
+        return "redirect:/admin/users";
     }
 
     // Suppression d'une users
     @RequestMapping("/users/supprimer-user/{id}")
-    public String supprimerUser(Model model, @PathVariable("id") long id) {
-        usersService.delete(usersService.findOne(id));
-        List<Users> listeUsers
-                = usersService.findAll();
-        model.addAttribute("listeUsers", listeUsers);
-
-        model.addAttribute("user", iLiveManager.userConnecte());
+    public String supprimerUser(Model model, @PathVariable("id") String login) {
+        usersService.delete(usersRepository.findUsersByLogin(login));
         chargerLive(model);
         return "redirect:/admin/users";
     }
