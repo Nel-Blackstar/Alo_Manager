@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Utilisateurs</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">Utilisateurs</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Nouveau utilisateur</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un nouveau utilisateur</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content" >
+                    <div class="offset4 span12" id="choice">
+                        <a class="quick-button-small span2" onclick="$('#choice').fadeOut();$('#user_form').css('visibility','visible')">
+                            <i class="icon-user"></i>
+                            <p>Cree un Compte Pour un Personnel Enregistrer</p>
+                        </a>
+                        <a class="quick-button-small span2" onclick="$('#choice').fadeOut();$('#new_perso').fadeIn()">
+                            <i class="icon-plus-sign"></i>
+                            <p>Cree un Compte Pour un Personnel Non enregistrer</p>
+                        </a>
+                    </div>
+                    <div class="alert alert-warning text-center" id="new_perso" style="display:none">
+                        <h2>Vous devez d'abord enregistrer l'utilisateur parmis le personnels avant la creation d'un compte</h2>
+                        <h4>suivez le lien ci dessous pour l'ajouter au personnel</h4>
+                        <a class="btn btn-link" data-th-href="@{/admin/personnels/ajouter-personnel}">Cliquer ici <span class="icon-chevron-right"><span class="icon-chevron-right"></span></a>
+                    </div>
+                    <form style="visibility:hidden"  id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/ajouter-user}" method="post"  data-th-object="${users}">
+                        <fieldset>
+                            <div class="offset3 box span5">
+                                    <div class="control-group"><br><br>
+                                        <label class="control-label" for="username">Nom D'utilisateur<span class="text-danger">*</span> </label>
+                                        <div class="controls">
+                                            <select id="username" data-rel="chosen"  required data-th-field="*{username}" class="span6 typeahead">
+                                                <option  data-th-each="personnel, pStat : ${listePersonnels}" data-th-value="${personnel.nom}" data-th-text="${personnel.nom}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="role">Role<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="role" data-rel="chosen" required  name="role" class="span6 typeahead">
+                                            <option  data-th-each="role : ${listeRoles}" data-th-value="${role.nom_role}" data-th-text="${role.nom_role}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="login">Login<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span6 typeahead" id="login" data-th-field="*{login}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="mdp">Mot de passe<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="password" class="span6 typeahead" id="mdp" data-th-field="*{password}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                        <label class="control-label span7"  for="mdp">Retapez le mot de passe<span class="text-danger">*</span> </label>                                   <div class="controls">
+                                        <input type="password"  class="span6 typeahead" id="vmdp" name="vmdp">
+                                    </div>
+                                </div>
+                            <div class="form-actions">
+                                <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
+                                <button type="reset" class="btn">Annuler</button>
+                            </div>
+                            </div>
+                        </fieldset>
+
+
+                    </form>
+                    <div class="text-center" data-th-if="${info}">
+                        <p class="fg-red" data-th-text="${info}">Info</p>
+                    </div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+    </div>
+    <!-- end: Content -->
+</div>
+<div data-layout-fragment="extra-js">
+<script type="text/javascript">
+
+</div>
+</body>
+</html>
+
+

@@ -148,12 +148,13 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @GetMapping("/users/ajouter-user")
+    @GetMapping(value="/users/ajouter-user")
     public String formUser(Model model) {
         chargerLive(model);
         // Charger la liste des rôles disponibles et déposer dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
-
+        //chargement de la liste du personnel
+        model.addAttribute("listePersonnels", personnelService.findAll());
         model.addAttribute("state", "get");
         model.addAttribute("users", new Users());
         return "administration/utilisateurs/create";
@@ -168,7 +169,7 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/users/ajouter-user")
-    public String ajouterUser(Model model, Users users, @RequestParam("role") String role) {
+    public String ajouterUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
 
@@ -180,17 +181,15 @@ public class PersonnelController extends InitiateController {
         // Crypter le mot de passe utilisateur
         user.setPassword(encoder.encode(users.getPassword()));
 
-        // Enregistrer l'utilisateur
-        Users savedUser = usersService.save(user);
-
         // Attribuer les rôles à l'utilisateur
-        Roles roles = rolesService.findOne(role);
+      Roles roles = rolesService.findOne(role);
         if(roles != null){
+            // Enregistrer l'utilisateur
+            Users savedUser = usersService.save(user);
             // Le rôle selectionné existe dans le système
-            savedUser.addRole(roles);
+            //savedUser.addRole(roles);
             usersService.save(savedUser);
         }
-
         model.addAttribute("state", "post");
         model.addAttribute("info",user.getLogin() +" - "+user.getUsername());
         return "redirect:/admin/users";
@@ -269,7 +268,7 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /** 
-    * M�thode d'ajout d'un Apprenant get
+    * M�thode d'ajout d'un Apprenant get
     * @param model
     * @return
     */
@@ -281,7 +280,7 @@ public class PersonnelController extends InitiateController {
        return "administration/apprenants/create";
     }
     /**
-     * M�thode d'ajout d'un Apprenant post
+     * M�thode d'ajout d'un Apprenant post
      * @param model
      * @return
      */
