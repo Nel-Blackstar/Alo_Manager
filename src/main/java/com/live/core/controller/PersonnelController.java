@@ -194,7 +194,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             // Le rôle selectionné existe dans le système
-            //savedUser.addRole(roles);
+            savedUser.addFirstRole(roles);
             usersService.save(savedUser);
         }
         model.addAttribute("state", "post");
@@ -238,12 +238,12 @@ public class PersonnelController extends InitiateController {
         return "administration/utilisateurs/update";
     }
 
-    @PostMapping(value = "/users/editer-user/{login]")
-    public String editUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp,@PathVariable("login") String login) {
+    @PostMapping(value = "/users/editer-user")
+    public String editUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
 
-        Users user = usersRepository.findUsersByLogin(login);
+        Users user = usersRepository.findUsersByLogin(users.getLogin());
         user.setLogin(users.getLogin());
         user.setActive(true);
         user.setUsername(users.getUsername());
@@ -256,8 +256,8 @@ public class PersonnelController extends InitiateController {
         if(roles != null){
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
-            // Le rôle selectionné existe dans le système
-            //savedUser.addRole(roles);
+            // Le rôle selectionné existe dans le systèmes
+            savedUser.addFirstRole(roles);
             usersService.save(savedUser);
         }
         model.addAttribute("state", "post");
@@ -335,8 +335,6 @@ public class PersonnelController extends InitiateController {
     }
     /**
      * Modification des informations sur un Apprenant
-     * @param model methode post
-     * @param id identifiant de l'apprenant
      * @return
      */
     @PostMapping(value = "/update-apprenant")
@@ -347,7 +345,6 @@ public class PersonnelController extends InitiateController {
     }
     /**
      * Suppression d'un apprenant
-     * @param model
      * @param id identifiant de l'apprenant
      * @return
      */

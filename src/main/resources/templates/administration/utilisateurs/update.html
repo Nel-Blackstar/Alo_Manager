@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="box-content" >
-                    <form id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/ajouter-user}" method="post"  data-th-object="${users}">
+                    <form id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/editer-user}" method="post"  data-th-object="${users}">
                         <fieldset>
                             <div class="offset3 box span5">
                                 <div class="control-group"><br><br>
@@ -55,7 +55,8 @@
                                 <div class="control-group">
                                     <label class="control-label"  for="login">Login<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" data-th-value="*{login}" required class="span6 typeahead" id="login" data-th-field="*{login}" >
+                                        <input type="text" data-th-value="*{login}" required class="span6 typeahead" disabled id="login" >
+                                        <input type="hidden" data-th-field="*{login}"  data-th-value="*{login}" >
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -89,7 +90,6 @@
     <!-- end: Content -->
 </div>
 <div data-layout-fragment="extra-js">
-    <script type="text/javascript">
 
 </div>
 </body>
