@@ -32,7 +32,7 @@
                         <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
                     </div>
                 </div>
-                <div class="text-center" data-th-if="${info}">
+                <div class="alert alert-info text-center" data-th-if="${info}">
                     <p class="fg-green" data-th-text="${info}">Info</p>
                 </div>
                 <div class="box-content">
@@ -58,7 +58,11 @@
                                 <span class="text-success" data-th-if="${users.active} == true">Actif</span>
                                 <span class="text-danger" data-th-if="${users.active} == false">Non Actif</span>
                             </td>
-                            <td data-th-object="${users.roles}">roles</td>
+                            <td>
+                                <b  data-th-each="role : ${users.roles}">
+                                    <span data-th-text=" ${role.nom_role}"></span> -
+                                </b>
+                            </td>
                             <td>
                                 <a href="#" data-th-href="@{'/admin/users/consulter-user/'+${users.login} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
                                 <a href="#" data-th-href="@{'/admin/users/editer-user/'+${users.login} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
