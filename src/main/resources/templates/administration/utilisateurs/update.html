@@ -47,7 +47,7 @@
                                 <div class="control-group">
                                     <label class="control-label"  for="role">Role<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select id="role" data-rel="chosen" required  name="role" class="span6 typeahead">
+                                        <select id="role" data-rel="chosen" required  name="role" class="span6 typeahead" data-role="select" multiple>
                                             <option  data-th-each="role : ${listeRoles}" data-th-value="${role.nom_role}" data-th-text="${role.nom_role}"></option>
                                         </select>
                                     </div>

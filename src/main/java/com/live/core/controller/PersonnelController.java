@@ -183,7 +183,7 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/users/ajouter-user")
-    public String ajouterUser(HttpSession session, Model model, Users users, @RequestParam("role") String role, @RequestParam("vmdp") String vmdp) {
+    public String ajouterUser(HttpSession session, Model model, Users users, @RequestParam("role") List<String> role, @RequestParam("vmdp") String vmdp) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
         List<String> erreur=new ArrayList<String>();
@@ -196,7 +196,6 @@ public class PersonnelController extends InitiateController {
         user.setPassword(encoder.encode(users.getPassword()));
 
         // Attribuer les rôles à l'utilisateur
-      Roles roles = rolesService.findOne(role);
       if (!vmdp.equals(users.getPassword())){
             erreur.add("les mots de passe saisie ne sont pas identique \n");
       }
@@ -207,11 +206,16 @@ public class PersonnelController extends InitiateController {
             session.setAttribute("infos",erreur);
             return  "redirect:/admin/users/ajouter-user";
         }else{
-            if(roles != null){
-                // Enregistrer l'utilisateur
-                Users savedUser = usersService.save(user);
+            List<Roles> roles = new ArrayList<Roles>();
+            for (String roleb:role) {
+                Roles r=rolesService.findOne(roleb);
+                roles.add(r);
+            }
+            // Enregistrer l'utilisateur
+            Users savedUser = usersService.save(user);
+            if(!roles.isEmpty()){
                 // Le rôle selectionné existe dans le système
-                savedUser.addFirstRole(roles);
+                savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
             model.addAttribute("state", "post");
@@ -261,11 +265,9 @@ public class PersonnelController extends InitiateController {
     }
 
     @PostMapping(value = "/users/editer-user")
-    public String editUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp) {
-        //model.addAttribute("user", iHotelManager.userConnecte());
-        chargerLive(model);
-
-        Users user = usersRepository.findUsersByLogin(users.getLogin());
+    public String editUser(HttpSession session,Model model, Users users, @RequestParam("role") List<String> role,@RequestParam("vmdp") String vmdp) {
+        List<String> erreur=new ArrayList<String>();
+        Users user = new Users();
         user.setLogin(users.getLogin());
         user.setActive(true);
         user.setUsername(users.getUsername());
@@ -274,16 +276,28 @@ public class PersonnelController extends InitiateController {
         user.setPassword(encoder.encode(users.getPassword()));
 
         // Attribuer les rôles à l'utilisateur
-        Roles roles = rolesService.findOne(role);
-        if(roles != null){
+        if (!vmdp.equals(users.getPassword())){
+            erreur.add("les mots de passe saisie ne sont pas identique \n");
+        }
+        if(!erreur.isEmpty()){
+            session.setAttribute("infos",erreur);
+            return  "redirect:/admin/users/ajouter-user";
+        }else {
+            List<Roles> roles = new ArrayList<Roles>();
+            for (String roleb : role) {
+                Roles r = rolesService.findOne(roleb);
+                roles.add(r);
+            }
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
-            // Le rôle selectionné existe dans le systèmes
-            savedUser.addFirstRole(roles);
-            usersService.save(savedUser);
+            if (!roles.isEmpty()) {
+                // Le rôle selectionné existe dans le système
+                savedUser.setRoles(roles);
+                usersService.save(savedUser);
+            }
         }
         model.addAttribute("state", "post");
-        model.addAttribute("info",user.getLogin() +" - "+user.getUsername());
+        session.setAttribute("infos",user.getLogin() +" - "+user.getUsername()+" mis a jour");
         return "redirect:/admin/users";
     }
 
@@ -291,7 +305,7 @@ public class PersonnelController extends InitiateController {
     @RequestMapping("/users/supprimer-user/{id}")
     public String supprimerUser(HttpSession session,Model model, @PathVariable("id") String login) {
         usersService.delete(usersRepository.findUsersByLogin(login));
-        session.setAttribute("infos","l'utilisateur "+login+"A ete supprimer avec success");
+        session.setAttribute("infos","l'utilisateur "+login+" a ete supprimer avec success");
         chargerLive(model);
         return "redirect:/admin/users";
     }

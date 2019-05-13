@@ -101,11 +101,6 @@ public class Users implements Serializable {
     public void addRole(Roles role) {
         getRoles().add(role);
     }
-    public void addFirstRole(Roles role) {
-        List<Roles> rs=new ArrayList<Roles>();
-        rs.add(role);
-        this.roles=rs;
-    }
     public void addRoles(Roles role) {
         List<Roles> rsa=getRoles();
         rsa.add(role);
