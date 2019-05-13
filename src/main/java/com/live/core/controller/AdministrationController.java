@@ -170,8 +170,11 @@ public class AdministrationController {
      * @return
      */
     @RequestMapping("/ajouter-banque")
-    public String formBanque(Model model) {
-
+    public String formBanque(Model model,HttpSession session) {
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         model.addAttribute("state", "get");
         model.addAttribute("banque", new Banque());
         return "administration/banques/create";
@@ -184,10 +187,11 @@ public class AdministrationController {
      * @return
      */
     @PostMapping(value = "/ajouter-banque")
-    public String ajouterBanque(Model model, Banque banque) {
+    public String ajouterBanque(HttpSession session,Model model, Banque banque) {
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
         model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
+        session.setAttribute("infos","La nouvelle banque vien d'être crée!!");
         return "redirect:/admin/banques";
     }
     /**
