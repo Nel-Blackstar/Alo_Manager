@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Utilisateurs</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#" data-th-href="@{/admin/users/}">Utilisateurs</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Modifier utilisateur</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Modifier l'utilisateur</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content" >
+                    <form id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/editer-user}" method="post"  data-th-object="${users}">
+                        <fieldset>
+                            <div class="offset3 box span5">
+                                <div class="control-group"><br><br>
+                                    <label class="control-label" for="username">Nom D'utilisateur<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="username" data-rel="chosen"  required data-th-field="*{username}" class="span6 typeahead">
+                                            <option data-th-value="*{username}" data-th-text="*{username}" selected>name</option>
+                                            <option  data-th-each="personnel, pStat : ${listePersonnels}" data-th-value="${personnel.nom}" data-th-text="${personnel.nom}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="role">Role<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="role" data-rel="chosen" required  name="role" class="span6 typeahead">
+                                            <option  data-th-each="role : ${listeRoles}" data-th-value="${role.nom_role}" data-th-text="${role.nom_role}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="login">Login<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" data-th-value="*{login}" required class="span6 typeahead" disabled id="login" >
+                                        <input type="hidden" data-th-field="*{login}"  data-th-value="*{login}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label"  for="mdp">Mot de passe<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="password" data-th-value="1234" class="span6 typeahead" id="mdp" data-th-field="*{password}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label span7"  for="mdp">Retapez le mot de passe<span class="text-danger">*</span> </label>                                   <div class="controls">
+                                    <input type="password"   class="span6 typeahead" id="vmdp" name="vmdp">
+                                </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </div>
+                        </fieldset>
+
+
+                    </form>
+                    <div class="text-center" data-th-if="${info}">
+                        <p class="fg-red" data-th-text="${info}">Info</p>
+                    </div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+    </div>
+    <!-- end: Content -->
+</div>
+<div data-layout-fragment="extra-js">
+
+</div>
+</body>
+</html>
+
+
