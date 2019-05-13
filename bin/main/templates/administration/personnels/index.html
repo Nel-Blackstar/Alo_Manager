@@ -32,6 +32,9 @@
                         <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
                     </div>
                 </div>
+                <div class="alert alert-info text-center" data-th-if="${info}">
+                    <p class="fg-green" data-th-text="${info}">Info</p>
+                </div>
                 <div class="box-content">
                     <table class="table table-striped table-bordered bootstrap-datatable datatable">
                         <thead>
@@ -54,9 +57,11 @@
                             <td data-th-text="${personnel.fonction}"></td>
                             <td data-th-text="${personnel.telephone_1}"></td>
                             <td>
-                                <a href="#" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                              	<a data-th-href="@{/admin/consulter-personnel/{id}(id = ${personnel.getId()})}"
+                                   title="Consulter le batiment" class="btn btn-small btn-primary">
+                                    <i class="halflings-icon white folder-open"></i></a>
+                                <a data-th-href="@{/admin/personnels/modifier-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-success" title="Modifier la banque"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/personnels/supprimer-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-danger" title="Supprimer la banque"><i class="halflings-icon white trash"></i></a>  
                             </td>
                         </tr>
                         </tbody>

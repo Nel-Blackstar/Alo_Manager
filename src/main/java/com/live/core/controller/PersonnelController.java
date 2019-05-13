@@ -18,8 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -83,57 +86,18 @@ public class PersonnelController extends InitiateController {
     }
 
     /**
-     *     <b> Consultation des information d'un personnel du system  </b>
+     *     <b> Modifiction des information d'un personnel du system  </b>
      * @param model
      * @param id identified of personnel
      * @return
      */
-    @RequestMapping("/personnels/consulter-personnel/{id}")
+    @RequestMapping("/personnels/modifier-personnel/{id}")
     public String consulterPersonnel(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
-
-        // Retrouver l'personnels à consulter et le placer dans le modèle
         Personnel personnel = personnelService.findOne(id);
+        model.addAttribute("banques", banqueService.findAll());
         model.addAttribute("personnel", personnel);
-        return "administration/consulter-personnel";
-    }
-
-    // Modification des informations sur le personnels
-
-    /**
-     *     <b>  Modification des informations sur l'utilisateur</b>
-     * @param model
-     * @param id identified of personnel
-     * @return
-     */
-    @RequestMapping("/personnels/editer-personnel/{id}")
-    public String editerPersonnel(Model model, @PathVariable("id") long id) {
-        Personnel personnel = personnelService.findOne(id);
-        model.addAttribute("state", "get");
-        model.addAttribute("personnel", personnel);
-
-        model.addAttribute("user", iLiveManager.userConnecte());
-        chargerLive(model);
-        return "administration/ajouter-personnel";
-    }
-
-    /** Suppression d'un personnel
-     *
-     * @param model
-     * @param id identified of personnel person
-     * @return
-     */
-    @RequestMapping("/personnels/supprimer-personnel/{id}")
-    public String supprimerPersonnel(Model model, @PathVariable("id") long id) {
-        personnelService.delete(personnelService.findOne(id));
-        List<Personnel> listePersonnels
-                = personnelService.findAll();
-        model.addAttribute("listePersonnels", listePersonnels);
-
-        model.addAttribute("user", iLiveManager.userConnecte());
-        chargerLive(model);
-        return "redirect:/admin/personnels";
+        return "administration/personnels/update";
     }
 
     /**
@@ -151,6 +115,40 @@ public class PersonnelController extends InitiateController {
     }
 
     //management des utilisateurs
+    
+    /**
+     * <b> methode de modification du personnel </b>
+     * @param model
+     * @param personnel personnel a ajouter
+     * @return
+     */
+    @PostMapping(value = "/personnels/modifier-personnel")
+    public String modifierPersonnel(Model model, Personnel personnel,String date) {
+    	@SuppressWarnings("deprecation")
+		Date date_naissance=new Date();
+		try {
+			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+    	personnel.setDate_naissance(date_naissance);
+        chargerLive(model);
+        personnelService.save(personnel);
+        return "redirect:/admin/personnels";
+	    }
+	    
+	    /** Suppression d'un personnel
+	    *
+	    * @param model
+	    * @param id identified of personnel person
+	    * @return
+	    */
+	   @RequestMapping("/personnels/supprimer-personnel/{id}")
+	   public String supprimerPersonnel(Model model, @PathVariable("id") long id) {
+	       personnelService.delete(personnelService.findOne(id));
+	       return "redirect:/admin/personnels";
+	   }
 
     /** Ajout d'un user
      *
@@ -304,7 +302,6 @@ public class PersonnelController extends InitiateController {
     @GetMapping("/users")
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
-        //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));

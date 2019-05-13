@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping(value = "/admin")
 public class AdministrationController {
@@ -153,8 +155,12 @@ public class AdministrationController {
      * @return
      */
     @GetMapping("/banques")
-    public String listBanques(Model model) {
+    public String listBanques(HttpSession session,Model model) {
         model.addAttribute("banques", banqueService.findAll());
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         return "administration/banques/index";
     }
 
