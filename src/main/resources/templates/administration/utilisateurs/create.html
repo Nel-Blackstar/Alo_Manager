@@ -31,6 +31,9 @@
                         <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
                     </div>
                 </div>
+                <div class="text-center alert alert-danger" data-th-if="${info}">
+                    <b class="fg-green" data-th-text="${info}">Info</b>
+                </div>
                 <div class="box-content" >
                     <div class="offset4 span12" id="choice">
                         <a class="quick-button-small span2" onclick="$('#choice').fadeOut();$('#user_form').css('visibility','visible')">
@@ -75,12 +78,12 @@
                                 <div class="control-group">
                                     <label class="control-label"  for="mdp">Mot de passe<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="password" class="span6 typeahead" id="mdp" data-th-field="*{password}" >
+                                        <input type="password" required class="span6 typeahead" id="mdp" data-th-field="*{password}" >
                                     </div>
                                 </div>
                                 <div class="control-group">
                                         <label class="control-label span7"  for="mdp">Retapez le mot de passe<span class="text-danger">*</span> </label>                                   <div class="controls">
-                                        <input type="password"  class="span6 typeahead" id="vmdp" name="vmdp">
+                                        <input type="password"  required class="span6 typeahead" id="vmdp" name="vmdp">
                                     </div>
                                 </div>
                             <div class="form-actions">
@@ -89,12 +92,7 @@
                             </div>
                             </div>
                         </fieldset>
-
-
                     </form>
-                    <div class="text-center" data-th-if="${info}">
-                        <p class="fg-red" data-th-text="${info}">Info</p>
-                    </div>
                 </div>
             </div><!--/span-->
         </div><!--/row-->
@@ -103,7 +101,6 @@
     <!-- end: Content -->
 </div>
 <div data-layout-fragment="extra-js">
-<script type="text/javascript">
 
 </div>
 </body>

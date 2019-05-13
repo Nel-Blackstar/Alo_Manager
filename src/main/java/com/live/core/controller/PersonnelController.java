@@ -17,6 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -155,11 +158,15 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @GetMapping(value="/users/ajouter-user")
-    public String formUser(Model model) {
+    public String formUser(Model model,HttpSession session) {
         chargerLive(model);
         // Charger la liste des rôles disponibles et déposer dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
         //chargement de la liste du personnel
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
         model.addAttribute("listePersonnels",listePersonnels);
         model.addAttribute("state", "get");
@@ -176,10 +183,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/users/ajouter-user")
-    public String ajouterUser(Model model, Users users, @RequestParam("role") String role,@RequestParam("vmdp") String vmdp) {
+    public String ajouterUser(HttpSession session, Model model, Users users, @RequestParam("role") String role, @RequestParam("vmdp") String vmdp) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
-
+        List<String> erreur=new ArrayList<String>();
         Users user = new Users();
         user.setLogin(users.getLogin());
         user.setActive(true);
@@ -190,16 +197,27 @@ public class PersonnelController extends InitiateController {
 
         // Attribuer les rôles à l'utilisateur
       Roles roles = rolesService.findOne(role);
-        if(roles != null){
-            // Enregistrer l'utilisateur
-            Users savedUser = usersService.save(user);
-            // Le rôle selectionné existe dans le système
-            savedUser.addFirstRole(roles);
-            usersService.save(savedUser);
+      if (!vmdp.equals(users.getPassword())){
+            erreur.add("les mots de passe saisie ne sont pas identique \n");
+      }
+        if (usersService.findByLogin(users.getLogin()) != null){
+            erreur.add("Un utilisateur possedans se login existe deja dans le systeme \n");
         }
-        model.addAttribute("state", "post");
-        model.addAttribute("info",user.getLogin() +" - "+user.getUsername());
-        return "redirect:/admin/users";
+        if(!erreur.isEmpty()){
+            session.setAttribute("infos",erreur);
+            return  "redirect:/admin/users/ajouter-user";
+        }else{
+            if(roles != null){
+                // Enregistrer l'utilisateur
+                Users savedUser = usersService.save(user);
+                // Le rôle selectionné existe dans le système
+                savedUser.addFirstRole(roles);
+                usersService.save(savedUser);
+            }
+            model.addAttribute("state", "post");
+            session.setAttribute("infos","Utilisateur cree, Login: "+user.getLogin() +" -- Nom :  "+user.getUsername());
+            return "redirect:/admin/users";
+        }
     }
 
     /**
@@ -227,12 +245,16 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @GetMapping("/users/editer-user/{id}")
-    public String editerUser(Model model, @PathVariable("id") String login) {
+    public String editerUser(HttpSession session,Model model, @PathVariable("id") String login) {
         Users users = usersRepository.findUsersByLogin(login);
         model.addAttribute("state", "get");
         model.addAttribute("users", users);
         model.addAttribute("listePersonnels", personnelService.findAll());
         model.addAttribute("listeRoles", rolesService.findAll());
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         //model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
         return "administration/utilisateurs/update";
@@ -267,8 +289,9 @@ public class PersonnelController extends InitiateController {
 
     // Suppression d'une users
     @RequestMapping("/users/supprimer-user/{id}")
-    public String supprimerUser(Model model, @PathVariable("id") String login) {
+    public String supprimerUser(HttpSession session,Model model, @PathVariable("id") String login) {
         usersService.delete(usersRepository.findUsersByLogin(login));
+        session.setAttribute("infos","l'utilisateur "+login+"A ete supprimer avec success");
         chargerLive(model);
         return "redirect:/admin/users";
     }
@@ -279,11 +302,14 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @GetMapping("/users")
-    public String listUsers(Model model) {
+    public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
-
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         return "administration/utilisateurs/index";
     }
     /**
