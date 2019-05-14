@@ -201,8 +201,12 @@ public class AdministrationController {
     * @return
     */
     @RequestMapping("/update-banque/{id}")
-    public String editeBanque(Model model,@PathVariable long id) {
+    public String editeBanque(HttpSession session,Model model,@PathVariable long id) {
    	Banque banque = banqueService.findOne(id);
+   	if (session.getAttribute("infos") != null){
+        model.addAttribute("info",session.getAttribute("infos"));
+        session.removeAttribute("infos");
+    }
    	model.addAttribute("banque", banque);
    	return "administration/banques/update";
 
@@ -214,8 +218,9 @@ public class AdministrationController {
     * @return
     */
     @PostMapping(value = "/update-banque")
-    public String saveUpdateBanque(Banque banque) {
+    public String saveUpdateBanque(HttpSession session,Banque banque) {
    	banqueService.save(banque);
+   	session.setAttribute("infos","Modification terminer avec succes!!");
    	return "redirect:/admin/banques";
 
    }
@@ -226,9 +231,10 @@ public class AdministrationController {
      * @return
      */
     @RequestMapping("/delete-banque/{id}")
-    public String deleteBanque(@PathVariable long id) {
+    public String deleteBanque(HttpSession session,@PathVariable long id) {
     	Banque banque = banqueService.findOne(id);
     	banqueService.delete(banque);
+    	session.setAttribute("infos","suppression terminer avec succes!!");
     	return "redirect:/admin/banques";
 
     }

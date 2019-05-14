@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Formations</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a href="#" data-th-href="@{/admin/formations/}">Sessions formations</a></li>
+        </ul>
+
+        <div style="margin-bottom: 7px">
+            <a data-th-href="@{/admin/ajouter-formation}" class="btn btn-small btn-primary">Ajouter une session de formation</a>
+        </div>
+
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Sessions de formations</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="text-center" data-th-if="${info}">
+                    <p class="fg-green" data-th-text="${info}">Info</p>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Libellet</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Categorie permis disponible</th>
+                            <th>Delai de depots dossiers</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="formations, uStat : ${listeFormations}">
+                            <td data-th-text="${uStat.count}"></td>
+                            <td data-th-text="${formations.dateDebut}"></td>
+                            <td data-th-text="${formations.dateDebut}"></td>
+                            <td data-th-text="${formations.dateFin}"></td>
+                            <td>Tous les permis</td>
+                            <td data-th-text="${formations.delaiDossiers}"></td>
+                            <td>
+                                <a href="#" data-th-href="@{'/admin/consulter-formation/'+${formations.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
+                                <a href="#" data-th-href="@{'/admin/update-formation/'+${formations.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/supprimer-user/'+${formations.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+    </div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>
+
+
+
+

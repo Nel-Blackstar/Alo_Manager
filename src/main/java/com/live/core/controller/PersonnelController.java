@@ -9,6 +9,9 @@ import com.live.core.repository.UsersRepository;
 import com.live.rh.entities.Apprenant;
 import com.live.rh.service.ApprenantService;
 import com.live.core.service.*;
+import com.live.moniteur.entities.SessionFormation;
+import com.live.moniteur.repository.SessionFormationRepository;
+import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,8 @@ public class PersonnelController extends InitiateController {
     BanqueService banqueService;
     @Autowired
     ApprenantService apprenantService;
+    @Autowired
+    SessionFormationService sessionFormationService;
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -57,10 +62,13 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @GetMapping("/personnels/ajouter-personnel")
-    public String formPersonnel(Model model) {
+    public String formPersonnel(Model model,HttpSession session) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
-
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         model.addAttribute("state", "get");
         model.addAttribute("personnel", new Personnel());
         model.addAttribute("banques", banqueService.findAll());
@@ -76,11 +84,12 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(Model model, Personnel personnel) {
+    public String ajouterPersonnel(HttpSession session,Model model, Personnel personnel) {
         //model.addAttribute("personnel", iHotelManager.userConnecte());
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
+        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'être crée!!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
@@ -92,11 +101,15 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @RequestMapping("/personnels/modifier-personnel/{id}")
-    public String consulterPersonnel(Model model, @PathVariable("id") Long id) {
+    public String consulterPersonnel(HttpSession session,Model model, @PathVariable("id") Long id) {
         chargerLive(model);
         Personnel personnel = personnelService.findOne(id);
         model.addAttribute("banques", banqueService.findAll());
         model.addAttribute("personnel", personnel);
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         return "administration/personnels/update";
     }
 
@@ -106,11 +119,14 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @RequestMapping("/personnels")
-    public String listPersonnel(Model model) {
+    public String listPersonnel(HttpSession session,Model model) {
         model.addAttribute("listePersonnels", personnelService.findAll());
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
-
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         return "administration/personnels/index";
     }
 
@@ -123,7 +139,7 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/personnels/modifier-personnel")
-    public String modifierPersonnel(Model model, Personnel personnel,String date) {
+    public String modifierPersonnel(HttpSession session,Model model, Personnel personnel,String date) {
     	@SuppressWarnings("deprecation")
 		Date date_naissance=new Date();
 		try {
@@ -135,6 +151,7 @@ public class PersonnelController extends InitiateController {
     	personnel.setDate_naissance(date_naissance);
         chargerLive(model);
         personnelService.save(personnel);
+        session.setAttribute("infos","Modification terminer avec succes!!");
         return "redirect:/admin/personnels";
 	    }
 	    
@@ -145,8 +162,9 @@ public class PersonnelController extends InitiateController {
 	    * @return
 	    */
 	   @RequestMapping("/personnels/supprimer-personnel/{id}")
-	   public String supprimerPersonnel(Model model, @PathVariable("id") long id) {
+	   public String supprimerPersonnel(HttpSession session,Model model, @PathVariable("id") long id) {
 	       personnelService.delete(personnelService.findOne(id));
+	       session.setAttribute("infos","suppression terminer avec succes!!");
 	       return "redirect:/admin/personnels";
 	   }
 
@@ -329,7 +347,11 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @GetMapping("/apprenants")
-    public String listApprenant(Model model) {
+    public String listApprenant(HttpSession session,Model model) {
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
     	model.addAttribute("listeApprenant", apprenantService.findAll());
         return "administration/apprenants/index";
     }
@@ -339,8 +361,11 @@ public class PersonnelController extends InitiateController {
     * @return
     */
     @RequestMapping("/ajouter-apprenant")
-    public String formApprenant(Model model) {
-
+    public String formApprenant(HttpSession session,Model model) {
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
        model.addAttribute("state", "get");
        model.addAttribute("apprenant", new Apprenant());
        return "administration/apprenants/create";
@@ -351,10 +376,11 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/ajouter-apprenant")
-    public String ajouterApprenant(Model model, Apprenant apprenant) {
+    public String ajouterApprenant(HttpSession session,Model model, Apprenant apprenant) {
         Apprenant apprenantToSave = apprenantService.save(apprenant);
         model.addAttribute("state", "post");
         model.addAttribute("info",apprenantToSave.getNom()+" - "+apprenantToSave.getTelephone_1());
+        session.setAttribute("infos","Ajout "+apprenantToSave.getNom()+" - "+apprenantToSave.getTelephone_1()+" terminer avec succes!!");
         return "redirect:/admin/apprenants";
     }
     /**
@@ -364,9 +390,13 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @RequestMapping("/update-apprenant/{id}")
-    public String editeApprenant(Model model,@PathVariable long id) {
+    public String editeApprenant(HttpSession session,Model model,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	model.addAttribute("apprenant", apprenant);
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
     	return "administration/apprenants/update";
 
     }
@@ -375,7 +405,17 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/update-apprenant")
-    public String saveUpdateApprenant(Apprenant apprenant) {
+    public String saveUpdateApprenant(HttpSession session,Apprenant apprenant,String date) {
+    	@SuppressWarnings("deprecation")
+		Date date_naissance=new Date();
+		try {
+			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+		session.setAttribute("infos","Modification terminer avec succes!!");
+		apprenant.setDate_naissance(date_naissance);
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
@@ -386,10 +426,91 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @RequestMapping("/delete-apprenant/{id}")
-    public String deleteApprenant(@PathVariable long id) {
+    public String deleteApprenant(HttpSession session,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	apprenantService.delete(apprenant);
+    	session.setAttribute("infos","suppression terminer avec succes!!");
     	return "redirect:/admin/apprenants";
 
     }
+    //La formation
+    /**
+     * Rechercher de l'ensemble des utilisateurs du systeme
+     * @param model
+     * @return
+     */
+    @RequestMapping("/formations")
+    public String listFormation(HttpSession session,Model model) {
+        model.addAttribute("listeFormations", sessionFormationService.findAll());
+        chargerLive(model);
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        return "administration/formations/index";
+    }
+    /** 
+     * Mï¿½thode d'ajout d'un Apprenant get
+     * @param model
+     * @return
+     */
+     @GetMapping("/ajouter-formation")
+     public String formFormation(HttpSession session,Model model) {
+     	if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+        model.addAttribute("state", "get");
+        model.addAttribute("sessionFormation", new SessionFormation());
+        return "administration/formations/create";
+     }
+     /**
+      * Mï¿½thode d'ajout d'un Apprenant post
+      * @param model
+      * @return
+      */
+     @PostMapping(value = "/ajouter-formation")
+     public String ajouterFormation(HttpSession session,Model model, SessionFormation formation) {
+         sessionFormationService.save(formation);
+         model.addAttribute("state", "post");
+         session.setAttribute("infos","Nouvelle session de formation configuerer avec succès!!");
+         return "redirect:/admin/formations";
+     }
+     /**
+      * Modification des informations sur un Apprenant
+      * @param model
+      * @param id identifiant de l'apprenant
+      * @return
+      */
+     @RequestMapping("/update-formation/{id}")
+     public String editeFormation(HttpSession session,Model model,@PathVariable long id) {
+     	SessionFormation formation = sessionFormationService.findOne(id);
+     	model.addAttribute("formation", formation);
+     	if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+     	return "administration/formations/update";
+
+     }
+     /**
+      * Modification des informations sur la formation
+      * @return
+      */
+     @PostMapping(value = "/update-formation")
+     public String saveUpdateFormation(HttpSession session,Apprenant apprenant,String date) {
+     	@SuppressWarnings("deprecation")
+ 		Date date_naissance=new Date();
+ 		try {
+ 			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+ 		} catch (ParseException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}  
+ 		session.setAttribute("infos","Modification terminer avec succes!!");
+ 		apprenant.setDate_naissance(date_naissance);
+     	apprenantService.save(apprenant);
+     	return "redirect:/admin/apprenants";
+
+     }
 }

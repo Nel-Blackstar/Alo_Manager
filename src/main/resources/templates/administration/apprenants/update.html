@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <form class="form-horizontal" data-th-action="@{/admin/ajouter-apprenant}" method="post"  data-th-object="${apprenant}">
+                    <form class="form-horizontal" data-th-action="@{/admin/update-apprenant}" method="post"  data-th-object="${apprenant}">
                         <fieldset>
                             <div class="box span6">
                                 <div class="control-group">
@@ -51,7 +51,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="date_naissance">Date de naissance<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" class="span6 typeahead input-xlarge datepicker" id="date_naissance" data-th-field="*{date_naissance}">
+                                        <input type="text" data-th-value="*{date_naissance}" required class="span6 typeahead input-xlarge datepicker" id="date_naissance" name="date">
                                     </div>
                                 </div>
                                 <div class="control-group">
