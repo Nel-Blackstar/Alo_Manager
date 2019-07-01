@@ -61,20 +61,6 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @GetMapping("/personnels/ajouter-personnel")
-    public String formPersonnel(Model model,HttpSession session) {
-        //model.addAttribute("user", iHotelManager.userConnecte());
-        chargerLive(model);
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("state", "get");
-        model.addAttribute("personnel", new Personnel());
-        model.addAttribute("banques", banqueService.findAll());
-        return "administration/personnels/create";
-    }
-
     //gestion des personnelss
 
     /**
@@ -89,8 +75,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'�tre cr�e!!");
-        model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
+        session.setAttribute("infos","Le personnel "+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'ètre crée!!");
         return "redirect:/admin/personnels";
     }
 
@@ -127,6 +112,9 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("state", "get");
+        model.addAttribute("personnel", new Personnel());
+        model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
 
@@ -173,23 +161,6 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @GetMapping(value="/users/ajouter-user")
-    public String formUser(Model model,HttpSession session) {
-        chargerLive(model);
-        // Charger la liste des rôles disponibles et déposer dans le model
-        model.addAttribute("listeRoles", rolesService.findAll());
-        //chargement de la liste du personnel
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
-        model.addAttribute("listePersonnels",listePersonnels);
-        model.addAttribute("state", "get");
-        model.addAttribute("users", new Users());
-        return "administration/utilisateurs/create";
-    }
-
     //gestion des userss
 
     /**
@@ -335,10 +306,17 @@ public class PersonnelController extends InitiateController {
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         chargerLive(model);
+        // Charger la liste des rôles disponibles et déposer dans le model
+        model.addAttribute("listeRoles", rolesService.findAll());
+        //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
+        model.addAttribute("listePersonnels",listePersonnels);
+        model.addAttribute("state", "get");
+        model.addAttribute("users", new Users());
         return "administration/utilisateurs/index";
     }
     /**
@@ -352,24 +330,10 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("state", "get");
     	model.addAttribute("listeApprenant", apprenantService.findAll());
         model.addAttribute("apprenant", new Apprenant());
         return "administration/apprenants/index";
-    }
-    /** 
-    * M�thode d'ajout d'un Apprenant get
-    * @param model
-    * @return
-    */
-    @RequestMapping("/ajouter-apprenant")
-    public String formApprenant(HttpSession session,Model model) {
-    	if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-       model.addAttribute("state", "get");
-       model.addAttribute("apprenant", new Apprenant());
-       return "administration/apprenants/create";
     }
     /**
      * M�thode d'ajout d'un Apprenant post

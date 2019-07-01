@@ -161,6 +161,7 @@ public class AdministrationController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("banque", new Banque());
         return "administration/banques/index";
     }
 
@@ -169,17 +170,6 @@ public class AdministrationController {
      * @param model
      * @return
      */
-    @RequestMapping("/ajouter-banque")
-    public String formBanque(Model model,HttpSession session) {
-    	if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("state", "get");
-        model.addAttribute("banque", new Banque());
-        return "administration/banques/create";
-    }
-
     /**
      * <b> methode d'ajout d'une banque </b>
      * @param model
@@ -190,8 +180,7 @@ public class AdministrationController {
     public String ajouterBanque(HttpSession session,Model model, Banque banque) {
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
-        model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
-        session.setAttribute("infos","La nouvelle banque vien d'être crée!!");
+        model.addAttribute("infos","La nouvelle banque vien d'Ã¨tre crÃ©e!! "+banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
         return "redirect:/admin/banques";
     }
     /**
