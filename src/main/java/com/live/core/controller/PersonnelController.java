@@ -89,7 +89,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'être crée!!");
+        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'ï¿½tre crï¿½e!!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
@@ -353,6 +353,7 @@ public class PersonnelController extends InitiateController {
             session.removeAttribute("infos");
         }
     	model.addAttribute("listeApprenant", apprenantService.findAll());
+        model.addAttribute("apprenant", new Apprenant());
         return "administration/apprenants/index";
     }
     /** 
@@ -473,7 +474,7 @@ public class PersonnelController extends InitiateController {
      public String ajouterFormation(HttpSession session,Model model, SessionFormation formation) {
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuerer avec succès!!");
+         session.setAttribute("infos","Nouvelle session de formation configuerer avec succï¿½s!!");
          return "redirect:/admin/formations";
      }
      /**
