@@ -24,46 +24,59 @@
 
 
         <div style="margin: 7px">
-           <h1 align="center">Ajouter un apprenant à la session de formation</h1>
+           <h1 align="center">Gestion des apprenants de la session de formation</h1>
         </div>
 
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les apprenants</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Ajouter un apprenants</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
                         <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
                     </div>
                 </div>
-                <div class="alert alert-info text-center" data-th-if="${info}">
+                <div class="alert alert-info text-center" style="height:12px;" data-th-if="${info}">
                     <p class="fg-green" data-th-text="${info}">Info</p>
                 </div>
                 <div class="box-content">
-                		<div>
-                        <form class="form-horizontal" data-th-action="@{/admin/ajouter-apprenant}" method="post">
-                            <fieldset>
-                                <div class="box span6">
-                                  <div class="control-group">
-                                        <label class="control-label" for="type_apprenan">Apprenant<span class="text-danger">*</span> </label>
-                                        <div class="controls">
-                                            <select id="sexe" data-rel="chosen"class="span6 typeahead">
-                                                <option data-th-value="M">Homme</option>
-                                                <option data-th-value="F">Femme</option>
-                                                <option data-th-value="A">Autre</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-actions">
-                                        <button type="submit" class="btn btn-primary">Ajouter</button>
-                                        <button type="reset" class="btn">Annuler</button>
-                                    </div>
-                                </div>
-                            </fieldset>
-
-
-                        </form>
+                		<div class="offset4 span12">
+	                        <form class="form-horizontal" data-th-action="@{/admin/formation/apprenant}" method="post" data-th-object="${inscription}">
+	                            <fieldset>
+	                                <div class="box span6">
+	                                  <div class="control-group">
+	                                        <label class="control-label" for="type_apprenan">Apprenant<span class="text-danger">*</span> </label>
+	                                        <input type="hidden" data-th-value="${formation.id}" data-th-field="*{formation}">
+	                                        <div class="controls">
+	                                            <select data-rel="chosen"class="span6 typeahead" data-th-field="*{apprenant}">
+	                                                <span data-th-each="apprenant : ${listeApprenant}">
+					                                    <option data-th-value="${apprenant.id}" data-th-text="${apprenant.nom}"></option>
+					                                </span>
+	                                            </select>
+	                                        </div>
+	                                        <label class="control-label" for="type_apprenan">Permis de permi<span class="text-danger">*</span> </label>
+	                                        <div class="controls">
+	                                            <select data-rel="chosen"class="span6 typeahead" data-th-field="*{categoriePermis}">
+	                                                <span data-th-each="permi : ${permis}">
+					                                    <option data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
+					                                </span>
+	                                            </select>
+	                                        </div>
+	                                        <div class="control-group">
+			                                    <label class="control-label"  for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
+			                                    <div class="controls">
+			                                        <input type="text" required class="span6 typeahead" id="paiement" data-th-field="*{paiement}" >
+			                                    </div>
+			                                </div>
+	                                    </div>
+	                                    <div class="form-actions">
+	                                        <button type="submit" class="btn btn-primary">Ajouter</button>
+	                                        <button type="reset" class="btn">Annuler</button>
+	                                    </div>
+	                                </div>
+	                            </fieldset>
+	                        </form>
                         </div>
                     <div style="margin: 7px">
                         <h1 align="center">Liste des Inscrits</h1>
@@ -77,22 +90,26 @@
                             <th>Adrèsse</th>
                             <th>Téléphone</th>
                             <th>email</th>
+                            <th>Paiement des frais</th>
+                            <th>Reste</th>
+                            <th>Permi</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="apprenant, aStat : ${listeApprenant}">
+                        <tr data-th-each="inscription, aStat : ${listeInscriptions}">
                             <td data-th-text="${aStat.count}"></td>
-                            <td data-th-text="${apprenant.nom}"></td>
-                            <td data-th-text="${apprenant.prenom}"></td>
-                            <td data-th-text="${apprenant.adresse}"></td>
-                            <td data-th-text="${apprenant.telephone_1}"></td>
-                            <td data-th-text="${apprenant.email}"></td>
+                            <td data-th-text="${inscription.getApprenant().nom}"></td>
+                            <td data-th-text="${inscription.getApprenant().prenom}"></td>
+                            <td data-th-text="${inscription.getApprenant().adresse}"></td>
+                            <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
+                            <td data-th-text="${inscription.getApprenant().email}"></td>
+                            <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
+                            <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
+                            <td data-th-text="${inscription.getCategoriePermis().getDescription()}"></td>
                             <td>
-                                <a href="#" class="btn btn-small btn-primary">
-                                    <i class="halflings-icon white folder-open"></i></a>
-                                <a data-th-href="@{/admin/update-apprenant/{id}(id = ${apprenant.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/delete-apprenant/{id}(id = ${apprenant.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
+                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

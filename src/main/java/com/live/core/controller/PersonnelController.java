@@ -1,5 +1,6 @@
 package com.live.core.controller;
 
+import com.live.common.service.CodeValueService;
 import com.live.core.entities.Live;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
@@ -12,6 +13,7 @@ import com.live.core.service.*;
 import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.repository.SessionFormationRepository;
+import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.text.ParseException;
@@ -52,6 +55,10 @@ public class PersonnelController extends InitiateController {
     ApprenantService apprenantService;
     @Autowired
     SessionFormationService sessionFormationService;
+    @Autowired
+    InscriptionService inscriptionService;
+    @Autowired
+    CodeValueService codeValueService;
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -496,8 +503,48 @@ public class PersonnelController extends InitiateController {
          }
      	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
      	model.addAttribute("listeApprenant", apprenantService.findAll());
+     	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+     	model.addAttribute("permis", codeValueService.findByIdentifier("type_permis"));
      	model.addAttribute("formation", formation);
         model.addAttribute("inscription", new Inscription());
          return "administration/formations/apprenants/index";
      }
+     @PostMapping(value = "/formation/apprenant")
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription) {
+         chargerLive(model);
+         SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+         inscription.setFormation(formation);
+         Inscription inscription1 = inscriptionService.save(inscription);
+         model.addAttribute("state", "post");
+         session.setAttribute("infos","Procéssus terminer avec succès!");
+         String referer = request.getHeader("Referer");
+         //return "redirect:"+ referer;
+         return "redirect:/admin/formation/apprenant";
+     }
+     //suppression de l'inscription
+     @GetMapping("/delete-Inscription/{id}")
+     public String deleteEntrer(HttpServletRequest request,Model model,HttpSession session,@PathVariable long id) {
+     	Inscription inscription = inscriptionService.findOne(id);
+     	inscriptionService.delete(inscription);
+     	session.setAttribute("infos","suppression terminer avec succes!!");
+     	String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
+     }
+     //modification de l'inscription
+     @RequestMapping("/modifier-Inscription/{id}")
+     public String editeCharge(HttpSession session,Model model,@PathVariable("id")  long id) {
+    	 SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+    	 model.addAttribute("listeApprenant", apprenantService.findAll());
+      	 model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+      	 model.addAttribute("permis", codeValueService.findByIdentifier("type_permis"));
+      	 model.addAttribute("formation", formation);
+         Inscription inscription = inscriptionService.findOne(id);
+         model.addAttribute("inscription", inscription);
+         if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+         return "administration/formations/apprenants/update";
+     }
+     
 }

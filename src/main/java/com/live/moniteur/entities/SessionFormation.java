@@ -15,8 +15,6 @@ public class SessionFormation extends LiveEntity {
     private Date dateDebut;
     @Temporal(TemporalType.DATE)
     private Date dateFin;
-    @OneToOne
-    private CodeValue categoriePermis;
     private float fraisInscription;
 
     @OneToMany
@@ -59,14 +57,6 @@ public class SessionFormation extends LiveEntity {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
-    }
-
-    public CodeValue getCategoriePermis() {
-        return categoriePermis;
-    }
-
-    public void setCategoriePermis(CodeValue categoriePermis) {
-        this.categoriePermis = categoriePermis;
     }
 
     public float getFraisInscription() {
