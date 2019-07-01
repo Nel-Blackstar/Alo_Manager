@@ -1,0 +1,69 @@
+<!DOCTYPE html5>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Cours</title>
+    <style type="text/css">
+                table td.c-info{
+                   vertical-align:middle !important;
+                   text-align:center !important;
+                }
+    </style>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#" data-th-href="@{/admin/cours/}">Cours</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Informations sur le cours</span></li>
+        </ul>
+                    <div class="text-center" data-th-if="${info}">
+                        <p class="fg-red" data-th-text="${info}">Info</p>
+                    </div>
+                    <table class="table table-striped table-bordered" style="width:100%; min-height:50%;">
+                            <tr>
+                                <td colspan="2" style="width:30%;" class="c-info"><h2>RECAPITULATIF</h2></td>
+                                <td style="width:70%; height:5%;" class="c-info"><h2>LES CHAPITRES </h2></td>
+                                <td class="c-info"><a href="#" data-th-href="@{'/admin/cours/add-chapter/'+${cours.id}}" class="btn btn-success pull-right">Ajouter un chapitre </a></td>
+                            </tr>
+                        <tr>
+                            <td class="c-info"><b>Module</b></td>
+                            <td class="c-info"><i><b data-th-text="${cours.module}"></b></i></td>
+                            <td rowspan="3" colspan="2" style="width:70%;">
+                                <a class="quick-button-small span2" data-th-href="@{'/admin/cours/view-chapter/'+${chap.id}}" data-th-each="chap, uStat : ${cours.getChapitres()}">
+                                    <p> <i class="glyphicons-icon book"></i> <br> chapitre <span data-th-text="${uStat.count}"></span> :<br> <b data-th-text="${chap.titre}">Le  Demarrage</b></p>
+                                    <span class="notification blue"> </span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="c-info"><b>Type</b></td>
+                            <td class="c-info"><i><b data-th-text="${cours.type}"></b></i></td>
+                        </tr>
+                        <tr>
+                            <td class="c-info"><b>Libellé</b></td>
+                            <td class="c-info"><i><b data-th-text="${cours.libelle}"></b></i></td>
+                        </tr>
+                    </table>
+        <div class="clearfix"></div>
+    </div>
+    <!-- end: Content -->
+</div>
+<div data-layout-fragment="extra-js">
+    <script type="text/javascript">
+
+</div>
+</body>
+</html>
+
+

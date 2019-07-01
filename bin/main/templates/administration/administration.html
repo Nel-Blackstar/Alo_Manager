@@ -13,7 +13,7 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="../index.html">Administration</a>
+                <a href="">Administration</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li><a href="#">Accueil</a></li>
@@ -26,24 +26,21 @@
                 </div>
                 <div class="box-content">
 
-                    <a class="quick-button-small span2">
+                    <a class="quick-button-small span2" data-th-href="@{/admin/banques}">
                         <i class="icon-building"></i>
-                        <p>L'auto ecole</p>
+                        <p>Banque</p>
                     </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-home"></i>
-                        <p>Personnel</p>
-                        <span class="notification blue">3</span>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/personnels}">
+                        <i class="icon-sitemap"></i>
+                        <p>Personnels</p>
                     </a>
                     <a class="quick-button-small span2" data-th-href="@{/admin/apprenants}">
-                        <i class="icon-step-forward"></i>
+                        <i class="icon-group"></i>
                         <p>Apprenants</p>
-                        <span class="notification green">15</span>
                     </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-folder-open"></i>
-                        <p>Comptable</p>
-                        <span class="notification green">230</span>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/users}">
+                        <i class="icon-user"></i>
+                        <p>Utilisateurs</p>
                     </a>
 
                     <div class="clearfix"></div>
@@ -59,21 +56,18 @@
                 </div>
                 <div class="box-content">
 
-                    <a class="quick-button-small span2">
-                        <i class="icon-building"></i>
-                        <p>Produits</p>
-                        <span class="notification green">120</span>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/formations}">
+                        <i class="icon-briefcase"></i>
+                        <p>Formations</p>
                     </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-folder-open"></i>
-                        <p>Personnel</p>
-                        <span class="notification green">10</span>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/fournisseurs}">
+                        <i class="icon-globe"></i>
+                        <p>Fournisseurs</p>
                     </a>
 
                     <a class="quick-button-small span2">
-                        <i class="icon-folder-open"></i>
-                        <p>Fournisseurs</p>
-                        <span class="notification green">10</span>
+                        <i class="icon-calendar"></i>
+                        <p>Rendez-vous</p>
                     </a>
 
                     <div class="clearfix"></div>

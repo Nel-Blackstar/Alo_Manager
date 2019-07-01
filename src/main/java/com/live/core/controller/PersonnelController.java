@@ -1,5 +1,4 @@
 package com.live.core.controller;
-
 import com.live.common.entities.CodeValue;
 import com.live.common.service.CodeValueService;
 import com.live.core.entities.Personnel;
@@ -8,7 +7,9 @@ import com.live.core.entities.Users;
 import com.live.core.repository.PersonnelRepository;
 import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
+import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
+import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.service.BanqueService;
 import com.live.rh.entities.Apprenant;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +53,9 @@ public class PersonnelController extends InitiateController {
     CodeValueService codeValueService;
     @Autowired
     SessionFormationService sessionFormationService;
+    @Autowired
+    InscriptionService inscriptionService;
+
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -61,20 +66,6 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @GetMapping("/personnels/ajouter-personnel")
-    public String formPersonnel(Model model,HttpSession session) {
-        //model.addAttribute("user", iHotelManager.userConnecte());
-        chargerLive(model);
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("state", "get");
-        model.addAttribute("personnel", new Personnel());
-        model.addAttribute("banques", banqueService.findAll());
-        return "administration/personnels/create";
-    }
-
     //gestion des personnelss
 
     /**
@@ -89,7 +80,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'�tre cr�e!!");
+        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vient d'etre cree !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
@@ -127,6 +118,9 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("state", "get");
+        model.addAttribute("personnel", new Personnel());
+        model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
 
@@ -173,23 +167,6 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @return
      */
-    @GetMapping(value="/users/ajouter-user")
-    public String formUser(Model model,HttpSession session) {
-        chargerLive(model);
-        // Charger la liste des rôles disponibles et déposer dans le model
-        model.addAttribute("listeRoles", rolesService.findAll());
-        //chargement de la liste du personnel
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
-        model.addAttribute("listePersonnels",listePersonnels);
-        model.addAttribute("state", "get");
-        model.addAttribute("users", new Users());
-        return "administration/utilisateurs/create";
-    }
-
     //gestion des userss
 
     /**
@@ -335,10 +312,17 @@ public class PersonnelController extends InitiateController {
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         chargerLive(model);
+        // Charger la liste des rôles disponibles et déposer dans le model
+        model.addAttribute("listeRoles", rolesService.findAll());
+        //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        List<Personnel> listePersonnels=personnelRepository.findUsersAccount();
+        model.addAttribute("listePersonnels",listePersonnels);
+        model.addAttribute("state", "get");
+        model.addAttribute("users", new Users());
         return "administration/utilisateurs/index";
     }
     /**
@@ -352,23 +336,10 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("state", "get");
     	model.addAttribute("listeApprenant", apprenantService.findAll());
+        model.addAttribute("apprenant", new Apprenant());
         return "administration/apprenants/index";
-    }
-    /** 
-    * M�thode d'ajout d'un Apprenant get
-    * @param model
-    * @return
-    */
-    @RequestMapping("/ajouter-apprenant")
-    public String formApprenant(HttpSession session,Model model) {
-    	if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-       model.addAttribute("state", "get");
-       model.addAttribute("apprenant", new Apprenant());
-       return "administration/apprenants/create";
     }
     /**
      * M�thode d'ajout d'un Apprenant post
@@ -515,4 +486,65 @@ public class PersonnelController extends InitiateController {
      	return "redirect:/admin/apprenants";
 
      }
+     //Affichage de la session de formation 
+     @RequestMapping("/consulter-formation/{id}")
+     public String ConsulterPeriode(Model model,@PathVariable long id,HttpSession session) {
+    	SessionFormation formation = sessionFormationService.findOne(id);
+    	session.setAttribute("formationCourante",formation);
+      	model.addAttribute("formation", formation);
+     	return "administration/formations/view";
+     }
+     //Gestion des apprenants dans la session de formation
+     @GetMapping("/formation/apprenant")
+     public String formationApprenant(HttpSession session,Model model) {
+     	if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+     	model.addAttribute("listeApprenant", apprenantService.findAll());
+     	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+     	model.addAttribute("permis", codeValueService.findByIdentifier("type_permis"));
+     	model.addAttribute("formation", formation);
+        model.addAttribute("inscription", new Inscription());
+         return "administration/formations/apprenants/index";
+     }
+     @PostMapping(value = "/formation/apprenant")
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription) {
+         chargerLive(model);
+         SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+         inscription.setFormation(formation);
+         Inscription inscription1 = inscriptionService.save(inscription);
+         model.addAttribute("state", "post");
+         session.setAttribute("infos","Proc�ssus terminer avec succ�s!");
+         String referer = request.getHeader("Referer");
+         //return "redirect:"+ referer;
+         return "redirect:/admin/formation/apprenant";
+     }
+     //suppression de l'inscription
+     @GetMapping("/delete-Inscription/{id}")
+     public String deleteEntrer(HttpServletRequest request,Model model,HttpSession session,@PathVariable long id) {
+     	Inscription inscription = inscriptionService.findOne(id);
+     	inscriptionService.delete(inscription);
+     	session.setAttribute("infos","suppression terminer avec succes!!");
+     	String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
+     }
+     //modification de l'inscription
+     @RequestMapping("/modifier-Inscription/{id}")
+     public String editeCharge(HttpSession session,Model model,@PathVariable("id")  long id) {
+    	 SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+    	 model.addAttribute("listeApprenant", apprenantService.findAll());
+      	 model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+      	 model.addAttribute("permis", codeValueService.findByIdentifier("type_permis"));
+      	 model.addAttribute("formation", formation);
+         Inscription inscription = inscriptionService.findOne(id);
+         model.addAttribute("inscription", inscription);
+         if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+         return "administration/formations/apprenants/update";
+     }
+     
 }

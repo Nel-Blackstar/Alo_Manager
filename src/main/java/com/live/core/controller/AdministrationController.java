@@ -1,39 +1,55 @@
 package com.live.core.controller;
 
 import com.live.core.entities.Live;
-import com.live.core.service.ILiveManager;
-import com.live.core.service.LiveService;
-import com.live.core.service.UsersService;
+import com.live.core.repository.PersonnelRepository;
+import com.live.core.repository.UsersRepository;
+import com.live.core.service.*;
+import com.live.moniteur.entities.Chapitre;
+import com.live.moniteur.entities.Cours;
+import com.live.moniteur.repository.ChapitreRepository;
+import com.live.moniteur.repository.CoursRepository;
+import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
-import com.live.rh.entities.Apprenant;
 import com.live.rh.service.ApprenantService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdministrationController {
     @Autowired
+    ChapitreRepository chapitreRepository;
+    @Autowired
+    CoursRepository coursRepository;
+    @Autowired
+    UsersRepository usersRepository;
+    @Autowired
+    PersonnelRepository personnelRepository;
+    @Autowired
+    PersonnelService personnelService;
+    @Autowired
+    UsersService usersService;
+    @Autowired
     LiveService liveService;
     @Autowired
     ILiveManager iLiveManager;
     @Autowired
-    UsersService usersService;
+    RolesService rolesService;
     @Autowired
     BanqueService banqueService;
     @Autowired
     ApprenantService apprenantService;
+    @Autowired
+    SessionFormationService sessionFormationService;
+    // Objet de cryptage et decryptage des mots de passe
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     // Rechercher l'autoecole et charger dans le modèle s'il existe, sinon, charger un autoecole par défaut
     public void chargerLive(Model model) {
@@ -160,6 +176,7 @@ public class AdministrationController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("banque", new Banque());
         return "administration/banques/index";
     }
 
@@ -168,17 +185,6 @@ public class AdministrationController {
      * @param model
      * @return
      */
-    @RequestMapping("/ajouter-banque")
-    public String formBanque(Model model,HttpSession session) {
-    	if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("state", "get");
-        model.addAttribute("banque", new Banque());
-        return "administration/banques/create";
-    }
-
     /**
      * <b> methode d'ajout d'une banque </b>
      * @param model
@@ -210,6 +216,7 @@ public class AdministrationController {
    	return "administration/banques/update";
 
    }
+
    /**
     * Modification des informations sur une banque
     * @param banque methode post
@@ -234,5 +241,90 @@ public class AdministrationController {
     	session.setAttribute("infos","suppression terminer avec succes!!");
     	return "redirect:/admin/banques";
 
+    }
+
+    /**
+     * Toutes les methodes de gestion des cours
+     * @param session
+     * @param model
+     * @return
+     */
+    @GetMapping("/cours")
+    public String Cours(HttpSession session,Model model) {
+        model.addAttribute("listeCours", coursRepository.findAll());
+        chargerLive(model);
+        //chargement de la liste du personnel
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("state", "get");
+        model.addAttribute("cours", new Cours());
+        return "administration/formations/cours/index";
+    }
+
+    @PostMapping(value = "/cours/ajouter-cours")
+    public String saveCours(HttpSession session,Cours cours) {
+        coursRepository.save(cours);
+        session.setAttribute("infos","Enregistrement du cours effectuer avec success");
+        return "redirect:/admin/cours";
+    }
+    @RequestMapping("/update-cours/{id}")
+    public String editCours(HttpSession session,Model model,@PathVariable long id) {
+        Cours cours = coursRepository.getOne(id);
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("cours", cours);
+        return "administration/formations/cours/update";
+
+    }
+    @PostMapping(value = "/cours/update-cours")
+    public String UpdateCours(HttpSession session,Cours cours) {
+        coursRepository.save(cours);
+        session.setAttribute("infos","Modification terminer avec succes!!");
+        return "redirect:/admin/cours";
+    }
+    @RequestMapping("/cours/delete-cours/{id}")
+    public String deleteCours(HttpSession session,@PathVariable long id) {
+        Cours cours = coursRepository.getOne(id);
+        coursRepository.delete(cours);
+        session.setAttribute("infos","suppression terminer avec succes!!");
+        return "redirect:/admin/cours";
+    }
+    /**
+     * affichage des information sur le cour
+     * @param session
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping("/consulter-cours/{id}")
+    public String showCour(HttpSession session,Model model,@PathVariable long id) {
+        Cours cours = coursRepository.getOne(id);
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("cours", cours);
+        return "administration/formations/cours/view";
+    }
+    @GetMapping(value = "/cours/add-chapter/{id}")
+    public String courChapter(HttpSession session,Model model,@PathVariable("id") long id_cours) {
+        model.addAttribute("chapitre",new Chapitre());
+        model.addAttribute("cours",id_cours);
+        return "administration/formations/cours/create_chapter";
+    }
+    @PostMapping(value = "/cours/save-chapitre")
+    public String saveChapter(HttpSession session,Chapitre chapitre,@RequestParam("id_cours") long cours) {
+            chapitreRepository.save(chapitre);
+            Cours cour=coursRepository.getOne(cours);
+            List<Chapitre> chapitres = cour.getChapitres();
+            chapitres.add(chapitre);
+            cour.setChapitres(chapitres);
+            coursRepository.save(cour);
+            session.setAttribute("infos","Nouveau chapitre enregistré");
+        return "redirect:/admin/consulter-cours/"+cours;
     }
 }
