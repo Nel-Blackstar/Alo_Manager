@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
 public class AdministrationController {
     @Autowired
     LiveService liveService;
-
     @Autowired
     ILiveManager iLiveManager;
     @Autowired
@@ -191,7 +190,7 @@ public class AdministrationController {
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
         model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
-        session.setAttribute("infos","La nouvelle banque vien d'être crée!!");
+        session.setAttribute("infos","La nouvelle banque vien d'ï¿½tre crï¿½e!!");
         return "redirect:/admin/banques";
     }
     /**
@@ -213,8 +212,7 @@ public class AdministrationController {
    }
    /**
     * Modification des informations sur une banque
-    * @param model methode post
-    * @param id identifiant de la banquet
+    * @param banque methode post
     * @return
     */
     @PostMapping(value = "/update-banque")
@@ -226,7 +224,6 @@ public class AdministrationController {
    }
     /**
      * Suppression d'une banque
-     * @param model
      * @param id identifiant de la banque
      * @return
      */

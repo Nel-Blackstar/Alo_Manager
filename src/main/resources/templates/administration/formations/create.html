@@ -34,45 +34,45 @@
                 <div class="box-content" >
                     <form id="formation_form" class="form-horizontal"  data-th-action="@{/admin/ajouter-formation}" method="post"  data-th-object="${sessionFormation}">
                         <fieldset>
-                            <div class="offset3 box span5">
-                                    <div class="control-group"><br><br>
-                                        <label class="control-label" for="delai_dossiers">Delai de depots des dossiers dossiers<span class="text-danger">*</span> </label>
-                                        <div class="controls">
-	                                        <input type="text" class="span6 typeahead" id="delai_dossiers" data-th-field="*{delaiDossiers}" >
-	                                    </div>
+                            <div class="offset3 box span6">
+                                <div class="control-group"><br><br>
+                                    <label class="control-label" for="delai_dossiers">Delai de depots des dossiers dossiers<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="delai_dossiers" data-th-field="*{delaiDossiers}" >
                                     </div>
+                                </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="dateDebut">Date de début<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                    <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateDebut" data-th-field="*{dateDebut}">
+                                        <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateDebut" data-th-field="*{dateDebut}">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="dateFin">Date de fin<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                    <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateFin" data-th-field="*{dateFin}">
+                                        <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateFin" data-th-field="*{dateFin}">
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"  for="categoriePermis">Frais d'inscription pour la formation<span class="text-danger">*</span> </label>
+                                    <label class="control-label"  for="fraisInscriptions">Frais d'inscription pour la formation<span class="text-danger">*</span></label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead" id="fraisInscriptions" data-th-field="*{fraisInscription}" >
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"  for="categoriePermis">Categorie de permie disponible<span class="text-danger">*</span> </label>
+                                    <label class="control-label"  for="categoriePermis">Categorie de permis disponible<span class="text-danger">*</span></label>
                                     <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="categoriePermis" data-th-field="*{categoriePermis}">
+                                        <select id="categoriePermis" data-rel="chosen" required  name="categoriePermis" class="span6 typeahead">
+                                            <option  data-th-each="permi : ${permis}" data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
+                                        </select>
                                     </div>
                                 </div>
-                            <div class="form-actions">
-                                <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
-                                <button type="reset" class="btn">Annuler</button>
-                            </div>
+                                <div class="form-actions">
+                                    <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
                             </div>
                         </fieldset>
-
-
                     </form>
                 </div>
             </div><!--/span-->

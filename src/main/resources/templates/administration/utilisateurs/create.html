@@ -48,19 +48,21 @@
                     <div class="alert alert-warning text-center" id="new_perso" style="display:none">
                         <h2>Vous devez d'abord enregistrer l'utilisateur parmis le personnels avant la creation d'un compte</h2>
                         <h4>suivez le lien ci dessous pour l'ajouter au personnel</h4>
-                        <a class="btn btn-link" data-th-href="@{/admin/personnels/ajouter-personnel}">Cliquer ici <span class="icon-chevron-right"><span class="icon-chevron-right"></span></a>
+                        <a class="btn btn-link" data-th-href="@{/admin/personnels/ajouter-personnel}">
+                            Cliquer ici <span class="icon-chevron-right"></span><span class="icon-chevron-right"></span></a>
                     </div>
-                    <form style="visibility:hidden"  id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/ajouter-user}" method="post"  data-th-object="${users}">
+                    <form style="visibility:hidden"  id="user_form" class="form-horizontal"  data-th-action="@{/admin/users/ajouter-user}" method="post"
+                          data-th-object="${users}">
                         <fieldset>
                             <div class="offset3 box span5">
-                                    <div class="control-group"><br><br>
-                                        <label class="control-label" for="username">Nom D'utilisateur<span class="text-danger">*</span> </label>
-                                        <div class="controls">
-                                            <select id="username" data-rel="chosen"  required data-th-field="*{username}" class="span6 typeahead">
-                                                <option  data-th-each="personnel, pStat : ${listePersonnels}" data-th-value="${personnel.nom}" data-th-text="${personnel.nom}"></option>
-                                            </select>
-                                        </div>
+                                <div class="control-group"><br><br>
+                                    <label class="control-label" for="username">Nom D'utilisateur<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="username" data-rel="chosen"  required data-th-field="*{username}" class="span6 typeahead">
+                                            <option  data-th-each="personnel, pStat : ${listePersonnels}" data-th-value="${personnel.nom}" data-th-text="${personnel.nom}"></option>
+                                        </select>
                                     </div>
+                                </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="role">Role<span class="text-danger">*</span> </label>
                                     <div class="controls">
@@ -82,14 +84,14 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                        <label class="control-label span7"  for="mdp">Retapez le mot de passe<span class="text-danger">*</span> </label>                                   <div class="controls">
-                                        <input type="password"  required class="span6 typeahead" id="vmdp" name="vmdp">
-                                    </div>
+                                    <label class="control-label span7"  for="mdp">Retapez le mot de passe<span class="text-danger">*</span> </label>                                   <div class="controls">
+                                    <input type="password"  required class="span6 typeahead" id="vmdp" name="vmdp">
                                 </div>
-                            <div class="form-actions">
-                                <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
-                                <button type="reset" class="btn">Annuler</button>
-                            </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
                             </div>
                         </fieldset>
                     </form>
