@@ -9,6 +9,7 @@ import com.live.core.repository.UsersRepository;
 import com.live.rh.entities.Apprenant;
 import com.live.rh.service.ApprenantService;
 import com.live.core.service.*;
+import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.repository.SessionFormationRepository;
 import com.live.moniteur.service.SessionFormationService;
@@ -514,12 +515,25 @@ public class PersonnelController extends InitiateController {
      	return "redirect:/admin/apprenants";
 
      }
-     //configuration de la session de formation 
+     //Affichage de la session de formation 
      @RequestMapping("/consulter-formation/{id}")
      public String ConsulterPeriode(Model model,@PathVariable long id,HttpSession session) {
     	SessionFormation formation = sessionFormationService.findOne(id);
     	session.setAttribute("formationCourante",formation);
       	model.addAttribute("formation", formation);
      	return "administration/formations/view";
+     }
+     //Gestion des apprenants dans la session de formation
+     @GetMapping("/formation/apprenant")
+     public String formationApprenant(HttpSession session,Model model) {
+     	if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+     	model.addAttribute("listeApprenant", apprenantService.findAll());
+     	model.addAttribute("formation", formation);
+        model.addAttribute("inscription", new Inscription());
+         return "administration/formations/apprenants/index";
      }
 }
