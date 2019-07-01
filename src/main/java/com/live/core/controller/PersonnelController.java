@@ -514,4 +514,12 @@ public class PersonnelController extends InitiateController {
      	return "redirect:/admin/apprenants";
 
      }
+     //configuration de la session de formation 
+     @RequestMapping("/consulter-formation/{id}")
+     public String ConsulterPeriode(Model model,@PathVariable long id,HttpSession session) {
+    	SessionFormation formation = sessionFormationService.findOne(id);
+    	session.setAttribute("formationCourante",formation);
+      	model.addAttribute("formation", formation);
+     	return "administration/formations/view";
+     }
 }
