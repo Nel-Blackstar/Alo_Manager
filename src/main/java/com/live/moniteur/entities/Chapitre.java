@@ -2,6 +2,7 @@ package com.live.moniteur.entities;
 
 import com.live.common.entities.LiveEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 @Entity
 public class Chapitre extends LiveEntity {
     private String titre;
+
+    @Column(columnDefinition = "TEXT")
     private String resume;
 
     @OneToMany(targetEntity = Evaluation.class)
