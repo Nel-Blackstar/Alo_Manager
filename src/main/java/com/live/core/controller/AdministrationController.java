@@ -307,15 +307,11 @@ public class AdministrationController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("chapitre",new Chapitre());
         model.addAttribute("cours", cours);
         return "administration/formations/cours/view";
     }
-    @GetMapping(value = "/cours/add-chapter/{id}")
-    public String courChapter(HttpSession session,Model model,@PathVariable("id") long id_cours) {
-        model.addAttribute("chapitre",new Chapitre());
-        model.addAttribute("cours",id_cours);
-        return "administration/formations/cours/create_chapter";
-    }
+
     @PostMapping(value = "/cours/save-chapitre")
     public String saveChapter(HttpSession session,Chapitre chapitre,@RequestParam("id_cours") long cours) {
             chapitreRepository.save(chapitre);
