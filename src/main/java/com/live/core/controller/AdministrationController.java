@@ -1,8 +1,6 @@
 package com.live.core.controller;
 
 import com.live.core.entities.Live;
-import com.live.core.entities.Personnel;
-import com.live.core.entities.Users;
 import com.live.core.repository.PersonnelRepository;
 import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
@@ -13,18 +11,15 @@ import com.live.moniteur.repository.CoursRepository;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
-import com.live.rh.entities.Apprenant;
 import com.live.rh.service.ApprenantService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -200,7 +195,8 @@ public class AdministrationController {
     public String ajouterBanque(HttpSession session,Model model, Banque banque) {
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
-        model.addAttribute("infos","La nouvelle banque vien d'ètre crée!! "+banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
+        model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
+        session.setAttribute("infos","La nouvelle banque vien d'�tre cr�e!!");
         return "redirect:/admin/banques";
     }
     /**
@@ -220,6 +216,12 @@ public class AdministrationController {
    	return "administration/banques/update";
 
    }
+
+   /**
+    * Modification des informations sur une banque
+    * @param banque methode post
+    * @return
+    */
     @PostMapping(value = "/update-banque")
     public String saveUpdateBanque(HttpSession session,Banque banque) {
    	banqueService.save(banque);
@@ -227,7 +229,11 @@ public class AdministrationController {
    	return "redirect:/admin/banques";
 
    }
-
+    /**
+     * Suppression d'une banque
+     * @param id identifiant de la banque
+     * @return
+     */
     @RequestMapping("/delete-banque/{id}")
     public String deleteBanque(HttpSession session,@PathVariable long id) {
     	Banque banque = banqueService.findOne(id);

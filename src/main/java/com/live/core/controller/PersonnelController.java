@@ -1,22 +1,19 @@
 package com.live.core.controller;
-
+import com.live.common.entities.CodeValue;
 import com.live.common.service.CodeValueService;
-import com.live.core.entities.Live;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
 import com.live.core.entities.Users;
 import com.live.core.repository.PersonnelRepository;
 import com.live.core.repository.UsersRepository;
-import com.live.rh.entities.Apprenant;
-import com.live.rh.service.ApprenantService;
 import com.live.core.service.*;
 import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
-import com.live.moniteur.repository.SessionFormationRepository;
 import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
-import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
+import com.live.rh.entities.Apprenant;
+import com.live.rh.service.ApprenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,11 +50,12 @@ public class PersonnelController extends InitiateController {
     @Autowired
     ApprenantService apprenantService;
     @Autowired
+    CodeValueService codeValueService;
+    @Autowired
     SessionFormationService sessionFormationService;
     @Autowired
     InscriptionService inscriptionService;
-    @Autowired
-    CodeValueService codeValueService;
+
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -83,7 +80,8 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel "+personnel1.getNom()+" - "+personnel1.getEmail()+" vien d'ètre crée!!");
+        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vient d'etre cree !!");
+        model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
 
@@ -181,7 +179,7 @@ public class PersonnelController extends InitiateController {
     public String ajouterUser(HttpSession session, Model model, Users users, @RequestParam("role") List<String> role, @RequestParam("vmdp") String vmdp) {
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
-        List<String> erreur=new ArrayList<String>();
+        List<String> erreur= new ArrayList<>();
         Users user = new Users();
         user.setLogin(users.getLogin());
         user.setActive(true);
@@ -195,13 +193,13 @@ public class PersonnelController extends InitiateController {
             erreur.add("les mots de passe saisie ne sont pas identique \n");
       }
         if (usersService.findByLogin(users.getLogin()) != null){
-            erreur.add("Un utilisateur possedans se login existe deja dans le systeme \n");
+            erreur.add("Un utilisateur possedant se login existe deja dans le systeme \n");
         }
         if(!erreur.isEmpty()){
             session.setAttribute("infos",erreur);
             return  "redirect:/admin/users/ajouter-user";
         }else{
-            List<Roles> roles = new ArrayList<Roles>();
+            List<Roles> roles = new ArrayList<>();
             for (String roleb:role) {
                 Roles r=rolesService.findOne(roleb);
                 roles.add(r);
@@ -230,7 +228,7 @@ public class PersonnelController extends InitiateController {
         //model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
         // Retrouver l'users à consulter et le placer dans le modèle
-        Users users = usersRepository.findUsersByLogin(login);;
+        Users users = usersRepository.findUsersByLogin(login);
         model.addAttribute("users", users);
         return "administration/utilisateurs/view";
     }
@@ -261,7 +259,7 @@ public class PersonnelController extends InitiateController {
 
     @PostMapping(value = "/users/editer-user")
     public String editUser(HttpSession session,Model model, Users users, @RequestParam("role") List<String> role,@RequestParam("vmdp") String vmdp) {
-        List<String> erreur=new ArrayList<String>();
+        List<String> erreur= new ArrayList<>();
         Users user = new Users();
         user.setLogin(users.getLogin());
         user.setActive(true);
@@ -278,7 +276,7 @@ public class PersonnelController extends InitiateController {
             session.setAttribute("infos",erreur);
             return  "redirect:/admin/users/ajouter-user";
         }else {
-            List<Roles> roles = new ArrayList<Roles>();
+            List<Roles> roles = new ArrayList<>();
             for (String roleb : role) {
                 Roles r = rolesService.findOne(roleb);
                 roles.add(r);
@@ -433,8 +431,10 @@ public class PersonnelController extends InitiateController {
              model.addAttribute("info",session.getAttribute("infos"));
              session.removeAttribute("infos");
          }
+     	List<CodeValue> typePermis = codeValueService.findByIdentifier("type_permis");
         model.addAttribute("state", "get");
         model.addAttribute("sessionFormation", new SessionFormation());
+        model.addAttribute("permis", typePermis);
         return "administration/formations/create";
      }
      /**
@@ -446,7 +446,7 @@ public class PersonnelController extends InitiateController {
      public String ajouterFormation(HttpSession session,Model model, SessionFormation formation) {
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuerer avec succ�s!!");
+         session.setAttribute("infos","Nouvelle session de formation configuerer avec succes!!");
          return "redirect:/admin/formations";
      }
      /**
@@ -480,7 +480,7 @@ public class PersonnelController extends InitiateController {
  			// TODO Auto-generated catch block
  			e.printStackTrace();
  		}  
- 		session.setAttribute("infos","Modification terminer avec succes!!");
+ 		session.setAttribute("infos","Modification terminer avec succes !!!");
  		apprenant.setDate_naissance(date_naissance);
      	apprenantService.save(apprenant);
      	return "redirect:/admin/apprenants";
@@ -516,7 +516,7 @@ public class PersonnelController extends InitiateController {
          inscription.setFormation(formation);
          Inscription inscription1 = inscriptionService.save(inscription);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Proc�ssus terminer avec succ�s!");
+         session.setAttribute("infos","Proc�ssus terminer avec succ�s!");
          String referer = request.getHeader("Referer");
          //return "redirect:"+ referer;
          return "redirect:/admin/formation/apprenant";

@@ -25,8 +25,7 @@ public class SessionFormation extends LiveEntity {
             inverseJoinColumns = @JoinColumn(name = "id_cours"))
     private List<Cours> formationCours;
 
-    public SessionFormation() {
-    }
+    public SessionFormation() { }
 
     public SessionFormation(String delaiDossiers, Date dateDebut, Date dateFin, float fraisInscription) {
         this.delaiDossiers = delaiDossiers;
