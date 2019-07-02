@@ -38,7 +38,7 @@
                             </tr>
                         <tr>
                             <td class="c-info"><b>Module</b></td>
-                            <td class="c-info"><i><b data-th-text="${cours.module}"></b></i></td>
+                            <td class="c-info"><i data-th-text="${cours.module}"></i></td>
                             <td rowspan="3" colspan="2" style="width:70%;">
                                 <a class="quick-button-small span2" data-th-href="@{'/admin/cours/view-chapter/'+${chap.id}}" data-th-each="chap, uStat : ${cours.getChapitres()}">
                                     <p> <i class="glyphicons-icon book"></i> <br> chapitre <span data-th-text="${uStat.count}"></span> :<br> <b data-th-text="${chap.titre}">Le  Demarrage</b></p>
@@ -48,11 +48,11 @@
                         </tr>
                         <tr>
                             <td class="c-info"><b>Type</b></td>
-                            <td class="c-info"><i><b data-th-text="${cours.type}"></b></i></td>
+                            <td class="c-info"><i data-th-text="${cours.type}"></i></td>
                         </tr>
                         <tr>
                             <td class="c-info"><b>Libellé</b></td>
-                            <td class="c-info"><i><b data-th-text="${cours.libelle}"></b></i></td>
+                            <td class="c-info"><i data-th-text="${cours.libelle}"></i></td>
                         </tr>
                     </table>
         <div class="clearfix"></div>
