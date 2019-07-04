@@ -6,6 +6,7 @@ import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
 import com.live.moniteur.entities.Chapitre;
 import com.live.moniteur.entities.Cours;
+import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.repository.ChapitreRepository;
 import com.live.moniteur.repository.CoursRepository;
 import com.live.moniteur.service.SessionFormationService;
@@ -322,5 +323,15 @@ public class AdministrationController {
             coursRepository.save(cour);
             session.setAttribute("infos","Nouveau chapitre enregistr√©");
         return "redirect:/admin/consulter-cours/"+cours;
+    }
+    //Ajout du cours ‡ la session de formation en cours
+    @RequestMapping("/ajouter/formation-cours")
+    public String ajouterCours(HttpSession session) {
+        SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+        List<Cours> formationCours=coursRepository.findAll();
+        formation.setFormationCours(formationCours);
+        sessionFormationService.save(formation);
+        session.setAttribute("infos","ajout des cours a la session de formation terminer avec succes!!");
+        return "redirect:/admin/cours";
     }
 }
