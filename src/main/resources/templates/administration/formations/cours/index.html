@@ -34,28 +34,29 @@
                 <div class="text-center alert alert-success" data-th-if="${info}">
                     <b class="fg-green" data-th-text="${info}">Info</b>
                 </div>
-                <div class="box-content" >
+                <div class="box-content" ><br>
                     <form class="form-horizontal"  data-th-action="@{/admin/cours/ajouter-cours}" method="post"  data-th-object="${cours}">
                         <fieldset>
-                            <div class="offset3 box span5">
+                            <div class="offset1 box span9">
+                                <br><br>
                                 <div class="control-group">
                                     <label class="control-label"  for="module">Module<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" required class="span6 typeahead" id="module" data-th-field="*{module}" >
+                                        <input type="text" required class="span10 typeahead" id="module" data-th-field="*{module}" >
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="libelle">Libellé<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" required class="span6 typeahead" id="libelle" data-th-field="*{libelle}" >
+                                        <input type="text" required class="span10 typeahead" id="libelle" data-th-field="*{libelle}" >
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label span7"  for="type">Type<span class="text-danger">*</span> </label>                                   <div class="controls">
-                                    <input type="text"  required class="span6 typeahead" id="type"  data-th-field="*{type}" >
+                                    <input type="text"  required class="span10 typeahead" id="type"  data-th-field="*{type}" >
                                 </div>
                                 </div>
-                                <div class="form-actions">
+                                <div class="text-center form-actions">
                                     <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
                                     <button type="reset" class="btn">Annuler</button>
                                 </div>
