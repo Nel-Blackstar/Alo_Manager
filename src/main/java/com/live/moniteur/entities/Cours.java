@@ -1,7 +1,6 @@
 package com.live.moniteur.entities;
 
 import com.live.common.entities.LiveEntity;
-import com.live.core.entities.Users;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,23 +13,25 @@ public class Cours extends LiveEntity {
 
     @OneToMany(targetEntity = Chapitre.class)
     private List<Chapitre> chapitres;
-
-    @ManyToMany(targetEntity = Users.class)
-    @JoinTable(name="formation_cours", joinColumns = {
-            @JoinColumn(name = "id_cours")}, inverseJoinColumns = {
-            @JoinColumn(name = "id_session")})
-    private List<SessionFormation> sessionFormations;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_formation")
+    private SessionFormation formation;
 
     public Cours() {
     }
 
-    public Cours(String module, String libelle, String type) {
-        this.module = module;
-        this.libelle = libelle;
-        this.type = type;
-    }
+    
 
-    public String getModule() {
+    public Cours(String module, String libelle, String type) {
+		this.module = module;
+		this.libelle = libelle;
+		this.type = type;
+	}
+
+
+
+	public String getModule() {
         return module;
     }
 
@@ -62,11 +63,12 @@ public class Cours extends LiveEntity {
         this.chapitres = chapitres;
     }
 
-    public List<SessionFormation> getSessionFormations() {
-        return sessionFormations;
-    }
+	public SessionFormation getFormation() {
+		return formation;
+	}
 
-    public void setSessionFormations(List<SessionFormation> sessionFormations) {
-        this.sessionFormations = sessionFormations;
-    }
+	public void setFormation(SessionFormation formation) {
+		this.formation = formation;
+	}
+    
 }

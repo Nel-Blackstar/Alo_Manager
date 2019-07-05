@@ -59,14 +59,6 @@
                                         <input type="text" class="span6 typeahead" id="fraisInscriptions" data-th-field="*{fraisInscription}" >
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label"  for="categoriePermis">Categorie de permis disponible<span class="text-danger">*</span></label>
-                                    <div class="controls">
-                                        <select id="categoriePermis" data-rel="chosen" required  name="categoriePermis" class="span6 typeahead">
-                                            <option  data-th-each="permi : ${permis}" data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="form-actions">
                                     <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
                                     <button type="reset" class="btn">Annuler</button>

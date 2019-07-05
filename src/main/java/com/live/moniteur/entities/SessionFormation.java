@@ -1,6 +1,5 @@
 package com.live.moniteur.entities;
 
-import com.live.common.entities.CodeValue;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.*;
@@ -20,9 +19,7 @@ public class SessionFormation extends LiveEntity {
     @OneToMany
     private Set<Inscription> inscriptions;
 
-    @ManyToMany(targetEntity = Cours.class)
-    @JoinTable(name = "formation_cours", joinColumns = @JoinColumn(name = "id_session"),
-            inverseJoinColumns = @JoinColumn(name = "id_cours"))
+    @OneToMany(targetEntity = Cours.class)
     private List<Cours> formationCours;
 
     public SessionFormation() { }

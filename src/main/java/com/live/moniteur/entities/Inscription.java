@@ -6,6 +6,7 @@ import com.live.rh.entities.Apprenant;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Inscription extends LiveEntity {
@@ -17,7 +18,13 @@ public class Inscription extends LiveEntity {
     @ManyToOne
     @JoinColumn(name = "id_formation")
     private SessionFormation formation;
-
+    
+    @OneToMany(targetEntity = Evaluation.class)
+    private List<Evaluation> evaluations;
+    
+    @OneToMany(targetEntity = Suivre.class)
+    private List<Evaluation> suivres;
+    
     @ManyToOne
     @JoinColumn(name = "id_apprenant")
     private Apprenant apprenant;
@@ -63,4 +70,22 @@ public class Inscription extends LiveEntity {
     public void setApprenant(Apprenant apprenant) {
         this.apprenant = apprenant;
     }
+    
+    public List<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
+
+	public List<Evaluation> getSuivres() {
+		return suivres;
+	}
+
+	public void setSuivres(List<Evaluation> suivres) {
+		this.suivres = suivres;
+	}
+    
+    
 }

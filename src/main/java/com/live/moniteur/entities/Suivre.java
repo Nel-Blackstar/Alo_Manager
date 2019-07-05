@@ -6,12 +6,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Evaluation extends LiveEntity {
-    private String typeEvaluation;
+public class Suivre extends LiveEntity {
+	private String appreciation;
     @Temporal(TemporalType.DATE)
     private Date date;
-    
-    private float note;
 
     @ManyToOne
     @JoinColumn(name = "id_chapitre")
@@ -21,29 +19,21 @@ public class Evaluation extends LiveEntity {
     @JoinColumn(name = "id_inscription")
     private Inscription inscription;
 
-	public Evaluation() {
+	public Suivre() {
     }
 
-    public Evaluation(String typeEvaluation, Date date, float note, Chapitre chapitre, Inscription inscription) {
+
+	public Suivre(String appreciation, Date date) {
 		super();
-		this.typeEvaluation = typeEvaluation;
+		this.appreciation = appreciation;
 		this.date = date;
-		this.note = note;
-		this.chapitre = chapitre;
-		this.inscription = inscription;
 	}
 
 
 
-	public String getTypeEvaluation() {
-        return typeEvaluation;
-    }
 
-    public void setTypeEvaluation(String typeEvaluation) {
-        this.typeEvaluation = typeEvaluation;
-    }
 
-    public Chapitre getChapitre() {
+	public Chapitre getChapitre() {
         return chapitre;
     }
 
@@ -59,15 +49,17 @@ public class Evaluation extends LiveEntity {
         this.date = date;
     }
     
-    public float getNote() {
-		return note;
+    public String getAppreciation() {
+		return appreciation;
 	}
 
-	public void setNote(float note) {
-		this.note = note;
+
+	public void setAppreciation(String appreciation) {
+		this.appreciation = appreciation;
 	}
-    
-    public Inscription getInscription() {
+
+
+	public Inscription getInscription() {
 		return inscription;
 	}
 
