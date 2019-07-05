@@ -252,7 +252,8 @@ public class AdministrationController {
      */
     @GetMapping("/cours")
     public String Cours(HttpSession session,Model model) {
-        model.addAttribute("listeCours", coursRepository.findAll());
+    	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+        model.addAttribute("listeCours", coursRepository.findAllByFormation(formation));
         chargerLive(model);
         //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
@@ -266,6 +267,8 @@ public class AdministrationController {
 
     @PostMapping(value = "/cours/ajouter-cours")
     public String saveCours(HttpSession session,Cours cours) {
+    	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+    	cours.setFormation(formation);
         coursRepository.save(cours);
         session.setAttribute("infos","Enregistrement du cours effectuer avec success");
         return "redirect:/admin/cours";
@@ -324,8 +327,8 @@ public class AdministrationController {
             session.setAttribute("infos","Nouveau chapitre enregistr√©");
         return "redirect:/admin/consulter-cours/"+cours;
     }
-    //Ajout du cours ‡ la session de formation en cours
-    @RequestMapping("/ajouter/formation-cours")
+    
+    /*@RequestMapping("/ajouter/formation-cours")
     public String ajouterCours(HttpSession session) {
         SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
         List<Cours> formationCours=coursRepository.findAll();
@@ -333,5 +336,5 @@ public class AdministrationController {
         sessionFormationService.save(formation);
         session.setAttribute("infos","ajout des cours a la session de formation terminer avec succes!!");
         return "redirect:/admin/cours";
-    }
+    }*/
 }
