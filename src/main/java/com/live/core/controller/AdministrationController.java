@@ -2,13 +2,14 @@ package com.live.core.controller;
 
 import com.live.core.entities.Live;
 import com.live.core.repository.PersonnelRepository;
-import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
 import com.live.moniteur.entities.Chapitre;
 import com.live.moniteur.entities.Cours;
 import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.repository.ChapitreRepository;
 import com.live.moniteur.repository.CoursRepository;
+import com.live.moniteur.service.ChapitreService;
+import com.live.moniteur.service.CoursService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
@@ -26,11 +27,9 @@ import java.util.List;
 @RequestMapping(value = "/admin")
 public class AdministrationController {
     @Autowired
-    ChapitreRepository chapitreRepository;
+    ChapitreService chapitreRepository;
     @Autowired
-    CoursRepository coursRepository;
-    @Autowired
-    UsersRepository usersRepository;
+    CoursService coursRepository;
     @Autowired
     PersonnelRepository personnelRepository;
     @Autowired
@@ -253,7 +252,7 @@ public class AdministrationController {
     @GetMapping("/cours")
     public String Cours(HttpSession session,Model model) {
     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
-        model.addAttribute("listeCours", coursRepository.findAllByFormation(formation));
+        model.addAttribute("listeCours", coursRepository.findByFormation(formation));
         chargerLive(model);
         //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
@@ -275,7 +274,7 @@ public class AdministrationController {
     }
     @RequestMapping("/update-cours/{id}")
     public String editCours(HttpSession session,Model model,@PathVariable long id) {
-        Cours cours = coursRepository.getOne(id);
+        Cours cours = coursRepository.findOne(id);
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
@@ -292,7 +291,7 @@ public class AdministrationController {
     }
     @RequestMapping("/cours/delete-cours/{id}")
     public String deleteCours(HttpSession session,@PathVariable long id) {
-        Cours cours = coursRepository.getOne(id);
+        Cours cours = coursRepository.findOne(id);
         coursRepository.delete(cours);
         session.setAttribute("infos","suppression terminer avec succes!!");
         return "redirect:/admin/cours";
@@ -306,7 +305,7 @@ public class AdministrationController {
      */
     @RequestMapping("/consulter-cours/{id}")
     public String showCour(HttpSession session,Model model,@PathVariable long id) {
-        Cours cours = coursRepository.getOne(id);
+        Cours cours = coursRepository.findOne(id);
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
@@ -319,7 +318,7 @@ public class AdministrationController {
     @PostMapping(value = "/cours/save-chapitre")
     public String saveChapter(HttpSession session,Chapitre chapitre,@RequestParam("id_cours") long cours) {
             chapitreRepository.save(chapitre);
-            Cours cour=coursRepository.getOne(cours);
+            Cours cour=coursRepository.findOne(cours);
             List<Chapitre> chapitres = cour.getChapitres();
             chapitres.add(chapitre);
             cour.setChapitres(chapitres);
