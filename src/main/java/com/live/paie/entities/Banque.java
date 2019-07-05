@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 public class Banque extends LiveEntity {
     private String nom;
     private String adresse;
-    private int fax;
+    private String  fax;
     private String telephone;
     @OneToOne(optional = true, targetEntity = Personnel.class)
     private Personnel personnel;
@@ -18,7 +18,7 @@ public class Banque extends LiveEntity {
     public Banque() {
     }
 
-    public Banque(String nom, String adresse, int fax, String telephone) {
+    public Banque(String nom, String adresse, String fax, String telephone) {
         this.nom = nom;
         this.adresse = adresse;
         this.fax = fax;
@@ -41,11 +41,11 @@ public class Banque extends LiveEntity {
         this.adresse = adresse;
     }
 
-    public int getFax() {
+    public String getFax() {
         return fax;
     }
 
-    public void setFax(int fax) {
+    public void setFax(String fax) {
         this.fax = fax;
     }
 
