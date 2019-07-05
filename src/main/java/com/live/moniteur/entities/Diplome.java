@@ -6,12 +6,11 @@ import com.live.rh.entities.Apprenant;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Diplome extends LiveEntity {
-    @OneToMany(targetEntity = CodeValue.class)
-    private List<CodeValue> categorie;
+	@ManyToOne
+	private CodeValue categorie;
 
     @ManyToOne
     private Apprenant apprenant;
@@ -51,11 +50,12 @@ public class Diplome extends LiveEntity {
         this.apprenant = apprenant;
     }
 
-    public List<CodeValue> getCategorie() {
-        return categorie;
-    }
+	public CodeValue getCategorie() {
+		return categorie;
+	}
 
-    public void setCategorie(List<CodeValue> categorie) {
-        this.categorie = categorie;
-    }
+	public void setCategorie(CodeValue categorie) {
+		this.categorie = categorie;
+	}
+    
 }

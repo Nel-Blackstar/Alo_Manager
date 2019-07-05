@@ -53,7 +53,7 @@
 	                                        </div><br>
 	                                        <label class="control-label" for="type_apprenan">Permis de permi<span class="text-danger">*</span> </label>
 	                                        <div class="controls">
-	                                            <select data-rel="chosen"class="span6 typeahead" data-th-field="*{categoriePermis}">
+	                                            <select data-rel="chosen"class="span6 typeahead" name="categoriePermis">
 	                                                <span data-th-each="permi : ${permis}">
 					                                    <option data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
 					                                </span>
@@ -111,7 +111,7 @@
                             <td data-th-text="${inscription.getApprenant().email}"></td>
                             <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
                             <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
-                            <td data-th-text="${inscription.getCategoriePermis().getDescription()}"></td>
+                            <td data-th-text="${inscription.getDiplome().getApprenant()}"></td>
                             <td>
                                 <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
                                 <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>

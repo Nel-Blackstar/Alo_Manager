@@ -1,7 +1,6 @@
 package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
-import com.live.moniteur.entities.Diplome;
 import com.live.moniteur.entities.Inscription;
 
 import javax.persistence.Entity;
@@ -28,10 +27,6 @@ public class Apprenant extends LiveEntity {
     private Date date_naissance;
     private String lieu_naissance;
     private String photo;
-
-
-    @OneToMany(targetEntity = Diplome.class)
-    private Set<Diplome> diplomes;
 
     @OneToMany
     private Set<Inscription> inscriptions;
@@ -168,12 +163,5 @@ public class Apprenant extends LiveEntity {
     public void setInscriptions(Set<Inscription> inscriptions) {
         this.inscriptions = inscriptions;
     }
-
-    public Set<Diplome> getDiplomes() {
-        return diplomes;
-    }
-
-    public void setDiplomes(Set<Diplome> diplomes) {
-        this.diplomes = diplomes;
-    }
+    
 }
