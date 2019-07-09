@@ -4,6 +4,11 @@
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
     <title>Utilisateurs</title>
+    <style>
+        ul{
+        list-style-type:square;
+        }
+    </style>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -35,32 +40,45 @@
                     <b class="fg-green" data-th-text="${info}">Info</b>
                 </div>
                 <div class="box-content" ><br>
-                    <form class="form-horizontal"  data-th-action="@{/admin/cours/ajouter-cours}" method="post"  data-th-object="${cours}">
+                    <form class="form-horizontal"  data-th-action="@{/admin/cours/ajouter-cours}" method="post">
                         <fieldset>
                             <div class="offset1 box span9">
                                 <br><br>
                                 <div class="control-group">
-                                    <label class="control-label"  for="module">Module<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="apprenant">Apprenant<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" required class="span10 typeahead" id="module" data-th-field="*{module}" >
+                                        <select id="apprenant" required data-rel="chosen"   class="span8 typeahead">
+                                            <option data-th-each="inscription, uStat : ${listeInscri}" data-th-value="${inscription.apprenant.id}"><span data-th-text="${inscription.apprenant.nom}"></span>- <span data-th-text="${inscription.apprenant.prenom} "></span></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"  for="libelle">Libellé<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="cour">Choisissez un Cours<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" required class="span10 typeahead" id="libelle" data-th-field="*{libelle}" >
+                                        <select id="cour" required data-rel="chosen"   class="span8 typeahead">
+                                            <option data-th-each="cours, uStat : ${listeCours}" data-th-value="${cours.id}"><span data-th-text="${cours.module}"></span>- <span data-th-text="${cours.type} "></span></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label span7"  for="type">Type<span class="text-danger">*</span> </label>                                   <div class="controls">
-                                    <input type="text"  required class="span10 typeahead" id="type"  data-th-field="*{type}" >
+                                    <label class="control-label" for="type">Type D'evaluation<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="type" required data-rel="chosen"   class="span8 typeahead">
+                                            <option value="Theorique">Theorique</option>
+                                            <option value="Pratique">Pratique</option>
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="control-group">
+                                    <label class="control-label span7"  for="appreciation">Appreciation</label>
+                                    <div class="controls">
+                                    <input type="text"  required class="span8 typeahead" id="appreciation" >
                                 </div>
-                                <div class="text-center form-actions">
-                                    <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
-                                    <button type="reset" class="btn">Annuler</button>
+                                    <div class="text-center form-actions">
+                                        <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
+                                        <button type="reset" class="btn">Annuler</button>
+                                    </div>
                                 </div>
-                            </div>
                         </fieldset>
                     </form>
                 </div>
@@ -78,26 +96,21 @@
                     </div>
                 </div>
                 <div class="box-content">
-                	<table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Module</th>
-                            <th>Libelllé</th>
-                            <th>Type</th>
-                            <th>Actions</th>
+                            <th  data-th-each="cours, uStat : ${listeCours}"><span data-th-text="${uStat.count}"></span>-
+                                <span data-th-text="${cours.module}"></span> :
+                                <span data-th-text="${cours.libelle}"></span>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="cours, uStat : ${listeCours}">
-                            <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${cours.module}"></td>
-                            <td data-th-text="${cours.libelle}"></td>
-                            <td data-th-text="${cours.type}"></td>
-                            <td>
-                                <a href="#" data-th-href="@{'/admin/consulter-cours/'+${cours.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" data-th-href="@{'/admin/update-cours/'+${cours.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/cours/delete-cours/'+${cours.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                        <tr>
+                            <td data-th-each="cours, uStat : ${listeCours}">
+                                <ul  data-th-each="apprenant, uStat : ${listeapp}">
+                                    <li><span data-th-text="${apprenant.nom}"></span> <span data-th-text="${apprenant.prenom}"></span></li>
+                                </ul>
                             </td>
                         </tr>
                         </tbody>

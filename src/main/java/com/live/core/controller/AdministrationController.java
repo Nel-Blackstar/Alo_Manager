@@ -342,7 +342,23 @@ public class AdministrationController {
         }
         model.addAttribute("state", "get");
         model.addAttribute("listeInscri",inscriptionService.findInscriptionsByFormation(formation));
+        model.addAttribute("listeapp",apprenantService.findAll());
         return "administration/formations/cours/suivieCours";
+    }
+    @GetMapping("/cours/evaluation")
+    public String evaluationCours(HttpSession session,Model model) {
+        SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+        model.addAttribute("listeCours", coursRepository.findByFormation(formation));
+        chargerLive(model);
+        //chargement de la liste du personnel
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("state", "get");
+        model.addAttribute("listeInscri",inscriptionService.findInscriptionsByFormation(formation));
+        model.addAttribute("listeapp",apprenantService.findAll());
+        return "administration/formations/cours/suivieEvaluation";
     }
     
     /*@RequestMapping("/ajouter/formation-cours")

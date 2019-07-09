@@ -4,6 +4,11 @@
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
     <title>Utilisateurs</title>
+    <style>
+        ul{
+        list-style-type:square;
+        }
+    </style>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -84,23 +89,18 @@
                 	<table class="table table-striped table-bordered bootstrap-datatable datatable">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Module</th>
-                            <th>Libelllé</th>
-                            <th>Type</th>
-                            <th>Actions</th>
+                            <th  data-th-each="cours, uStat : ${listeCours}"><span data-th-text="${uStat.count}"></span>-
+                            <span data-th-text="${cours.module}"></span> :
+                            <span data-th-text="${cours.libelle}"></span>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="cours, uStat : ${listeCours}">
-                            <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${cours.module}"></td>
-                            <td data-th-text="${cours.libelle}"></td>
-                            <td data-th-text="${cours.type}"></td>
-                            <td>
-                                <a href="#" data-th-href="@{'/admin/consulter-cours/'+${cours.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" data-th-href="@{'/admin/update-cours/'+${cours.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/cours/delete-cours/'+${cours.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                        <tr>
+                            <td data-th-each="cours, uStat : ${listeCours}">
+                                <ul  data-th-each="apprenant, uStat : ${listeapp}">
+                                    <li><span data-th-text="${apprenant.nom}"></span> <span data-th-text="${apprenant.prenom}"></span></li>
+                                </ul>
                             </td>
                         </tr>
                         </tbody>
