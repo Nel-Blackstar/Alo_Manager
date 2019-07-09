@@ -1,6 +1,5 @@
 package com.live.moniteur.entities;
 
-import com.live.common.entities.CodeValue;
 import com.live.common.entities.LiveEntity;
 import com.live.rh.entities.Apprenant;
 
@@ -29,7 +28,7 @@ public class Inscription extends LiveEntity {
     @JoinColumn(name = "id_apprenant")
     private Apprenant apprenant;
     @OneToOne
-    private CodeValue categoriePermis;
+    private Diplome diplome;
 
     public float getPaiement() {
         return paiement;
@@ -38,16 +37,16 @@ public class Inscription extends LiveEntity {
     public void setPaiement(float paiement) {
         this.paiement = paiement;
     }
-    
-    public CodeValue getCategoriePermis() {
-        return categoriePermis;
-    }
 
-    public void setCategoriePermis(CodeValue categoriePermis) {
-        this.categoriePermis = categoriePermis;
-    }
+    public Diplome getDiplome() {
+		return diplome;
+	}
 
-    public Date getDate() {
+	public void setDiplome(Diplome diplome) {
+		this.diplome = diplome;
+	}
+
+	public Date getDate() {
         return date;
     }
 

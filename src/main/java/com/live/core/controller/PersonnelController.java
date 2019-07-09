@@ -7,8 +7,10 @@ import com.live.core.entities.Users;
 import com.live.core.repository.PersonnelRepository;
 import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
+import com.live.moniteur.entities.Diplome;
 import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
+import com.live.moniteur.service.DiplomeService;
 import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.service.BanqueService;
@@ -55,6 +57,8 @@ public class PersonnelController extends InitiateController {
     SessionFormationService sessionFormationService;
     @Autowired
     InscriptionService inscriptionService;
+    @Autowired
+    DiplomeService diplomeService;
 
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -510,15 +514,20 @@ public class PersonnelController extends InitiateController {
          return "administration/formations/apprenants/index";
      }
      @PostMapping(value = "/formation/apprenant")
-     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription) {
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis) {
          chargerLive(model);
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+         CodeValue categorie=codeValueService.findById(categoriePermis);
+         Diplome diplome=new Diplome();
+         diplome.setCategorie(categorie);
+         diplome.setApprenant(inscription.getApprenant());
+         diplome.setStatut(false);
+         diplomeService.save(diplome);
+         inscription.setDiplome(diplome);
          inscription.setFormation(formation);
-         Inscription inscription1 = inscriptionService.save(inscription);
+         inscriptionService.save(inscription);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Proc�ssus terminer avec succ�s!");
-         String referer = request.getHeader("Referer");
-         //return "redirect:"+ referer;
+         session.setAttribute("infos","Processus terminer avec succes!");
          return "redirect:/admin/formation/apprenant";
      }
      //suppression de l'inscription
