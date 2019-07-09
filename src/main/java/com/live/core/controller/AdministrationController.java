@@ -8,6 +8,7 @@ import com.live.moniteur.entities.Cours;
 import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.repository.ChapitreRepository;
 import com.live.moniteur.repository.CoursRepository;
+import  com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.ChapitreService;
 import com.live.moniteur.service.CoursService;
 import com.live.moniteur.service.SessionFormationService;
@@ -26,6 +27,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdministrationController {
+    @Autowired
+    InscriptionService inscriptionService;
     @Autowired
     ChapitreService chapitreRepository;
     @Autowired
@@ -325,6 +328,21 @@ public class AdministrationController {
             coursRepository.save(cour);
             session.setAttribute("infos","Nouveau chapitre enregistré");
         return "redirect:/admin/consulter-cours/"+cours;
+    }
+
+    @GetMapping("/cours/suivie")
+    public String suivieCours(HttpSession session,Model model) {
+        SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+        model.addAttribute("listeCours", coursRepository.findByFormation(formation));
+        chargerLive(model);
+        //chargement de la liste du personnel
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("state", "get");
+        model.addAttribute("listeInscri",inscriptionService.findInscriptionsByFormation(formation));
+        return "administration/formations/cours/suivieCours";
     }
     
     /*@RequestMapping("/ajouter/formation-cours")
