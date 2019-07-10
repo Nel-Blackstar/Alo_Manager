@@ -519,8 +519,7 @@ public class PersonnelController extends InitiateController {
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
          Diplome diplome=new Diplome();
-         diplome.setCategorie(categorie);
-         diplome.setApprenant(inscription.getApprenant());
+         diplome.setPermie(categorie);
          diplome.setStatut(false);
          diplomeService.save(diplome);
          inscription.setDiplome(diplome);
