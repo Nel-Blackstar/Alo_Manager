@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 public class Diplome extends LiveEntity {
 	@OneToOne
-	private CodeValue permie;
+	private CodeValue permis;
 
     @Temporal(TemporalType.DATE)
     private Date dateDelivrance;
@@ -23,12 +23,12 @@ public class Diplome extends LiveEntity {
         this.statut = statut;
     }
     
-    public CodeValue getPermie() {
-		return permie;
+    public CodeValue getPermis() {
+		return permis;
 	}
 
-	public void setPermie(CodeValue permie) {
-		this.permie = permie;
+	public void setPermis(CodeValue permi) {
+		this.permis = permi;
 	}
 
 	public Date getDateDelivrance() {
