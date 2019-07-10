@@ -1,5 +1,6 @@
 package com.live.moniteur.service;
 
+import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.Suivre;
 
 import java.util.List;
@@ -9,4 +10,5 @@ public interface SuivreService {
     void delete(Suivre suivre);
     Suivre findOne(Long id);
     List<Suivre> findAll();
+    List<Suivre> findAllByInscription(Inscription inscription);
 }
