@@ -29,8 +29,12 @@ public class Inscription extends LiveEntity {
     private Apprenant apprenant;
     @OneToOne
     private Diplome diplome;
+    
+    
+	public Inscription() {
+	}
 
-    public float getPaiement() {
+	public float getPaiement() {
         return paiement;
     }
 

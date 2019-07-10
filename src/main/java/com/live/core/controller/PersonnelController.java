@@ -519,12 +519,14 @@ public class PersonnelController extends InitiateController {
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
          Diplome diplome=new Diplome();
-         diplome.setPermis(categorie);
          diplome.setStatut(false);
+         diplome.setCategoriePermis(categorie);
          diplomeService.save(diplome);
          inscription.setDiplome(diplome);
          inscription.setFormation(formation);
          inscriptionService.save(inscription);
+         diplome.setInscrit(inscription);
+         diplomeService.save(diplome);
          model.addAttribute("state", "post");
          session.setAttribute("infos","Processus terminer avec succes!");
          return "redirect:/admin/formation/apprenant";
@@ -562,6 +564,7 @@ public class PersonnelController extends InitiateController {
              session.removeAttribute("infos");
          }
      	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+     	model.addAttribute("diplmomes",diplomeService.findAll());
      	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
         return "administration/formations/diplomes/index";
      }

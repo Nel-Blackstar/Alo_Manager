@@ -18,8 +18,18 @@ public class CodeValue extends LiveEntity {
     @JsonIgnore
     @OneToOne(targetEntity = Code.class)
     private Code code;
+    
+    
+    public CodeValue() {
+	}
 
-    public String getValeur() {
+	public CodeValue(String valeur, String description, Code code) {
+		this.valeur = valeur;
+		this.description = description;
+		this.code = code;
+	}
+
+	public String getValeur() {
         return valeur;
     }
 

@@ -9,11 +9,13 @@ import java.util.Date;
 @Entity
 public class Diplome extends LiveEntity {
 	@OneToOne
-	private CodeValue permis;
-
+	private Inscription inscrit;
     @Temporal(TemporalType.DATE)
     private Date dateDelivrance;
     private boolean statut;
+    
+    @OneToOne
+    private CodeValue categoriePermis;
 
     public Diplome() {
     }
@@ -23,12 +25,20 @@ public class Diplome extends LiveEntity {
         this.statut = statut;
     }
     
-    public CodeValue getPermis() {
-		return permis;
+    public CodeValue getCategoriePermis() {
+		return categoriePermis;
 	}
 
-	public void setPermis(CodeValue permi) {
-		this.permis = permi;
+	public void setCategoriePermis(CodeValue categoriePermis) {
+		this.categoriePermis = categoriePermis;
+	}
+
+	public Inscription getInscrit() {
+		return inscrit;
+	}
+
+	public void setInscrit(Inscription inscrit) {
+		this.inscrit = inscrit;
 	}
 
 	public Date getDateDelivrance() {
