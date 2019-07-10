@@ -1,17 +1,13 @@
 package com.live.core.controller;
 
+import com.live.common.service.DetailServiceimpl;
 import com.live.core.entities.Live;
 import com.live.core.repository.PersonnelRepository;
 import com.live.core.service.*;
-import com.live.moniteur.entities.Chapitre;
-import com.live.moniteur.entities.Cours;
-import com.live.moniteur.entities.SessionFormation;
+import com.live.moniteur.entities.*;
 import com.live.moniteur.repository.ChapitreRepository;
 import com.live.moniteur.repository.CoursRepository;
-import  com.live.moniteur.service.InscriptionService;
-import com.live.moniteur.service.ChapitreService;
-import com.live.moniteur.service.CoursService;
-import com.live.moniteur.service.SessionFormationService;
+import com.live.moniteur.service.*;
 import com.live.paie.entities.Banque;
 import com.live.paie.service.BanqueService;
 import com.live.rh.service.ApprenantService;
@@ -27,6 +23,10 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdministrationController {
+    @Autowired
+    EvaluationService evaluationService;
+    @Autowired
+    SuivreService suivreService;
     @Autowired
     InscriptionService inscriptionService;
     @Autowired
@@ -342,7 +342,8 @@ public class AdministrationController {
         }
         model.addAttribute("state", "get");
         model.addAttribute("listeInscri",inscriptionService.findInscriptionsByFormation(formation));
-        model.addAttribute("listeapp",apprenantService.findAll());
+        model.addAttribute("listeApp",suivreService.findAll());
+        model.addAttribute("suivre",new Suivre());
         return "administration/formations/cours/suivieCours";
     }
     @GetMapping("/cours/evaluation")
@@ -357,17 +358,31 @@ public class AdministrationController {
         }
         model.addAttribute("state", "get");
         model.addAttribute("listeInscri",inscriptionService.findInscriptionsByFormation(formation));
-        model.addAttribute("listeapp",apprenantService.findAll());
+        model.addAttribute("listeEvaluation",evaluationService.findAll());
+        model.addAttribute("evaluation",new Evaluation());
         return "administration/formations/cours/suivieEvaluation";
     }
-    
-    /*@RequestMapping("/ajouter/formation-cours")
-    public String ajouterCours(HttpSession session) {
-        SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
-        List<Cours> formationCours=coursRepository.findAll();
-        formation.setFormationCours(formationCours);
-        sessionFormationService.save(formation);
-        session.setAttribute("infos","ajout des cours a la session de formation terminer avec succes!!");
-        return "redirect:/admin/cours";
-    }*/
+    @PostMapping("/cours/ajouter-suivieCours")
+    public String addSuivie(HttpSession session,Suivre suivre){
+        Boolean verif = false;
+        List<Suivre> suivies = suivreService.findAllByInscription(suivre.getInscription());
+        for (Suivre sui : suivies){
+                if (sui.getChapitre()==suivre.getChapitre()){
+                    verif=true;
+                }
+        }
+        if(verif){
+            session.setAttribute("infos","L'apprenant a deja suivie se cours, Merci de verifier vous informations");
+        }else{
+            suivreService.save(suivre);
+            session.setAttribute("infos","enregistrement du suivie de cours effectuer");
+        }
+        return "redirect:/admin/cours/suivie";
+    }
+    @PostMapping("/cours/ajouter-evaluation")
+    public String addEvaluation(HttpSession session, Evaluation evaluation){
+            evaluationService.save(evaluation);
+            session.setAttribute("infos","enregistrement de l'evaluation de cours effectuer");
+        return "redirect:/admin/cours/evaluation";
+    }
 }

@@ -1,5 +1,6 @@
 package com.live.moniteur.service;
 
+import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.Suivre;
 import com.live.moniteur.repository.SuivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,10 @@ public class SuivreServiceImpl implements SuivreService{
     @Override
     public List<Suivre> findAll() {
         return suivreRepository.findAll();
+    }
+
+    @Override
+    public List<Suivre> findAllByInscription(Inscription inscription) {
+        return suivreRepository.findAllByInscription(inscription);
     }
 }

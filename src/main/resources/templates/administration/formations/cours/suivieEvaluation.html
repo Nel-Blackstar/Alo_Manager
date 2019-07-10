@@ -20,7 +20,7 @@
                 <a href="index.html" data-th-href="@{/admin/}">Administration</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><a href="#" data-th-href="@{/admin/cours/}">Cours</a></li>
+            <li><a href="#" data-th-href="@{/admin/cours/}">Evaluation</a></li>
         </ul>
 
         <!--<div style="margin-bottom: 7px">
@@ -29,7 +29,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Enregistrer les informations sur le cours</h2>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Enregistrer les informations sur l'Evaluation</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -40,14 +40,14 @@
                     <b class="fg-green" data-th-text="${info}">Info</b>
                 </div>
                 <div class="box-content" ><br>
-                    <form class="form-horizontal"  data-th-action="@{/admin/cours/ajouter-cours}" method="post">
+                    <form class="form-horizontal"  data-th-action="@{/admin/cours/ajouter-evaluation}" method="post" data-th-object="${evaluation}">
                         <fieldset>
                             <div class="offset1 box span9">
                                 <br><br>
                                 <div class="control-group">
                                     <label class="control-label" for="apprenant">Apprenant<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select id="apprenant" required data-rel="chosen"   class="span8 typeahead">
+                                        <select id="apprenant" required data-rel="chosen" data-th-field="*{inscription}"   class="span8 typeahead">
                                             <option data-th-each="inscription, uStat : ${listeInscri}" data-th-value="${inscription.apprenant.id}"><span data-th-text="${inscription.apprenant.nom}"></span>- <span data-th-text="${inscription.apprenant.prenom} "></span></option>
                                         </select>
                                     </div>
@@ -55,24 +55,31 @@
                                 <div class="control-group">
                                     <label class="control-label" for="cour">Choisissez un Cours<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select id="cour" required data-rel="chosen"   class="span8 typeahead">
-                                            <option data-th-each="cours, uStat : ${listeCours}" data-th-value="${cours.id}"><span data-th-text="${cours.module}"></span>- <span data-th-text="${cours.type} "></span></option>
+                                        <select id="cour" data-th-field="*{chapitre}" required data-rel="chosen"   class="span8 typeahead">
+                                            <optgroup data-th-label="${uStat.count}+' : '+${cours.module}+' - '+${cours.type}" data-th-each="cours, uStat : ${listeCours}">
+                                                <option  data-th-value="${chapitre.id}" data-th-each="chapitre, uStat : ${cours.getChapitres()}"> <span data-th-text="${cours.module}"></span> : <span data-th-text="${chapitre.titre}"></span></option>
+                                            </optgroup>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="type">Type D'evaluation<span class="text-danger">*</span> </label>
+                                    <label class="control-label span7"  for="date">Date<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select id="type" required data-rel="chosen"   class="span8 typeahead">
+                                        <input type="Date" data-th-field="*{date}"  required class="span8 typeahead" id="date" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="type">Apprenant<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select id="type" required data-rel="chosen" data-th-field="*{typeEvaluation}"   class="span8 typeahead">
                                             <option value="Theorique">Theorique</option>
                                             <option value="Pratique">Pratique</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label span7"  for="appreciation">Appreciation</label>
-                                    <div class="controls">
-                                    <input type="text"  required class="span8 typeahead" id="appreciation" >
+                                    <label class="control-label span7"  for="note">Note<span class="text-danger">*</span> </label>                                   <div class="controls">
+                                    <input type="number" max="40"  required class="span8 typeahead" id="note" data-th-field="*{note}">
                                 </div>
                                     <div class="text-center form-actions">
                                         <button type="submit" id="valid" class="btn btn-primary">Enregistrer</button>
@@ -96,20 +103,20 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable"  data-th-each="cours, uStat : ${listeCours}">
+                        <h2 data-th-text="${uStat.count}+' - '+${cours.module}" align="center"></h2>
                         <thead>
                         <tr>
-                            <th  data-th-each="cours, uStat : ${listeCours}"><span data-th-text="${uStat.count}"></span>-
-                                <span data-th-text="${cours.module}"></span> :
-                                <span data-th-text="${cours.libelle}"></span>
+                            <th data-th-each="chapitre, cStat : ${cours.getChapitres()}"><span data-th-text="${cStat.count}"></span>-
+                                <span data-th-text="${chapitre.titre}"></span>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td data-th-each="cours, uStat : ${listeCours}">
-                                <ul  data-th-each="apprenant, uStat : ${listeapp}">
-                                    <li><span data-th-text="${apprenant.nom}"></span> <span data-th-text="${apprenant.prenom}"></span></li>
+                            <td data-th-each="chapitre : ${cours.getChapitres()}">
+                                <ul>
+                                    <li data-th-each="evaluation : ${listeEvaluation}" data-th-if="${evaluation.getChapitre()}==${chapitre}"><span data-th-text="${evaluation.getInscription().getApprenant().nom}"></span> <span data-th-text="${evaluation.getInscription().getApprenant().prenom}"></span> :  <b style="color:green" data-th-text="${evaluation.getNote()}+' /  40'"></b></li>
                                 </ul>
                             </td>
                         </tr>
