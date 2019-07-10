@@ -45,26 +45,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- <tr data-th-each="inscrit, aStat : ${listeInscriptions}">
+                 		<tr data-th-each="inscription, aStat : ${listeInscriptions}">
                             <td data-th-text="${aStat.count}"></td>
-                            <td data-th-text="${inscrit.getApprenant().nom}"></td>
-                            <td data-th-text="${inscrit.getApprenant().prenom}"></td>
-                            <td data-th-text="${inscrit.getApprenant().adresse}"></td>
-                            <td data-th-text="${inscrit.getApprenant().telephone_1}"></td>
-                            <td data-th-text="${inscrit.getApprenant().email}"></td>
-                            <td data-th-text="${inscrit.getDiplome()}"></td>
+                            <td data-th-text="${inscription.getApprenant().nom}"></td>
+                            <td data-th-text="${inscription.getApprenant().prenom}"></td>
+                            <td data-th-text="${inscription.getApprenant().adresse}"></td>
+                            <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
+                            <td data-th-text="${inscription.getApprenant().email}"></td>
+                            <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
+                            <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
+                            <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
                             <td>
-                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscrit.getDiplome().getId()})}" class="btn btn-small btn-success" title="Modifier le diplome de l'inscrit"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscrit.getDiplome().getId()})}" class="btn btn-small btn-danger" title="Activer le diplome l'apprenant"><i class="halflings-icon white trash"></i></a>
-                            </td>
-                        </tr>-->
-                        <tr data-th-each="diplome, aStat : ${diplmomes}">
-                            <td data-th-text="${aStat.count}"></td>
-                            <td data-th-text="${diplome.getDiplome()}"></td>
-                            
-                            <td>
-                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${diplome.getId()})}" class="btn btn-small btn-success" title="Modifier le diplome de l'inscrit"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${diplome.getId()})}" class="btn btn-small btn-danger" title="Activer le diplome l'apprenant"><i class="halflings-icon white trash"></i></a>
+                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

@@ -564,7 +564,6 @@ public class PersonnelController extends InitiateController {
              session.removeAttribute("infos");
          }
      	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
-     	model.addAttribute("diplmomes",diplomeService.findAll());
      	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
         return "administration/formations/diplomes/index";
      }

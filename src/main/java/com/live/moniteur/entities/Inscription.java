@@ -31,9 +31,6 @@ public class Inscription extends LiveEntity {
     private Diplome diplome;
     
     
-	public Inscription() {
-	}
-
 	public float getPaiement() {
         return paiement;
     }

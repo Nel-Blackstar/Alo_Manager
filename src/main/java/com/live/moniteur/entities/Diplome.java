@@ -17,6 +17,7 @@ public class Diplome extends LiveEntity {
     @OneToOne
     private CodeValue categoriePermis;
 
+
     public Diplome() {
     }
 
