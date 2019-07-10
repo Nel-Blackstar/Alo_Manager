@@ -2,18 +2,15 @@ package com.live.moniteur.entities;
 
 import com.live.common.entities.CodeValue;
 import com.live.common.entities.LiveEntity;
-import com.live.rh.entities.Apprenant;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Diplome extends LiveEntity {
-	@ManyToOne
-	private CodeValue categorie;
+	@OneToOne
+	private CodeValue permis;
 
-    @ManyToOne
-    private Apprenant apprenant;
     @Temporal(TemporalType.DATE)
     private Date dateDelivrance;
     private boolean statut;
@@ -25,8 +22,16 @@ public class Diplome extends LiveEntity {
         this.dateDelivrance = dateDelivrance;
         this.statut = statut;
     }
+    
+    public CodeValue getPermis() {
+		return permis;
+	}
 
-    public Date getDateDelivrance() {
+	public void setPermis(CodeValue permi) {
+		this.permis = permi;
+	}
+
+	public Date getDateDelivrance() {
         return dateDelivrance;
     }
 
@@ -41,21 +46,5 @@ public class Diplome extends LiveEntity {
     public void setStatut(boolean statut) {
         this.statut = statut;
     }
-
-    public Apprenant getApprenant() {
-        return apprenant;
-    }
-
-    public void setApprenant(Apprenant apprenant) {
-        this.apprenant = apprenant;
-    }
-
-	public CodeValue getCategorie() {
-		return categorie;
-	}
-
-	public void setCategorie(CodeValue categorie) {
-		this.categorie = categorie;
-	}
     
 }

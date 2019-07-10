@@ -519,8 +519,7 @@ public class PersonnelController extends InitiateController {
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
          Diplome diplome=new Diplome();
-         diplome.setCategorie(categorie);
-         diplome.setApprenant(inscription.getApprenant());
+         diplome.setPermis(categorie);
          diplome.setStatut(false);
          diplomeService.save(diplome);
          inscription.setDiplome(diplome);
@@ -554,6 +553,17 @@ public class PersonnelController extends InitiateController {
              session.removeAttribute("infos");
          }
          return "administration/formations/apprenants/update";
+     }
+	 //Gestion des diplomes dans la session de formation
+	 @GetMapping("/formation/diplomes")
+     public String listeDiplomlesFormation(HttpSession session,Model model) {
+     	if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+     	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+        return "administration/formations/diplomes/index";
      }
      
 }
