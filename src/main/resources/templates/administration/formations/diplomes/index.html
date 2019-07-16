@@ -41,6 +41,7 @@
                             <th>Téléphone</th>
                             <th>email</th>
                             <th>Permi</th>
+                            <th>Délivrer</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -52,12 +53,10 @@
                             <td data-th-text="${inscription.getApprenant().adresse}"></td>
                             <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
                             <td data-th-text="${inscription.getApprenant().email}"></td>
-                            <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
-                            <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
                             <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
+                            <td><span data-th-text="${inscription.getDiplome().statut}"></span></td>
                             <td>
-                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
+                                <a data-th-href="@{/admin/setDiplomeStatut/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="A reçu le diplome"><i class="halflings-icon white edit"></i></a>
                             </td>
                         </tr>
                         </tbody>

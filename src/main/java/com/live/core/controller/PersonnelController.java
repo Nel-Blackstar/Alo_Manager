@@ -567,5 +567,16 @@ public class PersonnelController extends InitiateController {
      	model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
         return "administration/formations/diplomes/index";
      }
-     
+	 @RequestMapping("/setDiplomeStatut/{id}")
+     public String setDiplomeStatut(HttpServletRequest request,HttpSession session,Model model,@PathVariable("id")  long id) {
+    	Diplome diplome=diplomeService.findOne(id);
+    	if(diplome.isStatut()==true) {
+    		diplome.setStatut(false);
+    	}else {
+    		diplome.setStatut(true);
+    	}
+        session.setAttribute("infos","Opération terminer avec succes!!");
+      	String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
+     }
 }
