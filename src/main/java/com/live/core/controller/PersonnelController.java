@@ -514,11 +514,11 @@ public class PersonnelController extends InitiateController {
          return "administration/formations/apprenants/index";
      }
      @PostMapping(value = "/formation/apprenant")
-     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis,@RequestParam("form") String form) {
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis) {
          chargerLive(model);
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
-         Diplome diplome=new Diplome();
+    	 Diplome diplome=new Diplome();
          diplome.setStatut(false);
          diplome.setCategoriePermis(categorie);
          diplomeService.save(diplome);
@@ -528,7 +528,7 @@ public class PersonnelController extends InitiateController {
          diplome.setInscrit(inscription);
          diplomeService.save(diplome);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Processus terminer avec succes!");
+         session.setAttribute("infos","Processus de création terminer avec succes!");
          return "redirect:/admin/formation/apprenant";
      }
      //suppression de l'inscription
@@ -575,14 +575,25 @@ public class PersonnelController extends InitiateController {
      }
 	 @RequestMapping("/setDiplomeStatut/{id}")
      public String setDiplomeStatut(HttpSession session,Model model,@PathVariable("id")  long id) {
-    	Diplome diplome=diplomeService.findOne(id);
-    	if(diplome.isStatut()==true) {
-    		diplome.setStatut(false);
-    	}else {
-    		diplome.setStatut(true);
+		 Diplome diplome=null;
+		 try {
+    		diplome=diplomeService.findOne(id);
+    	}catch(Exception $e) {
+    		$e.printStackTrace();
     	}
-    	diplomeService.save(diplome);
-        session.setAttribute("infos","Opération terminer avec succes!!");
-        return "redirect:/admin/formation/diplomes";
+    	if(diplome!=null) {
+    		if(diplome.isStatut()==true) {
+        		diplome.setStatut(false);
+        	}else {
+        		diplome.setStatut(true);
+        	}
+        	diplomeService.save(diplome);
+            session.setAttribute("infos","Opération terminer avec succes!!");
+            return "redirect:/admin/formation/diplomes";
+    	}else {
+    		session.setAttribute("infos"," Echec de l'opération!!");
+            return "redirect:/admin/formation/diplomes";
+    	}
+    	
      }
 }

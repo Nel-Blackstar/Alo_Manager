@@ -57,7 +57,7 @@
                                 <div class="control-group">
                                     <label class="control-label"  for="resume">Resumé<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <textarea cols="20" rows="20" class="span9 typeahead"  data-role="textarea" maxlength="255" required data-th-field="*{resume}" id="resume" placeholder="saisissez votre resumer ici!"></textarea>
+                                        <textarea cols="20" rows="20" class="span9 typeahead"  data-role="textarea" required data-th-field="*{resume}" id="resume" placeholder="saisissez votre resumer ici!"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-actions">
@@ -81,8 +81,8 @@
                             <td class="c-info"><b>Module</b></td>
                             <td class="c-info"><i data-th-text="${cours.module}"></i></td>
                             <td rowspan="3" colspan="2" style="width:70%;">
-                                <a class="quick-button-small span2" data-th-href="@{'/admin/cours/view-chapter/'+${chap.id}}" data-th-each="chap, uStat : ${cours.getChapitres()}">
-                                    <p> <i class="glyphicons-icon book"></i> <br> chapitre <span data-th-text="${uStat.count}"></span> :<br> <b data-th-text="${chap.titre}">Le  Demarrage</b></p>
+                                <a class="quick-button-small span2" data-th-value="afficheur+${chap.id}" onclick="afficher(this)" data-th-each="chap, uStat : ${cours.getChapitres()}">
+                                    <p> <i class="glyphicons-icon book"></i> <br> Chapitre <span data-th-text="${uStat.count}"></span> :<br> <b data-th-text="${chap.titre}">Le  Demarrage</b></p>
                                     <span class="notification blue"> </span>
                                 </a>
                             </td>
@@ -97,19 +97,19 @@
                         </tr>
                     </table>
         <div class="clearfix"></div>
-        <div class="row-fluid sortable">
+        <div class="row-fluid sortable afficheur"  data-th-attr="id=afficheur+${chap.id}" data-th-each="chap, uStat : ${cours.getChapitres()}" style="display:none;">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Contenue du Chapitre</h2>
+                    <h2><i class="halflings-icon trash"></i><a data-th-href="@{'/admin/cours/delete-chap/'+${chap.id}+'/'+${cours.id} }" class="btn-sm btn-danger" style="vertical-align:middle">Supprimer </a></h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
                         <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
                     </div>
                 </div>
-                <div class="box-content" >
-                    <h2>TItre</h2><br>
-                    <h4>contenue complet</h4>
+                <div class="box-content">
+                    <h1 align="center"  style="color:red"><span data-th-text="'Chapitre  ' +${chap.id}">Titre : </span> : <b data-th-text="${chap.titre}">Le  Demarrage</b></h1><br>
+                    <p data-th-utext="${chap.resume}"></p>
                 </div>
             </div><!--/span-->
         </div><!--/row-->
@@ -117,7 +117,13 @@
     <!-- end: Content -->
 </div>
 <div data-layout-fragment="extra-js">
-
+    <script>
+        function afficher(source){
+            cible="#"+$(source).attr('value');
+            $('.afficheur').hide();
+            $(cible).show();
+    }
+    </script>
 </div>
 </body>
 </html>
