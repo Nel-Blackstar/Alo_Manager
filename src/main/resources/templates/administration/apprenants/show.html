@@ -57,14 +57,14 @@
                         <td>
                             <ul>
                                 <li data-th-each="evaluation : ${inscription.getEvaluations()}" >
-                                    <b data-th-text="${evaluation.getChapitre().getTitre()}"></b> : <span class="text-info" data-th-text="${evaluation.getNote()}"></span> <span class="text-info">/40</span>
+                                    <b data-th-text="${evaluation.getChapitre().getTitre()}"></b> : <span class="btn-info"><span  style="font-size:18" data-th-text="${evaluation.getNote()}"></span>/40</span>
                                 </li>
                             </ul>
                         </td>
                         <td>Permis <b data-th-text="${inscription.getDiplome().getCategoriePermis().getValeur()}"></b></td>
                         <td>
-                            <b class="text-success" data-th-if="${inscription.getDiplome().isStatut()}==true">Délivré</b>
-                            <b class="text-danger" data-th-if="${inscription.getDiplome().isStatut()}==false" >Non Délivré</b>
+                            <b class="btn-success"  data-th-if="${inscription.getDiplome().isStatut()}==true"><span >Délivré</span></b>
+                            <b class="btn-danger"  data-th-if="${inscription.getDiplome().isStatut()}==false" ><span >Non Délivré</span></b>
                         </td>
                     </tr>
                     </tbody>
