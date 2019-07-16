@@ -320,6 +320,9 @@ public class AdministrationController {
 
     @PostMapping(value = "/cours/save-chapitre")
     public String saveChapter(HttpSession session,Chapitre chapitre,@RequestParam("id_cours") long cours) {
+            String resumeTraiter=chapitre.getResume();
+            resumeTraiter.replace("\n", "<br>");
+            chapitre.setResume(resumeTraiter);
             chapitreRepository.save(chapitre);
             Cours cour=coursRepository.findOne(cours);
             List<Chapitre> chapitres = cour.getChapitres();
@@ -328,6 +331,18 @@ public class AdministrationController {
             coursRepository.save(cour);
             session.setAttribute("infos","Nouveau chapitre enregistré");
         return "redirect:/admin/consulter-cours/"+cours;
+    }
+    @RequestMapping("/cours/delete-chap/{id}/{courId}")
+    public String deleteChapitre(HttpSession session,@PathVariable("id") long id,@PathVariable("courId") long id_cour) {
+        Chapitre chapitre = chapitreRepository.findOne(id);
+        Cours cours =coursRepository.findOne(id_cour);
+        List<Chapitre> chaps=cours.getChapitres();
+        chaps.remove(chapitre);
+        cours.setChapitres(chaps);
+        coursRepository.save(cours);
+        chapitreRepository.delete(chapitre);
+        session.setAttribute("infos","suppression terminer avec succes!!");
+        return "redirect:/admin/consulter-cours/"+id_cour;
     }
 
     @GetMapping("/cours/suivie")
