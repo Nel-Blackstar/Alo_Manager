@@ -22,7 +22,7 @@ public class Inscription extends LiveEntity {
     private List<Evaluation> evaluations;
     
     @OneToMany(targetEntity = Suivre.class)
-    private List<Evaluation> suivres;
+    private List<Suivre> suivres;
     
     @ManyToOne
     @JoinColumn(name = "id_apprenant")
@@ -79,11 +79,11 @@ public class Inscription extends LiveEntity {
         this.evaluations = evaluations;
     }
 
-	public List<Evaluation> getSuivres() {
+	public List<Suivre> getSuivres() {
 		return suivres;
 	}
 
-	public void setSuivres(List<Evaluation> suivres) {
+	public void setSuivres(List<Suivre> suivres) {
 		this.suivres = suivres;
 	}
     

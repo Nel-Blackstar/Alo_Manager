@@ -166,7 +166,7 @@
                             <td data-th-text="${apprenant.telephone_1}"></td>
                             <td data-th-text="${apprenant.email}"></td>
                             <td>
-                                <a href="#" class="btn btn-small btn-primary">
+                                <a data-th-href="@{/admin/apprenants/view/{id}(id = ${apprenant.getId()})}"class="btn btn-small btn-primary">
                                     <i class="halflings-icon white folder-open"></i></a>
                                 <a data-th-href="@{/admin/update-apprenant/{id}(id = ${apprenant.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
                                 <a data-th-href="@{/admin/delete-apprenant/{id}(id = ${apprenant.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>

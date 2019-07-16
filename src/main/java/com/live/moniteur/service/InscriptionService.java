@@ -12,4 +12,5 @@ public interface InscriptionService {
     Inscription findOne(Long id);
     List<Inscription> findAll();
     List<Inscription> findInscriptionsByFormation(SessionFormation formation);
+    List<Inscription> findInscriptionsByApprenant(Apprenant apprenant);
 }

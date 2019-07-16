@@ -41,7 +41,7 @@ public class Chapitre extends LiveEntity {
     }
 
     public String getTitre() {
-        return titre;
+        return this.titre;
     }
 
     public void setTitre(String titre) {

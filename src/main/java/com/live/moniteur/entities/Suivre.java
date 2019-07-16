@@ -34,7 +34,7 @@ public class Suivre extends LiveEntity {
 
 
 	public Chapitre getChapitre() {
-        return chapitre;
+        return this.chapitre;
     }
 
     public void setChapitre(Chapitre chapitre) {
