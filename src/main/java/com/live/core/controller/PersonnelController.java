@@ -514,7 +514,7 @@ public class PersonnelController extends InitiateController {
          return "administration/formations/apprenants/index";
      }
      @PostMapping(value = "/formation/apprenant")
-     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis) {
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis,@RequestParam("form") String form) {
          chargerLive(model);
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
@@ -532,16 +532,22 @@ public class PersonnelController extends InitiateController {
          return "redirect:/admin/formation/apprenant";
      }
      //suppression de l'inscription
-     @GetMapping("/delete-Inscription/{id}")
-     public String deleteEntrer(HttpServletRequest request,Model model,HttpSession session,@PathVariable long id) {
+     @GetMapping("/formation/delete-Inscription/{id}")
+     public String deleteInscriFormation(HttpServletRequest request,Model model,HttpSession session,@PathVariable long id) {
      	Inscription inscription = inscriptionService.findOne(id);
+     	Diplome diplome=diplomeService.findOne(inscription.getDiplome().getId());
+     	diplome.setInscrit(null);
+     	inscription.setDiplome(null);
+     	inscriptionService.save(inscription);
+     	diplomeService.save(diplome);
      	inscriptionService.delete(inscription);
+     	diplomeService.delete(diplome);
      	session.setAttribute("infos","suppression terminer avec succes!!");
      	String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+        return "redirect:/admin/formation/apprenant";
      }
      //modification de l'inscription
-     @RequestMapping("/modifier-Inscription/{id}")
+     @RequestMapping("/formation/modifier-Inscription/{id}")
      public String editeCharge(HttpSession session,Model model,@PathVariable("id")  long id) {
     	 SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
     	 model.addAttribute("listeApprenant", apprenantService.findAll());
@@ -568,15 +574,15 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/diplomes/index";
      }
 	 @RequestMapping("/setDiplomeStatut/{id}")
-     public String setDiplomeStatut(HttpServletRequest request,HttpSession session,Model model,@PathVariable("id")  long id) {
+     public String setDiplomeStatut(HttpSession session,Model model,@PathVariable("id")  long id) {
     	Diplome diplome=diplomeService.findOne(id);
     	if(diplome.isStatut()==true) {
     		diplome.setStatut(false);
     	}else {
     		diplome.setStatut(true);
     	}
+    	diplomeService.save(diplome);
         session.setAttribute("infos","Opération terminer avec succes!!");
-      	String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+        return "redirect:/admin/formation/diplomes";
      }
 }

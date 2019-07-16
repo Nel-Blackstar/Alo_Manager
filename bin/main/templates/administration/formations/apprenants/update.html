@@ -21,10 +21,11 @@
             </li>
             <li><a href="#">Apprenants</a></li>
         </ul>
+
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Modifier l'apprenant</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Inscrire un apprenant à la session</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -35,31 +36,33 @@
                     <p class="fg-green" data-th-text="${info}">Info</p>
                 </div>
                 <div class="box-content">
-                		<div class="offset4 span12">
+                		<div class="offset3">
 	                        <form class="form-horizontal" data-th-action="@{/admin/formation/apprenant}" method="post" data-th-object="${inscription}">
+	                            <a data-th-href="@{/admin/apprenants}" class="btn btn-primary">Cliquez pour ajouter un apprenant qui n'existe pas</a>	                            
 	                            <fieldset>
-	                                <div class="box span6">
+	                                <div class="box span6"><br>
 	                                  <div class="control-group">
 	                                        <label class="control-label" for="type_apprenan">Apprenant<span class="text-danger">*</span> </label>
 	                                        <input type="hidden" data-th-value="${formation.id}" data-th-field="*{formation}">
 	                                        <input type="hidden" data-th-value="${inscription.id}" data-th-field="*{id}">
+	                                        <input type="hidden" value="update" name="form">
 	                                        <div class="controls">
-	                                            <select id="sexe" data-rel="chosen"class="span6 typeahead" data-th-field="*{apprenant}">
+	                                            <select data-rel="chosen"class="span6 typeahead" data-th-field="*{apprenant}">
 	                                                <span data-th-each="apprenant : ${listeApprenant}">
 					                                    <option data-th-value="${apprenant.id}" data-th-text="${apprenant.nom}"></option>
 					                                </span>
 	                                            </select>
-	                                        </div>
-	                                        <label class="control-label" for="type_apprenan">Permis de permi<span class="text-danger">*</span> </label>
+	                                        </div><br>
+	                                        <label class="control-label" for="type_apprenan">Catégorie de permi<span class="text-danger">*</span> </label>
 	                                        <div class="controls">
 	                                            <select data-rel="chosen"class="span6 typeahead" name="categoriePermis">
-	                                            	<option data-th-value="${inscription.getCategoriePermis().getId()}" data-th-text="${inscription.getCategoriePermis().getDescription()}"></option>
+	                                            	<option data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-value="${code.id}" data-th-text="${code.description}"></option>
 	                                                <span data-th-each="permi : ${permis}">
 					                                    <option data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
 					                                </span>
 	                                            </select>
 	                                        </div>
-	                                        <div class="control-group">
+	                                        <div class="control-group"><br>
 			                                    <label class="control-label"  for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
 			                                    <div class="controls">
 			                                        <input type="text" required class="span6 typeahead" id="paiement" data-th-field="*{paiement}" >
@@ -67,14 +70,13 @@
 			                                </div>
 	                                    </div>
 	                                    <div class="form-actions">
-	                                        <button type="submit" class="btn btn-primary">Ajouter</button>
+	                                        <button type="submit" class="btn btn-primary">Modifier</button>
 	                                        <button type="reset" class="btn">Annuler</button>
 	                                    </div>
 	                                </div>
 	                            </fieldset>
 	                        </form>
                         </div>
-                     </div>
                        </div>
                       </div>
                      <div class="box">
@@ -98,7 +100,7 @@
                             <th>email</th>
                             <th>Paiement des frais</th>
                             <th>Reste</th>
-                            <th>Permi</th>
+                            <th>Permis</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -112,10 +114,10 @@
                             <td data-th-text="${inscription.getApprenant().email}"></td>
                             <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
                             <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
-                            <td data-th-text="${inscription.getCategoriePermis().getDescription()}"></td>
+                            <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
                             <td>
-                                <a data-th-href="@{/admin/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
+                                <a data-th-href="@{/admin/formation/modifier-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="Modifier l'apprenant"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/formation/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
