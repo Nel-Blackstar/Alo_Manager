@@ -514,6 +514,9 @@ public class PersonnelController extends InitiateController {
      //Gestion des apprenants dans la session de formation
      @GetMapping("/formation/apprenant")
      public String formationApprenant(HttpSession session,Model model) {
+    	 if(session.getAttribute("formationCourante")==null) {
+     		return "redirect:/admin/formations";
+     	}
      	if (session.getAttribute("infos") != null){
              model.addAttribute("info",session.getAttribute("infos"));
              session.removeAttribute("infos");
@@ -529,6 +532,9 @@ public class PersonnelController extends InitiateController {
      @PostMapping(value = "/formation/apprenant")
      public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis) {
          chargerLive(model);
+         if(session.getAttribute("formationCourante")==null) {
+     		return "redirect:/admin/formations";
+     	}
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
          List<Inscription> listeInscrit=inscriptionService.findInscriptionsByFormation(formation);
@@ -558,7 +564,10 @@ public class PersonnelController extends InitiateController {
      //suppression de l'inscription
      @GetMapping("/formation/delete-Inscription/{id}")
      public String deleteInscriFormation(HttpServletRequest request,Model model,HttpSession session,@PathVariable long id) {
-     	Inscription inscription = inscriptionService.findOne(id);
+    	 if(session.getAttribute("formationCourante")==null) {
+     		return "redirect:/admin/formations";
+     	}
+    	Inscription inscription = inscriptionService.findOne(id);
      	Diplome diplome=diplomeService.findOne(inscription.getDiplome().getId());
      	diplome.setInscrit(null);
      	inscription.setDiplome(null);
@@ -573,6 +582,9 @@ public class PersonnelController extends InitiateController {
      //modification de l'inscription
      @RequestMapping("/formation/modifier-Inscription/{id}")
      public String editeCharge(HttpSession session,Model model,@PathVariable("id")  long id) {
+    	if(session.getAttribute("formationCourante")==null) {
+     		return "redirect:/admin/formations";
+     	}
     	 SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
     	 model.addAttribute("listeApprenant", apprenantService.findAll());
       	 model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
@@ -589,6 +601,9 @@ public class PersonnelController extends InitiateController {
 	 //Gestion des diplomes dans la session de formation
 	 @GetMapping("/formation/diplomes")
      public String listeDiplomlesFormation(HttpSession session,Model model) {
+		if(session.getAttribute("formationCourante")==null) {
+	    		return "redirect:/admin/formations";
+	    	}
      	if (session.getAttribute("infos") != null){
              model.addAttribute("info",session.getAttribute("infos"));
              session.removeAttribute("infos");
@@ -599,6 +614,9 @@ public class PersonnelController extends InitiateController {
      }
 	 @RequestMapping("/setDiplomeStatut/{id}")
      public String setDiplomeStatut(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 if(session.getAttribute("formationCourante")==null) {
+	    		return "redirect:/admin/formations";
+	    	}
 		 Diplome diplome=null;
 		 try {
     		diplome=diplomeService.findOne(id);

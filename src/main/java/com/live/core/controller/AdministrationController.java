@@ -254,6 +254,9 @@ public class AdministrationController {
      */
     @GetMapping("/cours")
     public String Cours(HttpSession session,Model model) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
         model.addAttribute("listeCours", coursRepository.findByFormation(formation));
         chargerLive(model);
@@ -269,6 +272,9 @@ public class AdministrationController {
 
     @PostMapping(value = "/cours/ajouter-cours")
     public String saveCours(HttpSession session,Cours cours) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
     	cours.setFormation(formation);
         coursRepository.save(cours);
@@ -277,6 +283,9 @@ public class AdministrationController {
     }
     @RequestMapping("/update-cours/{id}")
     public String editCours(HttpSession session,Model model,@PathVariable long id) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         Cours cours = coursRepository.findOne(id);
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
@@ -288,12 +297,18 @@ public class AdministrationController {
     }
     @PostMapping(value = "/cours/update-cours")
     public String UpdateCours(HttpSession session,Cours cours) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         coursRepository.save(cours);
         session.setAttribute("infos","Modification terminer avec succes!!");
         return "redirect:/admin/cours";
     }
     @RequestMapping("/cours/delete-cours/{id}")
     public String deleteCours(HttpSession session,@PathVariable long id) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         Cours cours = coursRepository.findOne(id);
         coursRepository.delete(cours);
         session.setAttribute("infos","suppression terminer avec succes!!");
@@ -308,6 +323,9 @@ public class AdministrationController {
      */
     @RequestMapping("/consulter-cours/{id}")
     public String showCour(HttpSession session,Model model,@PathVariable long id) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         Cours cours = coursRepository.findOne(id);
         if (session.getAttribute("infos") != null){
             model.addAttribute("info",session.getAttribute("infos"));
@@ -347,6 +365,9 @@ public class AdministrationController {
 
     @GetMapping("/cours/suivie")
     public String suivieCours(HttpSession session,Model model) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
         model.addAttribute("listeCours", coursRepository.findByFormation(formation));
         chargerLive(model);
@@ -363,6 +384,9 @@ public class AdministrationController {
     }
     @GetMapping("/cours/evaluation")
     public String evaluationCours(HttpSession session,Model model) {
+    	if(session.getAttribute("formationCourante")==null) {
+    		return "redirect:/admin/formations";
+    	}
         SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
         model.addAttribute("listeCours", coursRepository.findByFormation(formation));
         chargerLive(model);
