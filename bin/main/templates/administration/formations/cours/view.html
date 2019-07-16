@@ -16,13 +16,18 @@
     <!-- start: Content -->
     <div id="content" class="span10">
         <ul class="breadcrumb">
-            <li>
+            <ul class="breadcrumb">
+           <li>
                 <i class="icon-home"></i>
-                <a href="index.html" data-th-href="@{/admin/}">Administration</a>
+                <a data-th-href="@{/admin/}">Administration</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li>
-                <a href="#" data-th-href="@{/admin/cours/}">Cours</a>
+            	<a data-th-href="@{/admin/formations/}">Formations</a>
+            	<i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/cours/}">Cours</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li><span href="#">Informations sur le cours</span></li>

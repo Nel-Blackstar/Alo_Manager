@@ -531,17 +531,28 @@ public class PersonnelController extends InitiateController {
          chargerLive(model);
          SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
          CodeValue categorie=codeValueService.findById(categoriePermis);
-    	 Diplome diplome=new Diplome();
-         diplome.setStatut(false);
-         diplome.setCategoriePermis(categorie);
-         diplomeService.save(diplome);
-         inscription.setDiplome(diplome);
-         inscription.setFormation(formation);
-         inscriptionService.save(inscription);
-         diplome.setInscrit(inscription);
-         diplomeService.save(diplome);
-         model.addAttribute("state", "post");
-         session.setAttribute("infos","Processus de création terminer avec succes!");
+         List<Inscription> listeInscrit=inscriptionService.findInscriptionsByFormation(formation);
+         boolean n=false;
+         for(Inscription inscrit : listeInscrit) {
+        	 if(inscrit.getApprenant()==inscription.getApprenant()) {
+        		 n=true;
+        	 }
+         }
+         if(n==true) {
+        	 session.setAttribute("infos","Echec du processus de création. Cet apprenant a déjà été inscrit a cette session de formation!");
+         }else {
+        	 Diplome diplome=new Diplome();
+             diplome.setStatut(false);
+             diplome.setCategoriePermis(categorie);
+             diplomeService.save(diplome);
+             inscription.setDiplome(diplome);
+             inscription.setFormation(formation);
+             inscriptionService.save(inscription);
+             diplome.setInscrit(inscription);
+             diplomeService.save(diplome);
+             model.addAttribute("state", "post");
+             session.setAttribute("infos","Processus de création terminer avec succes!"); 
+         }
          return "redirect:/admin/formation/apprenant";
      }
      //suppression de l'inscription

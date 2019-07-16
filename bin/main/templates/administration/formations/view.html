@@ -13,10 +13,16 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a data-th-href="@{/admin/formations/}">Sessions formations</a></li>
+            <li>
+       			<i class="icon-angle-right"></i>
                 <a data-th-text="*{formation.dateFin}"></a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><a href="#">Accueil</a></li>
+            <li><a>Accueil</a></li>
         </ul>
         
          <div class="row-fluid">
