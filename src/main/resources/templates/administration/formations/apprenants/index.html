@@ -37,23 +37,23 @@
                 </div>
                 <div class="box-content">
                 		<div class="offset3">
-	                        <form class="form-horizontal" data-th-action="@{/admin/formation/apprenant}" method="post" data-th-object="${inscription}">
+	                        <form class="form-horizontal span9" data-th-action="@{/admin/formation/apprenant}" method="post" data-th-object="${inscription}">
 	                            <a data-th-href="@{/admin/apprenants}" class="btn btn-primary">Cliquez pour ajouter un apprenant qui n'existe pas</a>
 	                            <fieldset>
-	                                <div class="box span6"><br>
+	                                <div class="box"><br>
 	                                  <div class="control-group">
 	                                        <label class="control-label" for="type_apprenan">Apprenant<span class="text-danger">*</span> </label>
 	                                        <input type="hidden" data-th-value="${formation.id}" data-th-field="*{formation}">
 	                                        <div class="controls">
-	                                            <select data-rel="chosen"class="span6 typeahead" data-th-field="*{apprenant}">
+	                                            <select data-rel="chosen"class="typeahead" data-th-field="*{apprenant}">
 	                                                <span data-th-each="apprenant : ${listeApprenant}">
-					                                    <option data-th-value="${apprenant.id}" data-th-text="${apprenant.nom}"></option>
+					                                    <option data-th-value="${apprenant.id}" data-th-text="${apprenant.nom}+' '+${apprenant.prenom}"></option>
 					                                </span>
 	                                            </select>
 	                                        </div><br>
 	                                        <label class="control-label" for="type_apprenan">Catégorie de permi<span class="text-danger">*</span> </label>
 	                                        <div class="controls">
-	                                            <select data-rel="chosen"class="span6 typeahead" name="categoriePermis">
+	                                            <select data-rel="chosen"class="typeahead" name="categoriePermis">
 	                                                <span data-th-each="permi : ${permis}">
 					                                    <option data-th-value="${permi.id}" data-th-text="${permi.description}"></option>
 					                                </span>
@@ -62,7 +62,7 @@
 	                                        <div class="control-group"><br>
 			                                    <label class="control-label"  for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
 			                                    <div class="controls">
-			                                        <input type="text" required class="span6 typeahead" id="paiement" data-th-field="*{paiement}" >
+			                                        <input type="text" required class="typeahead" id="paiement" data-th-field="*{paiement}" >
 			                                    </div>
 			                                </div>
 	                                    </div>

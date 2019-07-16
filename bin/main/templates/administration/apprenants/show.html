@@ -19,7 +19,7 @@
         </ul>
         <div class="box">
             <div class="box-header" data-original-title>
-                <h2><i class="halflings-icon user"></i><span class="break"></span>Recapitulatif sur l'Apprenant <span data-th-text="${apprenant.nom}"></span></h2>
+                <h2><i class="halflings-icon user"></i><span class="break"></span>Recapitulatif sur l'Apprenant <span data-th-text="${apprenant.nom}+' '+${apprenant.prenom}"></span></h2>
                 <div class="box-icon">
                     <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                     <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -31,7 +31,6 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nom</th>
                         <th>Session</th>
                         <th>Cours Suivie</th>
                         <th>Evaluation</th>
@@ -42,7 +41,6 @@
                     <tbody>
                     <tr>
                         <td data-th-text="${iStat.count}"></td>
-                        <td data-th-text="${apprenant.nom} +' ' +${apprenant.prenom}"></td>
                         <td> <b>Du </b>
                             <span  data-th-text="${inscription.getFormation().getDateDebut()}"></span> <b>Au</b>
                             <span  data-th-text="${inscription.getFormation().getDateFin()}"></span>

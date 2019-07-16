@@ -45,7 +45,7 @@
                             <th>Téléphone</th>
                             <th>email</th>
                             <th>Permi</th>
-                            <th>Délivrer</th>
+                            <th>Décision</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -58,7 +58,10 @@
                             <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
                             <td data-th-text="${inscription.getApprenant().email}"></td>
                             <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
-                            <td><span data-th-if="${inscription.getDiplome().statut}==true" data-th-text="oui"></span><span data-th-if="${inscription.getDiplome().statut}==false" data-th-text="non"></span></td>
+                            <td>
+	                            <b class="btn-success"  data-th-if="${inscription.getDiplome().isStatut()}==true"><span >Délivré</span></b>
+	                            <b class="btn-danger"  data-th-if="${inscription.getDiplome().isStatut()}==false" ><span >Non Délivré</span></b>
+                            </td>
                             <td>
                                 <a data-th-href="@{/admin/setDiplomeStatut/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-success" title="A reçu le diplome"><i class="halflings-icon white edit"></i></a>
                             </td>
