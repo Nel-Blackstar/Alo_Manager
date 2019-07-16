@@ -48,7 +48,7 @@
                                     <label class="control-label" for="apprenant">Apprenant<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <select id="apprenant" required data-rel="chosen" data-th-field="*{inscription}"   class="span8 typeahead">
-                                            <option data-th-each="inscription, uStat : ${listeInscri}" data-th-value="${inscription.apprenant.id}"><span data-th-text="${inscription.apprenant.nom}"></span>- <span data-th-text="${inscription.apprenant.prenom} "></span></option>
+                                            <option data-th-each="inscription, uStat : ${listeInscri}" data-th-value="${inscription.apprenant.id}"><span data-th-text="${inscription.apprenant.nom}"></span>- <span data-th-text="${inscription.apprenant.prenom} "></span> : <b class="btn-info">Permis <span data-th-text="${inscription.getDiplome().getCategoriePermis().getValeur()}"></span></b></option>
                                         </select>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                         <tr>
                             <td data-th-each="chapitre : ${cours.getChapitres()}">
                                 <ul>
-                                    <li data-th-each="suivi : ${listeApp}" data-th-if="${suivi.getChapitre()}==${chapitre}"><span data-th-text="${suivi.getInscription().getApprenant().nom}"></span> <span data-th-text="${suivi.getInscription().getApprenant().prenom}"></span></li>
+                                    <li data-th-each="suivi : ${listeApp}" data-th-if="${suivi.getChapitre()}==${chapitre}"><span data-th-text="${suivi.getInscription().getApprenant().nom}"></span> <span data-th-text="${suivi.getInscription().getApprenant().prenom}"></span> : <b class="btn-info" >Permis <span data-th-text="${suivi.getInscription().getDiplome().getCategoriePermis().getValeur()}"></span></b></li>
                                 </ul>
                             </td>
                         </tr>

@@ -389,14 +389,22 @@ public class AdministrationController {
         if(verif){
             session.setAttribute("infos","L'apprenant a deja suivie se cours, Merci de verifier vous informations");
         }else{
-            suivreService.save(suivre);
+            Inscription inscrit = suivre.getInscription();
+            List<Suivre> suivs=inscrit.getSuivres();
+            suivs.add(suivreService.save(suivre));
+            inscrit.setSuivres(suivs);
+            inscriptionService.save(inscrit);
             session.setAttribute("infos","enregistrement du suivie de cours effectuer");
         }
         return "redirect:/admin/cours/suivie";
     }
     @PostMapping("/cours/ajouter-evaluation")
     public String addEvaluation(HttpSession session, Evaluation evaluation){
-            evaluationService.save(evaluation);
+            Inscription inscrit=evaluation.getInscription();
+            List<Evaluation> evals=inscrit.getEvaluations();
+            evals.add(evaluationService.save(evaluation));
+            inscrit.setEvaluations(evals);
+            inscriptionService.save(inscrit);
             session.setAttribute("infos","enregistrement de l'evaluation de cours effectuer");
         return "redirect:/admin/cours/evaluation";
     }

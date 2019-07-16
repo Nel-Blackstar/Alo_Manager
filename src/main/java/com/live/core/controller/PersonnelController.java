@@ -395,6 +395,19 @@ public class PersonnelController extends InitiateController {
     	return "redirect:/admin/apprenants";
 
     }
+
+    @GetMapping("/apprenants/view/{id}")
+    public String viewApprenant(HttpSession session,Model model,@PathVariable("id") long id) {
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("state", "get");
+        model.addAttribute("apprenant", apprenantService.findOne(id));
+        model.addAttribute("inscriptions",inscriptionService.findInscriptionsByApprenant(apprenantService.findOne(id)));
+        return "administration/apprenants/show";
+    }
+
     /**
      * Suppression d'un apprenant
      * @param id identifiant de l'apprenant
@@ -582,7 +595,7 @@ public class PersonnelController extends InitiateController {
     		diplome.setStatut(true);
     	}
     	diplomeService.save(diplome);
-        session.setAttribute("infos","Opération terminer avec succes!!");
+        session.setAttribute("infos","Opï¿½ration terminer avec succes!!");
         return "redirect:/admin/formation/diplomes";
      }
 }

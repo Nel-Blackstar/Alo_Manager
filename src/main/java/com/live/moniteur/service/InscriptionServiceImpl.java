@@ -42,4 +42,9 @@ public class InscriptionServiceImpl implements InscriptionService{
     public List<Inscription> findInscriptionsByFormation(SessionFormation formation) {
         return inscriptionRepository.findAllByFormation(formation);
     }
+
+    @Override
+    public List<Inscription> findInscriptionsByApprenant(Apprenant apprenant) {
+        return inscriptionRepository.findByApprenant(apprenant);
+    }
 }

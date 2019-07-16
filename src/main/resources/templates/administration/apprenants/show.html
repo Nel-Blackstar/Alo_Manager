@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Apprenants</title>
 </head>
 <body>
-
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a href="#">Apprenants</a></li>
+        </ul>
+        <div class="box">
+            <div class="box-header" data-original-title>
+                <h2><i class="halflings-icon user"></i><span class="break"></span>Recapitulatif sur l'Apprenant <span data-th-text="${apprenant.nom}"></span></h2>
+                <div class="box-icon">
+                    <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                    <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                    <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered" data-th-each="inscription, iStat : ${inscriptions}">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Session</th>
+                        <th>Cours Suivie</th>
+                        <th>Evaluation</th>
+                        <th>Diplome</th>
+                        <th>Decision</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td data-th-text="${iStat.count}"></td>
+                        <td data-th-text="${apprenant.nom} +' ' +${apprenant.prenom}"></td>
+                        <td> <b>Du </b>
+                            <span  data-th-text="${inscription.getFormation().getDateDebut()}"></span> <b>Au</b>
+                            <span  data-th-text="${inscription.getFormation().getDateFin()}"></span>
+                        </td>
+                        <td>
+                            <ul>
+                                <li data-th-each="suivie : ${inscription.getSuivres()}" >
+                                    <b data-th-text="${suivie.getChapitre().getTitre()}"></b>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li data-th-each="evaluation : ${inscription.getEvaluations()}" >
+                                    <b data-th-text="${evaluation.getChapitre().getTitre()}"></b> : <span class="text-info" data-th-text="${evaluation.getNote()}"></span> <span class="text-info">/40</span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>Permis <b data-th-text="${inscription.getDiplome().getCategoriePermis().getValeur()}"></b></td>
+                        <td>
+                            <b class="text-success" data-th-if="${inscription.getDiplome().isStatut()}==true">Délivré</b>
+                            <b class="text-danger" data-th-if="${inscription.getDiplome().isStatut()}==false" >Non Délivré</b>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!--/row-->
+        </div>
+        <!-- end: Content -->
+    </div>
 </body>
 </html>
