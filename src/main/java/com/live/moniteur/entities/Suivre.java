@@ -3,10 +3,13 @@ package com.live.moniteur.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 
 @Entity
 public class Suivre extends LiveEntity {
+	@NotNull
 	private String appreciation;
     @Temporal(TemporalType.DATE)
     private Date date;

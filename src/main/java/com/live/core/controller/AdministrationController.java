@@ -15,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 import java.util.List;
 
 @Controller
@@ -195,7 +198,10 @@ public class AdministrationController {
      * @return
      */
     @PostMapping(value = "/ajouter-banque")
-    public String ajouterBanque(HttpSession session,Model model, Banque banque) {
+    public String ajouterBanque(HttpSession session,Model model,@Valid Banque banque, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+    		return "administration/banques/index";
+		}
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
         model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
@@ -226,10 +232,13 @@ public class AdministrationController {
     * @return
     */
     @PostMapping(value = "/update-banque")
-    public String saveUpdateBanque(HttpSession session,Banque banque) {
-   	banqueService.save(banque);
-   	session.setAttribute("infos","Modification terminer avec succes!!");
-   	return "redirect:/admin/banques";
+    public String saveUpdateBanque(HttpSession session,@Valid Banque banque, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+    		return "administration/banques/update";
+		}
+	   	banqueService.save(banque);
+	   	session.setAttribute("infos","Modification terminer avec succes!!");
+	   	return "redirect:/admin/banques";
 
    }
     /**
@@ -271,7 +280,10 @@ public class AdministrationController {
     }
 
     @PostMapping(value = "/cours/ajouter-cours")
-    public String saveCours(HttpSession session,Cours cours) {
+    public String saveCours(HttpSession session,@Valid Cours cours, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+    		return "administration/formations/cours/index";
+		}
     	if(session.getAttribute("formationCourante")==null) {
     		return "redirect:/admin/formations";
     	}
@@ -296,7 +308,10 @@ public class AdministrationController {
 
     }
     @PostMapping(value = "/cours/update-cours")
-    public String UpdateCours(HttpSession session,Cours cours) {
+    public String UpdateCours(HttpSession session,@Valid Cours cours, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+    		return "administration/formations/cours/update";
+		}
     	if(session.getAttribute("formationCourante")==null) {
     		return "redirect:/admin/formations";
     	}
@@ -337,7 +352,10 @@ public class AdministrationController {
     }
 
     @PostMapping(value = "/cours/save-chapitre")
-    public String saveChapter(HttpSession session,Chapitre chapitre,@RequestParam("id_cours") long cours) {
+    public String saveChapter(HttpSession session,@Valid Chapitre chapitre,@RequestParam("id_cours") long cours, BindingResult bindingResult) {
+	    	if (bindingResult.hasErrors()) {
+	    		return "administration/formations/cours/view";
+			}
             String resumeTraiter=chapitre.getResume();
             resumeTraiter.replace("\n", "<br>");
             chapitre.setResume(resumeTraiter);

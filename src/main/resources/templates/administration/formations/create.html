@@ -39,24 +39,28 @@
                                     <label class="control-label" for="delai_dossiers">Delai de depots des dossiers dossiers<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead" id="delai_dossiers" data-th-field="*{delaiDossiers}" >
+                                        <span style="color:red;" data-th-errors="${sessionFormation.delaiDossiers}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="dateDebut">Date de début<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateDebut" data-th-field="*{dateDebut}">
+                                        <span style="color:red;" data-th-errors="${sessionFormation.dateDebut}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="dateFin">Date de fin<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead input-xlarge datepicker" id="dateFin" data-th-field="*{dateFin}">
+                                        <span style="color:red;" data-th-errors="${sessionFormation.dateFin}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="fraisInscriptions">Frais d'inscription pour la formation<span class="text-danger">*</span></label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead" id="fraisInscriptions" data-th-field="*{fraisInscription}" >
+                                        <span style="color:red;" data-th-errors="${sessionFormation.fraisInscription}"></span>
                                     </div>
                                 </div>
                                 <div class="form-actions">

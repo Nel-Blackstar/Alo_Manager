@@ -20,10 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,8 +82,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(HttpSession session,Model model, Personnel personnel) {
-        //model.addAttribute("personnel", iHotelManager.userConnecte());
+    public String ajouterPersonnel(HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 return "administration/personnels/index";
+	 	}
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
@@ -137,7 +142,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/personnels/modifier-personnel")
-    public String modifierPersonnel(HttpSession session,Model model, Personnel personnel,String date) {
+    public String modifierPersonnel(HttpSession session,Model model,@Valid Personnel personnel,String date, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 	return "administration/personnels/update";
+	 		}
     	@SuppressWarnings("deprecation")
 		Date date_naissance=new Date();
 		try {
@@ -180,7 +188,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/users/ajouter-user")
-    public String ajouterUser(HttpSession session, Model model, Users users, @RequestParam("role") List<String> role, @RequestParam("vmdp") String vmdp) {
+    public String ajouterUser(HttpSession session, Model model,@Valid Users users, @RequestParam("role") List<String> role, @RequestParam("vmdp") String vmdp, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 return "administration/utilisateurs/index";
+	 	}
         //model.addAttribute("user", iHotelManager.userConnecte());
         chargerLive(model);
         List<String> erreur= new ArrayList<>();
@@ -262,7 +273,10 @@ public class PersonnelController extends InitiateController {
     }
 
     @PostMapping(value = "/users/editer-user")
-    public String editUser(HttpSession session,Model model, Users users, @RequestParam("role") List<String> role,@RequestParam("vmdp") String vmdp) {
+    public String editUser(HttpSession session,Model model,@Valid Users users, @RequestParam("role") List<String> role,@RequestParam("vmdp") String vmdp, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 return "administration/utilisateurs/update";
+	 	}
         List<String> erreur= new ArrayList<>();
         Users user = new Users();
         user.setLogin(users.getLogin());
@@ -351,7 +365,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/ajouter-apprenant")
-    public String ajouterApprenant(HttpSession session,Model model, Apprenant apprenant) {
+    public String ajouterApprenant(HttpSession session,Model model,@Valid Apprenant apprenant, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 return "administration/apprenants/index";
+	 	}
         Apprenant apprenantToSave = apprenantService.save(apprenant);
         model.addAttribute("state", "post");
         model.addAttribute("info",apprenantToSave.getNom()+" - "+apprenantToSave.getTelephone_1());
@@ -380,7 +397,10 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/update-apprenant")
-    public String saveUpdateApprenant(HttpSession session,Apprenant apprenant,String date) {
+    public String saveUpdateApprenant(HttpSession session,@Valid Apprenant apprenant,String date, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+       	 return "administration/apprenants/update";
+	 	}
     	@SuppressWarnings("deprecation")
 		Date date_naissance=new Date();
 		try {
@@ -389,7 +409,7 @@ public class PersonnelController extends InitiateController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-		session.setAttribute("infos","Modification terminer avec succes!!");
+		session.setAttribute("infos","Modification terminer avec succès!!");
 		apprenant.setDate_naissance(date_naissance);
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
@@ -417,7 +437,7 @@ public class PersonnelController extends InitiateController {
     public String deleteApprenant(HttpSession session,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	apprenantService.delete(apprenant);
-    	session.setAttribute("infos","suppression terminer avec succes!!");
+    	session.setAttribute("infos","suppréssion terminer avec succès!!");
     	return "redirect:/admin/apprenants";
 
     }
@@ -460,10 +480,13 @@ public class PersonnelController extends InitiateController {
       * @return
       */
      @PostMapping(value = "/ajouter-formation")
-     public String ajouterFormation(HttpSession session,Model model, SessionFormation formation) {
+     public String ajouterFormation(HttpSession session,Model model,@Valid SessionFormation formation, BindingResult bindingResult) {
+         if (bindingResult.hasErrors()) {
+        	 return "administration/formations/create";
+	 		}
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuerer avec succes!!");
+         session.setAttribute("infos","Nouvelle session de formation configuerée avec succès!!");
          return "redirect:/admin/formations";
      }
      /**
@@ -488,7 +511,7 @@ public class PersonnelController extends InitiateController {
       * @return
       */
      @PostMapping(value = "/update-formation")
-     public String saveUpdateFormation(HttpSession session,Apprenant apprenant,String date) {
+     public String saveUpdateFormation(HttpSession session,@Valid Apprenant apprenant,String date, BindingResult bindingResult) {
      	@SuppressWarnings("deprecation")
  		Date date_naissance=new Date();
  		try {
@@ -530,8 +553,11 @@ public class PersonnelController extends InitiateController {
          return "administration/formations/apprenants/index";
      }
      @PostMapping(value = "/formation/apprenant")
-     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model, Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis) {
+     public String ajouterApprenantFormation(HttpServletRequest request,HttpSession session,Model model,@Valid Inscription inscription,@RequestParam("categoriePermis") Long categoriePermis, BindingResult bindingResult) {
          chargerLive(model);
+         if (bindingResult.hasErrors()) {
+        	 return "administration/formations/apprenants/index";
+ 		 }
          if(session.getAttribute("formationCourante")==null) {
      		return "redirect:/admin/formations";
      	}
@@ -545,7 +571,7 @@ public class PersonnelController extends InitiateController {
         	 }
          }
          if(n==true) {
-        	 session.setAttribute("infos","Echec du processus de cr�ation. Cet apprenant a d�j� �t� inscrit a cette session de formation!");
+        	 session.setAttribute("infos","Echec du procéssus de création. Cet apprénant a déjà été inscrit a cette session de formation!");
          }else {
         	 Diplome diplome=new Diplome();
              diplome.setStatut(false);
@@ -557,7 +583,7 @@ public class PersonnelController extends InitiateController {
              diplome.setInscrit(inscription);
              diplomeService.save(diplome);
              model.addAttribute("state", "post");
-             session.setAttribute("infos","Processus de cr�ation terminer avec succes!"); 
+             session.setAttribute("infos","Procéssus de création terminer avec succès!"); 
          }
          return "redirect:/admin/formation/apprenant";
      }
@@ -573,9 +599,18 @@ public class PersonnelController extends InitiateController {
      	inscription.setDiplome(null);
      	inscriptionService.save(inscription);
      	diplomeService.save(diplome);
-     	inscriptionService.delete(inscription);
+     	try {
+     		inscriptionService.delete(inscription);
+     	}catch(Exception $e) {
+     		diplome.setInscrit(inscription);
+         	inscription.setDiplome(diplome);
+         	inscriptionService.save(inscription);
+         	diplomeService.save(diplome);
+     		session.setAttribute("infos","suppréssion echouer car plusieurs oppérations ont déjà été éffectuers!!");
+     		return "redirect:/admin/formation/apprenant";
+     	}
      	diplomeService.delete(diplome);
-     	session.setAttribute("infos","suppression terminer avec succes!!");
+     	session.setAttribute("infos","suppréssion terminer avec succès!!");
      	String referer = request.getHeader("Referer");
         return "redirect:/admin/formation/apprenant";
      }
@@ -630,10 +665,10 @@ public class PersonnelController extends InitiateController {
         		diplome.setStatut(true);
         	}
         	diplomeService.save(diplome);
-            session.setAttribute("infos","Op�ration terminer avec succes!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
             return "redirect:/admin/formation/diplomes";
     	}else {
-    		session.setAttribute("infos"," Echec de l'op�ration!!");
+    		session.setAttribute("infos"," Echec de l'opération!!");
             return "redirect:/admin/formation/diplomes";
     	}
      }

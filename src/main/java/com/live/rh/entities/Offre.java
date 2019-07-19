@@ -4,10 +4,15 @@ import com.live.common.entities.LiveEntity;
 import com.live.core.entities.Partenaire;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 
 @Entity
 public class Offre extends LiveEntity {
+	@DecimalMin("0")
+	@NotNull
     private Long quantite;
     private float montant;
     @Temporal(TemporalType.DATE)

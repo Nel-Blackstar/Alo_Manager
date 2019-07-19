@@ -3,11 +3,17 @@ package com.live.rh.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Prevision extends LiveEntity {
+	@NotNull
     private String type;
+	@NotNull
     private  String description;
+	@NotNull
+	@DecimalMin("0")
     private Long quantite;
 
     public Prevision() {

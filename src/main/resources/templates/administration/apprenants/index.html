@@ -39,48 +39,56 @@
                                         <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="nom" data-th-field="*{nom}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.nom}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="prenom">Prénom<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="prenom" data-th-field="*{prenom}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.prenom}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="date_naissance">Date de naissance<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead input-xlarge datepicker" id="date_naissance" data-th-field="*{date_naissance}">
+                                            <span class="text-danger" data-th-errors="${apprenant.date_naissance}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="lieu_naissance">Lieu naissance<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="lieu_naissance" data-th-field="*{lieu_naissance}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.lieu_naissance}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="numero_cni">Numéro CNI<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="numero_cni" data-th-field="*{numero_cni}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.numero_cni}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="email">Adresse mail </label>
                                         <div class="controls">
                                             <input type="email" class="span6 typeahead" id="email" data-th-field="*{email}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.email}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="telephone1">Téléphone 1<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="telephone1" data-th-field="*{telephone_1}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.telephone_1}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="telephone2">Téléphone 2 </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="telephone2" data-th-field="*{telephone_2}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.telephone_2}"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -89,12 +97,14 @@
                                         <label class="control-label" for="matricule">Matricule<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="matricule" data-th-field="*{matricule}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.matricule}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label" for="adresse">Adresse<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.adresse}"></span>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -121,6 +131,7 @@
                                         <label class="control-label" for="photo">Photo<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <input type="file" class="span6 typeahead" id="photo" data-th-field="*{photo}" >
+                                            <span class="text-danger" data-th-errors="${apprenant.photo}"></span>
                                         </div>
                                     </div>
                                     <div class="form-actions">

@@ -10,16 +10,23 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Partenaire extends LiveEntity {
+	@NotNull
     private String nom;
     private String prenom;
+    @NotNull
     private String email;
+    @NotNull
     private String telephone;
+    @NotNull
     private String numero_cni;
+    @NotNull
     private Character sexe;
     private String adresse;
 

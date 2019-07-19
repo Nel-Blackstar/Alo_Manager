@@ -63,6 +63,7 @@
 			                                    <label class="control-label"  for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
 			                                    <div class="controls">
 			                                        <input type="text" required class="typeahead" id="paiement" data-th-field="*{paiement}" >
+			                                        <span class="text-danger" data-th-errors="${inscription.paiement}"></span>
 			                                    </div>
 			                                </div>
 	                                    </div>

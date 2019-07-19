@@ -47,17 +47,20 @@
                                     <label class="control-label"  for="module">Module<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" required class="span10 typeahead" id="module" data-th-field="*{module}" >
+                                        <span class="text-danger" data-th-errors="${cours.module}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"  for="libelle">Libellé<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" required class="span10 typeahead" id="libelle" data-th-field="*{libelle}" >
+                                        <span class="text-danger" data-th-errors="${cours.libelle}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label span7"  for="type">Type<span class="text-danger">*</span> </label>                                   <div class="controls">
                                     <input type="text"  required class="span10 typeahead" id="type"  data-th-field="*{type}" >
+                                    <span class="text-danger" data-th-errors="${cours.type}"></span>
                                 </div>
                                 </div>
                                 <div class="text-center form-actions">

@@ -39,26 +39,30 @@
                                 <div class="controls">
                                 	<input type="hidden" class="span6 typeahead" id="id" data-th-field="*{id}" >
                                     <input type="text" class="span6 typeahead" id="nom" data-th-field="*{nom}" >
+                                        <span class="text-danger" data-th-errors="${banque.nom}"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="telephone">Telephone<span class="text-danger">*</span> </label>
-                                <div class="controls">
-                                    <input type="text" class="span6 typeahead" id="telephone" data-th-field="*{telephone}" >
+                                <div class="control-group">
+                                    <label class="control-label" for="telephone">Telephone<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="telephone" data-th-field="*{telephone}" >
+                                        <span class="text-danger" data-th-errors="${banque.telephone}"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="adresse">Addresse </label>
-                                <div class="controls">
-                                    <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" >
+                                <div class="control-group">
+                                    <label class="control-label" for="adresse">Addresse </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" >
+                                        <span class="text-danger" data-th-errors="${banque.adresse}"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="fax">Fax </label>
-                                <div class="controls">
-                                    <input type="text" class="span6 typeahead" id="fax" data-th-field="*{fax}" >
+                                <div class="control-group">
+                                    <label class="control-label" for="fax">Fax </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="fax" data-th-field="*{fax}" >
+                                        <span class="text-danger" data-th-errors="${banque.fax}"></span>
+                                    </div>
                                 </div>
-                            </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Enregistrer</button>
                                 <button type="reset" class="btn">Annuler</button>

@@ -3,17 +3,24 @@ package com.live.moniteur.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 public class SessionFormation extends LiveEntity {
+	@NotNull
     private String delaiDossiers;
+	@NotNull
     @Temporal(TemporalType.DATE)
     private Date dateDebut;
+	@NotNull
     @Temporal(TemporalType.DATE)
     private Date dateFin;
+    @DecimalMin("1000")
     private float fraisInscription;
 
     @OneToMany

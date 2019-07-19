@@ -4,12 +4,15 @@ import com.live.common.entities.LiveEntity;
 import com.live.rh.entities.Apprenant;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Inscription extends LiveEntity {
-
+	@NotNull
     private float paiement;
     @Temporal(TemporalType.DATE)
     private Date date;

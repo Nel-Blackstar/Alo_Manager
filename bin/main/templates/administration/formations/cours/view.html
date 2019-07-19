@@ -55,6 +55,7 @@
                                     <label class="control-label"  for="titre">Titre<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" required class="span9 typeahead" id="titre" data-th-field="*{titre}" >
+                                        <span class="text-danger" data-th-errors="${chapitre.titre}"></span>
                                     </div>
                                 </div>
                                 <input type="hidden" data-th-value="${cours.id}" name="id_cours">
@@ -62,6 +63,7 @@
                                     <label class="control-label"  for="resume">Resumé<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <textarea cols="20" rows="20" class="span9 typeahead"  data-role="textarea" required data-th-field="*{resume}" id="resume" placeholder="saisissez votre resumer ici!"></textarea>
+                                        <span class="text-danger" data-th-errors="${chapitre.resume}"></span>
                                     </div>
                                 </div>
                                 <div class="form-actions">

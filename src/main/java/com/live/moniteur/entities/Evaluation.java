@@ -3,14 +3,18 @@ package com.live.moniteur.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 
 @Entity
 public class Evaluation extends LiveEntity {
+	@NotNull
     private String typeEvaluation;
     @Temporal(TemporalType.DATE)
     private Date date;
     
+    @NotNull
     private float note;
 
     @ManyToOne

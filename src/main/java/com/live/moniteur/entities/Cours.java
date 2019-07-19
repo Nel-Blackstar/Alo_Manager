@@ -3,12 +3,17 @@ package com.live.moniteur.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 @Entity
 public class Cours extends LiveEntity {
+	@NotNull
     private String module;
+	@NotNull
     private String libelle;
+    @NotNull
     private String type;
 
     @OneToMany(targetEntity = Chapitre.class)

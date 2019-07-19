@@ -7,10 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 @Entity
 public class Chapitre extends LiveEntity {
+	
+	@NotNull
     private String titre;
     
     @ManyToOne
@@ -23,7 +27,8 @@ public class Chapitre extends LiveEntity {
 	public void setCours(Cours cours) {
 		this.cours = cours;
 	}
-
+	
+	@NotNull
 	@Column(columnDefinition = "TEXT")
     private String resume;
 
