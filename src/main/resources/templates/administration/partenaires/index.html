@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Accueil</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a data-th-href="@{/admin/partenaire/}">Partenaire</a></li>
+            <li>
+       			<i class="icon-angle-right"></i>
+            </li>
+            <li><a>Accueil</a></li>
+        </ul>
+        
+         <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon user"></i><span class="break"></span>Configurations</h2>
+                </div>
+                <div class="box-content">
+
+                    <a class="quick-button-small span2" data-th-href="@{'/admin/partenaires/view'}">
+                        <i class="glyphicons-icon group"></i>
+                        <p>Gestion des partenaires</p>
+                        <span class="notification green"></span>
+                    </a>
+                    <a class="quick-button-small span2" data-th-href="@{'/admin/partenaires/fournitures'}">
+                        <i class="glyphicons-icon cargo"></i>
+                        <p>Gestion des fournitures</p>
+                        <span class="notification green"></span>
+                    </a>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+
+
+        <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon cog"></i><span class="break"></span>Gestion des partenariats</h2>
+                </div>
+                <div class="box-content">
+
+                    <a class="quick-button-small span2"data-th-href="@{/admin/partenaires/offres}">
+                        <i class="glyphicons-icon resize_full"></i>
+                        <p>Gestion des Offres</p>
+                    </a>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/partenaires/previsions}">
+                        <i class="glyphicons-icon notes"></i>
+                        <p>Gestion des prévisions</p>
+                        <span class="notification blue"> </span>
+                    </a>
+                    <a class="quick-button-small span2" data-th-href="@{'/admin/formation/apprenant'}">
+                        <i class="glyphicons-icon pie_chart"></i>
+                        <p>Rapport des offres</p>
+                        <span class="notification green"></span>
+                    </a>
+                    
+                    
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        
+        <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon retweet"></i><span class="break"></span>Gestion des randez-vous</h2>
+                </div>
+                <div class="box-content">
+
+                    <a class="quick-button-small span2" data-th-href="@{/admin/formation/diplomes}">
+                        <i class="glyphicons-icon retweet_2"></i>
+                        <p>Randez-vous</p>
+                    </a>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+	</div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>

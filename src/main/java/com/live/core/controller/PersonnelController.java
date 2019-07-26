@@ -1,6 +1,7 @@
 package com.live.core.controller;
 import com.live.common.entities.CodeValue;
 import com.live.common.service.CodeValueService;
+import com.live.core.entities.Partenaire;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
 import com.live.core.entities.Users;
@@ -15,7 +16,14 @@ import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.service.BanqueService;
 import com.live.rh.entities.Apprenant;
+import com.live.rh.entities.Fournitures;
+import com.live.rh.entities.Offre;
+import com.live.rh.entities.Prevision;
 import com.live.rh.service.ApprenantService;
+import com.live.rh.service.FournituresService;
+import com.live.rh.service.OffreService;
+import com.live.rh.service.PrevisionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -62,6 +70,15 @@ public class PersonnelController extends InitiateController {
     InscriptionService inscriptionService;
     @Autowired
     DiplomeService diplomeService;
+    @Autowired
+    PartenaireService partenaireService;
+    @Autowired
+    FournituresService fournitureService;
+    @Autowired
+    OffreService offreService;
+    @Autowired
+    PrevisionService previsionService;
+
 
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -397,20 +414,11 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/update-apprenant")
-    public String saveUpdateApprenant(HttpSession session,@Valid Apprenant apprenant,String date, BindingResult bindingResult) {
+    public String saveUpdateApprenant(HttpSession session,@Valid Apprenant apprenant, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/update";
 	 	}
-    	@SuppressWarnings("deprecation")
-		Date date_naissance=new Date();
-		try {
-			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
 		session.setAttribute("infos","Modification terminer avec succès!!");
-		apprenant.setDate_naissance(date_naissance);
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
@@ -511,19 +519,13 @@ public class PersonnelController extends InitiateController {
       * @return
       */
      @PostMapping(value = "/update-formation")
-     public String saveUpdateFormation(HttpSession session,@Valid Apprenant apprenant,String date, BindingResult bindingResult) {
-     	@SuppressWarnings("deprecation")
- 		Date date_naissance=new Date();
- 		try {
- 			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
- 		} catch (ParseException e) {
- 			// TODO Auto-generated catch block
- 			e.printStackTrace();
- 		}  
- 		session.setAttribute("infos","Modification terminer avec succes !!!");
- 		apprenant.setDate_naissance(date_naissance);
-     	apprenantService.save(apprenant);
-     	return "redirect:/admin/apprenants";
+     public String saveUpdateFormation(HttpSession session,@Valid SessionFormation formation, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/formations/update";
+    	}
+    	session.setAttribute("infos","Nouvelle session de formation modifier avec succès!!");
+     	sessionFormationService.save(formation);
+     	return"redirect:/admin/formations";
 
      }
      //Affichage de la session de formation 
@@ -671,5 +673,163 @@ public class PersonnelController extends InitiateController {
     		session.setAttribute("infos"," Echec de l'opération!!");
             return "redirect:/admin/formation/diplomes";
     	}
+     }
+	 @RequestMapping("/partenaire")
+     public String partenaire(HttpSession session,Model model) {
+    	return "administration/partenaires/index";
+     }
+	 @RequestMapping("/partenaires/view")
+     public String addPartenaire(HttpSession session,Model model) {
+		 if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+		 Partenaire partenaire=new Partenaire();
+		 model.addAttribute(partenaire);
+		 model.addAttribute("partenaires",partenaireService.findAll());
+    	return "administration/partenaires/partenaires/index";
+     }
+	 @PostMapping(value = "/partenaires/save")
+     public String savePartenaire(HttpSession session,@Valid Partenaire partenaire, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/partenaires/partenaires/index";
+    	}
+    	session.setAttribute("infos","Opération terminer avec succès!!");
+     	partenaireService.save(partenaire);
+     	return"redirect:/admin/partenaires/view";
+
+     }
+	 @RequestMapping("/partenaires/update/{id}")
+     public String updatePartenaire(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 model.addAttribute("partenaire",partenaireService.findOne(id));
+		 return "administration/partenaires/partenaires/update";
+     }
+	 @RequestMapping("/partenaires/delete/{id}")
+     public String deletePartenaire(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 Partenaire partenaire=partenaireService.findOne(id);
+		 try {
+			 partenaireService.delete(partenaire);
+			 session.setAttribute("infos","Opération terminer avec succès!!");
+		 }catch(Exception $e) {
+			 session.setAttribute("infos","Opération non éffectuer ce partenaire existe et est lier a plusieurs opérations!!");
+		 }
+		 return"redirect:/admin/partenaires/view";
+     }
+	 @RequestMapping("/partenaires/fournitures")
+     public String addFornitures(HttpSession session,Model model) {
+		 if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+		 Fournitures fourniture=new Fournitures();
+		 model.addAttribute(fourniture);
+		 model.addAttribute("fournitures",fournitureService.findAll());
+    	return "administration/partenaires/fournitures/index";
+     }
+	 @PostMapping(value = "/fourniture/save")
+     public String saveFourniture(HttpSession session,@Valid Fournitures fourniture, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/partenaires/fournitures/index";
+    	}
+    	session.setAttribute("infos","Opération terminer avec succès!!");
+     	fournitureService.save(fourniture);
+     	return"redirect:/admin/partenaires/fournitures";
+
+     }
+	 @RequestMapping("/fourniture/update/{id}")
+     public String updateFourniture(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 model.addAttribute("fourniture",fournitureService.findOne(id));
+		 return "administration/partenaires/fournitures/update";
+     }
+	 @RequestMapping("/fourniture/delete/{id}")
+     public String deleteFourniture(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 Fournitures fourniture=fournitureService.findOne(id);
+		 try {
+			 fournitureService.delete(fourniture);
+			 session.setAttribute("infos","Opération terminer avec succès!!");
+		 }catch(Exception $e) {
+			 session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+		 }
+		 return"redirect:/admin/partenaires/fournitures";
+     }
+	 @RequestMapping("/partenaires/offres")
+     public String addoffres(HttpSession session,Model model) {
+		 if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+		 Offre offre=new Offre();
+		 model.addAttribute("partenaires",partenaireService.findAll());
+		 model.addAttribute("fournitures",fournitureService.findAll());
+		 model.addAttribute(offre);
+		 model.addAttribute("offres",offreService.findAll());
+    	return "administration/partenaires/offres/index";
+     }
+	 @PostMapping(value = "/offres/save")
+     public String saveOffres(HttpSession session,@Valid Offre offre, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/partenaires/offres/index";
+    	}
+    	session.setAttribute("infos","Opération terminer avec succès!!");
+     	offreService.save(offre);
+     	return"redirect:/admin/partenaires/offres";
+
+     }
+	 @RequestMapping("/offres/update/{id}")
+     public String updateOffre(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 model.addAttribute("offre",offreService.findOne(id));
+		 model.addAttribute("partenaires",partenaireService.findAll());
+		 model.addAttribute("fournitures",fournitureService.findAll());
+		 return "administration/partenaires/offres/update";
+     }
+	 @RequestMapping("/offres/delete/{id}")
+     public String deleteOffre(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 Offre offre=offreService.findOne(id);
+		 try {
+			 offreService.delete(offre);
+			 session.setAttribute("infos","Opération terminer avec succès!!");
+		 }catch(Exception $e) {
+			 session.setAttribute("infos","Opération non éffectuer cette offre existe et est lier a plusieurs opérations!!");
+		 }
+		 return"redirect:/admin/partenaires/offres";
+     }
+	 @RequestMapping("/partenaires/previsions")
+     public String addprevision(HttpSession session,Model model) {
+		 if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+		 Prevision prevision=new Prevision();
+		 model.addAttribute("partenaires",partenaireService.findAll());
+		 model.addAttribute("previsions",previsionService.findAll());
+		 model.addAttribute(prevision);
+    	return "administration/partenaires/previsions/index";
+     }
+	 @PostMapping(value = "/previsions/save")
+     public String savePrevision(HttpSession session,@Valid Prevision prevision, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/partenaires/previsions/index";
+    	}
+    	session.setAttribute("infos","Opération terminer avec succès!!");
+     	previsionService.save(prevision);
+     	return"redirect:/admin/partenaires/previsions";
+
+     }
+	 @RequestMapping("/previsions/update/{id}")
+     public String updateprevisions(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 model.addAttribute("prevision",previsionService.findOne(id));
+		 model.addAttribute("partenaires",partenaireService.findAll());
+		 return "administration/partenaires/previsions/update";
+     }
+	 @RequestMapping("/previsions/delete/{id}")
+     public String deleteprevision(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 Prevision prevision=previsionService.findOne(id);
+		 try {
+			 previsionService.delete(prevision);
+			 session.setAttribute("infos","Opération terminer avec succès!!");
+		 }catch(Exception $e) {
+			 session.setAttribute("infos","Opération non éffectuer cette prévisions existe et est lier a plusieurs opérations!!");
+		 }
+		 return"redirect:/admin/partenaires/previsions";
      }
 }

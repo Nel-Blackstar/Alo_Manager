@@ -53,7 +53,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="date_naissance">Date de naissance<span class="text-danger">*</span> </label>
                                         <div class="controls">
-                                            <input type="text" class="span6 typeahead input-xlarge datepicker" id="date_naissance" data-th-field="*{date_naissance}">
+                                            <input type="text" class="span6 typeahead input-xlarge datepicker" id="date_naissance" data-th-value="${#dates.format(apprenant.date_naissance, 'dd/MM/yyyy')}"  name="date_naissance">
                                             <span class="text-danger" data-th-errors="${apprenant.date_naissance}"></span>
                                         </div>
                                     </div>

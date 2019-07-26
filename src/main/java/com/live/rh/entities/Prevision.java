@@ -1,13 +1,18 @@
 package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
+import com.live.core.entities.Partenaire;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class Prevision extends LiveEntity {
+	@OneToOne
+	private Partenaire partenaire;
+
 	@NotNull
     private String type;
 	@NotNull
@@ -48,4 +53,12 @@ public class Prevision extends LiveEntity {
     public void setQuantite(Long quantite) {
         this.quantite = quantite;
     }
+    
+	public Partenaire getPartenaire() {
+		return partenaire;
+	}
+
+	public void setPartenaire(Partenaire partenaire) {
+		this.partenaire = partenaire;
+	}
 }

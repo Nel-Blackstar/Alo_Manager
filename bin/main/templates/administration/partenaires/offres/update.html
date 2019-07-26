@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Personnels</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/partenaire}">Partenaire</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Offres</span></li>
+        </ul>
+         <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une offre</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                <div class="alert alert-info" data-th-if="${info}">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+				  </div>
+             		<form class="form-horizontal" data-th-action="@{/admin/offres/save}" method="post"  data-th-object="${fourniture}">
+                            <fieldset style="text-align:center">
+							    <div class="control-group">
+									<label class="control-label" for="partenaire">Partenaire<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<select id="partenaire" required data-rel="chosen" name="partenaire" class="span10 typeahead">
+											<option data-th-value="${offre.partenaire.id}" selected data-th-text="${offre.partenaire.nom}+' '+${offre.partenaire.prenom}"></option>
+											<span data-th-each="partenaire : ${partenaires}">
+												<option data-th-value="${partenaire.id}" data-th-text="${partenaire.nom}+' '+${partenaire.prenom}"></option>
+											</span>
+										</select>
+									</div>
+	                            </div>
+								<div class="control-group">
+	                                    <label class="control-label" for="fournitures">fourniture<span class="text-danger">*</span> </label>
+	                                    <div class="controls">
+	                                        <select id="fournitures" required data-rel="chosen" name="fournitures" class="span10 typeahead">
+	                                        	<option data-th-value="${offre.fournitures.id}" selected data-th-text="${offre.fournitures.description}"></option>
+	                                            <span data-th-each="fourniture : ${fournitures}">
+	                                            	<option data-th-value="${fourniture.id}" data-th-text="${fourniture.description}"></option>
+	                                            </span>
+	                                        </select>
+	                                    </div>
+	                            </div>
+                                 <div class="control-group">
+									<label class="control-label" for="quantite">Quantité<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="hidden" required class="span10" data-th-value="${offre.id}" id="id" name="id">
+										<input type="text" required class="span10" id="quantite" data-th-value="${offre.quantite}" name="quantite">
+										<span class="text-danger" data-th-errors="${offre.quantite}"></span>
+									</div>
+								</div>
+								 <div class="control-group">
+									<label class="control-label" for="montant">Montant<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="number" required class="span10" data-th-value="${offre.montant}" id="montant" name="montant">
+										<span class="text-danger" data-th-errors="${offre.montant}"></span>
+									</div>
+								</div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+</div>
+</div>
+</body>
+</html>
