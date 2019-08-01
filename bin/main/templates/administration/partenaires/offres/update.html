@@ -68,11 +68,18 @@
 										<span class="text-danger" data-th-errors="${offre.quantite}"></span>
 									</div>
 								</div>
-								 <div class="control-group">
-									<label class="control-label" for="montant">Montant<span class="text-danger">*</span> </label>
+								<div class="control-group">
+									<label class="control-label" for="pp">Prix de vente partenaire<span class="text-danger">*</span> </label>
 									<div class="controls">
-										<input type="number" required class="span10" data-th-value="${offre.montant}" id="montant" name="montant">
-										<span class="text-danger" data-th-errors="${offre.montant}"></span>
+										<input type="number" required class="span10" id="pp" name="pp" data-th-value="${offre.pp}">
+										<span class="text-danger" data-th-errors="${offre.pp}"></span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="pp">Prix de vente public<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="number" required class="span10" id="pvp" name="pvp" data-th-value="${offre.pvp}">
+										<span class="text-danger" data-th-errors="${offre.pp}"></span>
 									</div>
 								</div>
                                 <div class="form-actions">

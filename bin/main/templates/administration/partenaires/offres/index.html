@@ -65,11 +65,18 @@
 										<span class="text-danger" data-th-errors="${offre.quantite}"></span>
 									</div>
 								</div>
-								 <div class="control-group">
-									<label class="control-label" for="montant">Montant<span class="text-danger">*</span> </label>
+								<div class="control-group">
+									<label class="control-label" for="pp">Prix de vente partenaire<span class="text-danger">*</span> </label>
 									<div class="controls">
-										<input type="number" required class="span10" id="montant" name="montant">
-										<span class="text-danger" data-th-errors="${offre.montant}"></span>
+										<input type="number" required class="span10" id="pp" name="pp">
+										<span class="text-danger" data-th-errors="${offre.pp}"></span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="pp">Prix de vente public<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="number" required class="span10" id="pvp" name="pvp">
+										<span class="text-danger" data-th-errors="${offre.pp}"></span>
 									</div>
 								</div>
                                 <div class="form-actions">
@@ -101,7 +108,8 @@
 							<th>Fourniture</th>
                             <th>Fournisseur</th>
                             <th>Quantité</th>
-							<th>Montant</th>
+							<th>Prix de vente partenaire</th>
+							<th>Prix de vente public</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -111,7 +119,8 @@
                             <td data-th-text="${offre.fournitures.description}"></td>
                             <td data-th-text="${offre.partenaire.nom}"></td>
 							<td data-th-text="${offre.quantite}"></td>
-							<td data-th-text="${offre.montant}+' fcfa'"></td>
+							<td data-th-text="${offre.pp}+' fcfa'"></td>
+							<td data-th-text="${offre.pvp}+' fcfa'"></td>
                             <td>  
                             	<!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
                                 <a href="#" data-th-href="@{'/admin/offres/update/'+${offre.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
