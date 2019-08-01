@@ -1,7 +1,6 @@
 package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
-import com.live.core.entities.Partenaire;
 
 import java.util.Date;
 
@@ -13,9 +12,9 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Prevision extends LiveEntity {
+public class Sortie extends LiveEntity {
 	@OneToOne
-	private Partenaire partenaire;
+	private Offre offre;
 
 	@NotNull
     private String type;
@@ -28,10 +27,10 @@ public class Prevision extends LiveEntity {
 	@DecimalMin("0")
     private Long quantite;
 
-    public Prevision() {
+    public Sortie() {
     }
 
-    public Prevision(String type, String description, Long quantite, Date date) {
+    public Sortie(String type, String description, Long quantite, Date date) {
         this.type = type;
         this.description = description;
         this.quantite = quantite;
@@ -62,12 +61,12 @@ public class Prevision extends LiveEntity {
         this.quantite = quantite;
     }
     
-	public Partenaire getPartenaire() {
-		return partenaire;
+	public Offre getOffre() {
+		return offre;
 	}
 
-	public void setPartenaire(Partenaire partenaire) {
-		this.partenaire = partenaire;
+	public void setOffre(Offre offre) {
+		this.offre = offre;
 	}
 
 	public Date getDate() {

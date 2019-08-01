@@ -71,6 +71,13 @@
 										<span class="text-danger" data-th-errors="${prevision.quantite}"></span>
 									</div>
 								</div>
+								<div class="control-group">
+                                     <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
+                                     <div class="controls">
+                                         <input type="text" class="span10 typeahead input-xlarge datepicker" data-th-value="${prevision.date}" id="date" name="date">
+                                         <span class="text-danger" data-th-errors="${prevision.date}" ></span>
+                                     </div>
+                                 </div>
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     <button type="reset" class="btn">Annuler</button>

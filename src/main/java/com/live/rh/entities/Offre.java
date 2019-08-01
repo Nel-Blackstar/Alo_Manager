@@ -14,7 +14,9 @@ public class Offre extends LiveEntity {
 	@DecimalMin("0")
 	@NotNull
     private Long quantite;
-    private float montant;
+	@NotNull
+    private double pp;
+	private double pvp;
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -29,9 +31,10 @@ public class Offre extends LiveEntity {
     public Offre() {
     }
 
-    public Offre(Long quantite, float montant, Date date) {
+    public Offre(Long quantite, double pp,double pvp, Date date) {
         this.quantite = quantite;
-        this.montant = montant;
+        this.pp = pp;
+        this.pvp = pvp;
         this.date = date;
     }
 
@@ -43,12 +46,12 @@ public class Offre extends LiveEntity {
         this.quantite = quantite;
     }
 
-    public float getMontant() {
-        return montant;
+    public double getPp() {
+        return pp;
     }
 
-    public void setMontant(float montant) {
-        this.montant = montant;
+    public void setPp(double pp) {
+        this.pp = pp;
     }
 
     public Date getDate() {
@@ -74,4 +77,13 @@ public class Offre extends LiveEntity {
     public void setPartenaire(Partenaire partenaire) {
         this.partenaire = partenaire;
     }
+
+	public double getPvp() {
+		return pvp;
+	}
+
+	public void setPvp(double pvp) {
+		this.pvp = pvp;
+	}
+    
 }
