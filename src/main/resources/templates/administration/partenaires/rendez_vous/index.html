@@ -19,12 +19,12 @@
                 <a data-th-href="@{/admin/partenaire}">Partenaire</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><span>Prévisions</span></li>
+            <li><span>Rendez-vous</span></li>
         </ul>
          <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une prévision</h2>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un rendez-vous</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -36,12 +36,12 @@
 					<button type="button" class="close" data-dismiss="alert">×</button>
 					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
 				  </div>
-             		<form class="form-horizontal" data-th-action="@{/admin/previsions/save}" method="post"  data-th-object="${prevision}">
+             		<form class="form-horizontal" data-th-action="@{/admin/rendez-vous/save}" method="post"  data-th-object="${rendezVous}">
                             <fieldset style="text-align:center">
 							    <div class="control-group">
 									<label class="control-label" for="partenaire">Partenaire<span class="text-danger">*</span> </label>
 									<div class="controls">
-										<select id="partenaire" required data-rel="chosen" name="partenaire" class="span10 typeahead">
+										<select id="partenaire" required data-rel="chosen" name="partenaire" class="span10 typeahead" multiple>
 											<span data-th-each="partenaire : ${partenaires}">
 												<option data-th-value="${partenaire.id}" data-th-text="${partenaire.nom}+' '+${partenaire.prenom}"></option>
 											</span>
@@ -49,26 +49,33 @@
 									</div>
 	                            </div>
 	                            <div class="control-group">
-									<label class="control-label" for="type">Type<span class="text-danger">*</span> </label>
+									<label class="control-label" for="lieu">Lieu<span class="text-danger">*</span> </label>
 									<div class="controls">
-										<input type="text" required class="span10" id="type" name="type">
-										<span class="text-danger" data-th-errors="${prevision.type}"></span>
+										<input type="text" required class="span10" id="lieu" name="lieu">
+										<span class="text-danger" data-th-errors="${rendezVous.lieu}" ></span>
 									</div>
 								</div>
                                 <div class="control-group">
-									<label class="control-label" for="description">Descriptions<span class="text-danger">*</span> </label>
+									<label class="control-label" for="libelle">Libelle<span class="text-danger">*</span> </label>
 									<div class="controls">
-										<input type="text" required class="span10" id="description" name="description">
-										<span class="text-danger" data-th-errors="${prevision.description}"></span>
+										<input type="text" required class="span10" id="libelle" name="libelle">
+										<span class="text-danger" data-th-errors="${rendezVous.libelle}" ></span>
 									</div>
 								</div>
-								 <div class="control-group">
-									<label class="control-label" for="quantite">quantite<span class="text-danger">*</span> </label>
-									<div class="controls">
-										<input type="number" required class="span10" id="description" name="quantite">
-										<span class="text-danger" data-th-errors="${prevision.quantite}"></span>
-									</div>
-								</div>
+								<div class="control-group">
+                                     <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
+                                     <div class="controls">
+                                         <input type="text" class="span10 typeahead input-xlarge datepicker" id="date" name="date">
+                                         <span class="text-danger" data-th-errors="${rendezVous.date}" ></span>
+                                     </div>
+                                 </div>
+                                 <div class="control-group">
+                                     <label class="control-label" for="heur">Heur<span class="text-danger">*</span> </label>
+                                     <div class="controls">
+                                         <input type="text" class="span10 typeahead input-xlarge timepicker" id="heur" name="heur">
+                                         <span class="text-danger" data-th-errors="${rendezVous.heur}" ></span>
+                                     </div>
+                                 </div>
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     <button type="reset" class="btn">Annuler</button>
@@ -82,7 +89,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les offres</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les rendez-vous</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -95,23 +102,23 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Fournisseur</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th>Quantité</th>
+                            <th>Lieu</th>
+                            <th>Libelle</th>
+                            <th>Date</th>
+                            <th>Heur</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="prevision, uStat : ${previsions}">
+                        <tr data-th-each="rendezVous, uStat : ${rendezVouss}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${prevision.partenaire.nom}"></td>
-                            <td data-th-text="${prevision.type}"></td>
-							<td data-th-text="${prevision.description}"></td>
-							<td data-th-text="${prevision.quantite}"></td>
+                            <td data-th-text="${rendezVous.lieu}"></td>
+                            <td data-th-text="${rendezVous.libelle}"></td>
+							<td data-th-text="${rendezVous.date}"></td>
+							<td data-th-text="${rendezVous.heur}"></td>
                             <td>
-                                <a href="#" data-th-href="@{'/admin/previsions/update/'+${prevision.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/previsions/delete/'+${prevision.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            	<a href="#" data-th-href="@{'/admin/rendez-vous/update/'+${rendezVous.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/rendez-vous/delete/'+${rendezVous.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

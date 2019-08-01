@@ -14,6 +14,7 @@ public class RendezVous extends LiveEntity {
 	@NotNull
     @Temporal(TemporalType.DATE)
     private Date date;
+	private String heur;
 	@NotNull
     private String lieu;
 	@NotNull
@@ -35,8 +36,16 @@ public class RendezVous extends LiveEntity {
     public void setDate(Date date) {
         this.date = date;
     }
+    
+    public String getHeur() {
+		return heur;
+	}
 
-    public String getLieu() {
+	public void setHeur(String heur) {
+		this.heur = heur;
+	}
+
+	public String getLieu() {
         return lieu;
     }
 

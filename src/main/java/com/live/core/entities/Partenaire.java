@@ -7,6 +7,7 @@ import com.live.rh.entities.Prevision;
 import com.live.rh.entities.RendezVous;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,8 +41,8 @@ public class Partenaire extends LiveEntity {
 
     @OneToMany(targetEntity = Prevision.class)
     private List<Prevision> previsions;
-
-    @OneToMany(targetEntity = RendezVous.class)
+    
+    @ManyToMany(targetEntity = RendezVous.class)
     private List<RendezVous> rendezVous;
 
     @OneToMany(targetEntity = Offre.class)

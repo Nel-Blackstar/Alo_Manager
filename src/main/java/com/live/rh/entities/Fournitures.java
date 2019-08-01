@@ -14,9 +14,6 @@ public class Fournitures extends LiveEntity {
     private String type;
     private String description;
 
-    @OneToMany(targetEntity = Offre.class)
-    private List<Offre> offres;
-
     public Fournitures() {
     }
 
@@ -39,13 +36,5 @@ public class Fournitures extends LiveEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Offre> getOffres() {
-        return offres;
-    }
-
-    public void setOffres(List<Offre> offres) {
-        this.offres = offres;
     }
 }

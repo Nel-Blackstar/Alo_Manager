@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Personnels</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/partenaire}">Partenaire</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Rendez-vous</span></li>
+        </ul>
+         <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un rendez-vous</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                <div class="alert alert-info" data-th-if="${info}">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+				  </div>
+             		<form class="form-horizontal" data-th-action="@{/admin/rendez-vous/update}" method="post"  data-th-object="${rendezVous}">
+                            <fieldset style="text-align:center">
+	                            <div class="control-group">
+									<label class="control-label" for="lieu">Lieu<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="hidden" required class="span10" id="id" name="id" data-th-value="${rendezVous.id}">
+										<input type="text" required class="span10" id="lieu" name="lieu" data-th-value="${rendezVous.lieu}">
+										<span class="text-danger" data-th-errors="${rendezVous.lieu}" ></span>
+									</div>
+								</div>
+                                <div class="control-group">
+									<label class="control-label" for="libelle">Libelle<span class="text-danger">*</span> </label>
+									<div class="controls">
+										<input type="text" required class="span10" id="libelle" name="libelle" data-th-value="${rendezVous.libelle}">
+										<span class="text-danger" data-th-errors="${rendezVous.libelle}" ></span>
+									</div>
+								</div>
+								<div class="control-group">
+                                     <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
+                                     <div class="controls">
+                                         <input type="text" class="span10 typeahead input-xlarge datepicker" id="date" name="date" data-th-value="${#dates.format(rendezVous.date, 'dd/MM/yyyy')}">
+                                         <span class="text-danger" data-th-errors="${rendezVous.date}" ></span>
+                                     </div>
+                                 </div>
+                                 <div class="control-group">
+                                     <label class="control-label" for="heur">Heur<span class="text-danger">*</span> </label>
+                                     <div class="controls">
+                                         <input type="text" class="span10 typeahead input-xlarge timepicker" id="heur" name="heur" data-th-value="${rendezVous.heur}">
+                                         <span class="text-danger" data-th-errors="${rendezVous.heur}" ></span>
+                                     </div>
+                                 </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+      </div>
+</div>
+</body>
+</html>

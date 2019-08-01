@@ -19,9 +19,6 @@ public class IndexController {
 	// Point d'entrée dans l'application
     @GetMapping("/")
     public String home(Model model,HttpSession session) {
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users user=usersRepository.findUsersByLogin(auth.getName());
-        session.setAttribute("user",user);
         return "index";
     }
 
