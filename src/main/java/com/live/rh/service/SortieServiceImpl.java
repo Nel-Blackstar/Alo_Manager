@@ -1,5 +1,6 @@
 package com.live.rh.service;
 
+import com.live.rh.entities.Offre;
 import com.live.rh.entities.Sortie;
 import com.live.rh.repository.SortieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,10 @@ public class SortieServiceImpl implements SortieService{
     @Override
     public List<Sortie> findAll() {
         return sortieRepository.findAll();
+    }
+
+    @Override
+    public List<Sortie> findAllByOffre(Offre offre) {
+        return sortieRepository.findAllByOffre(offre);
     }
 }

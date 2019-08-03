@@ -979,13 +979,12 @@ public class PersonnelController extends InitiateController {
 			 rendezVousService.delete(rendezVous);
 			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectuer ce rendez-vous existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Op�ration non éffectuer ce rendez-vous existe et est lier a plusieurs op�rations!!");
 		 }
 		 return"redirect:/admin/partenaires/rendez-vous";
      }
 
      // gestion des sortie de stock
-
     @RequestMapping("/partenaires/sorties")
     public String saveSortie(HttpSession session,Model model) {
         if (session.getAttribute("infos") != null){
@@ -1001,12 +1000,109 @@ public class PersonnelController extends InitiateController {
     @PostMapping(value = "/sortie/save")
     public String saveSortie(HttpSession session,Sortie sortie) {
         try {
-            System.out.println(sortie);
+            sortie.setType("sortie");
             sortieService.save(sortie);
         }catch(Exception $e) {
             session.setAttribute("infos","Opération terminer avec succ�s!!");
         }
         return"redirect:/admin/partenaires/sorties";
 
+    }
+    @RequestMapping("/sorties/delete/{id}")
+    public String deleteSortie(HttpSession session,Model model,@PathVariable("id")  long id) {
+        Sortie sortie=sortieService.findOne(id);
+        try {
+            sortieService.delete(sortie);
+            session.setAttribute("infos","Opération terminer avec succ�s!!");
+        }catch(Exception $e) {
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+        }
+        return"redirect:/admin/partenaires/sorties";
+    }
+    @GetMapping("/sorties/update/{id}")
+    public String updateSortie(Model model,@PathVariable("id")  long id) {
+        model.addAttribute("sortie",sortieService.findOne(id));
+        model.addAttribute("offres",offreService.findAll());
+        return "administration/partenaires/sorties/update";
+    }
+    @PostMapping("/sorties/update")
+    public String saveUpdateSortie(HttpSession session,Model model,Sortie sortie,@RequestParam("date") Date date) {
+         sortie.setDate(date);
+         sortie.setType("sortie");
+        try {
+            sortieService.save(sortie);
+            session.setAttribute("infos","Modification effectuer avec success "+sortie.getId());
+        }catch (Exception $e){
+            session.setAttribute("infos","Erreur survenue lors de la modification");
+        }
+        return "redirect:/admin/partenaires/sorties";
+    }
+
+    @RequestMapping("partenaires/Emprunts")
+    public String saveEmprunt(HttpSession session,Model model) {
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("sortie",new Sortie());
+        model.addAttribute("offres",offreService.findAll());
+        model.addAttribute("sorties",sortieService.findAll());
+        return "administration/partenaires/emprunts/index";
+    }
+    @PostMapping(value = "/emprunt/save")
+    public String saveEmprunt(HttpSession session,Sortie sortie) {
+        try {
+            sortie.setType("Emprunt");
+            sortieService.save(sortie);
+        }catch(Exception $e) {
+            session.setAttribute("infos","Opération terminer avec succ�s!!");
+        }
+        return"redirect:/admin/partenaires/Emprunts";
+
+    }
+    @RequestMapping("/emprunt/delete/{id}")
+    public String deleteEmprunt(HttpSession session,Model model,@PathVariable("id")  long id) {
+        Sortie sortie=sortieService.findOne(id);
+        try {
+            sortieService.delete(sortie);
+            session.setAttribute("infos","Opération terminer avec succ�s!!");
+        }catch(Exception $e) {
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+        }
+        return"redirect:/admin/partenaires/Emprunts";
+    }
+    @GetMapping("/emprunt/update/{id}")
+    public String updateEmprunt(Model model,@PathVariable("id")  long id) {
+        model.addAttribute("sortie",sortieService.findOne(id));
+        model.addAttribute("offres",offreService.findAll());
+        return "administration/partenaires/Emprunt/update";
+    }
+    @PostMapping("/emprunt/update")
+    public String saveUpdateEmprunt(HttpSession session,Model model,Sortie sortie,@RequestParam("date") Date date) {
+        sortie.setDate(date);
+        sortie.setType("Emprunt");
+        try {
+            sortieService.save(sortie);
+            session.setAttribute("infos","Modification effectuer avec success "+sortie.getId());
+        }catch (Exception $e){
+            session.setAttribute("infos","Erreur survenue lors de la modification");
+        }
+        return "redirect:/admin/partenaires/Emprunts";
+    }
+    @GetMapping("/partenaires/stock")
+    public String stock(Model model){
+         List<Offre> offres1=offreService.findAll();
+         List<Offre> offres2=new ArrayList<>();
+        for (Offre offre : offres1) {
+                List<Sortie> sorties = sortieService.findAllByOffre(offre);
+                long qte = offre.getQuantite();
+            for (Sortie sortie: sorties) {
+                    qte-=sortie.getQuantite();
+            }
+            offre.setQuantite(qte);
+            offres2.add(offre);
+        }
+         model.addAttribute("offres",offres2);
+         return  "administration/partenaires/stock";
     }
 }

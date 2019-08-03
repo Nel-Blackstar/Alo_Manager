@@ -1,5 +1,6 @@
 package com.live.rh.service;
 
+import com.live.rh.entities.Offre;
 import com.live.rh.entities.Sortie;
 
 import java.util.List;
@@ -9,4 +10,5 @@ public interface SortieService {
     void delete(Sortie sortie);
     Sortie findOne(Long id);
     List<Sortie> findAll();
+    List<Sortie> findAllByOffre(Offre offre);
 }
