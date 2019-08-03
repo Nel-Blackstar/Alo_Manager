@@ -1,5 +1,6 @@
 package com.live.core.controller;
 import com.live.common.entities.CodeValue;
+import com.live.common.entities.Detail;
 import com.live.common.service.CodeValueService;
 import com.live.core.entities.Partenaire;
 import com.live.core.entities.Personnel;
@@ -16,6 +17,7 @@ import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
 import com.live.paie.service.BanqueService;
 import com.live.rh.entities.*;
+import com.live.rh.repository.DetailOffreRepository;
 import com.live.rh.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,8 @@ public class PersonnelController extends InitiateController {
     SortieService sortieService;
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    DetailOffreRepository detailOffreRepository;
     @Autowired
     PersonnelRepository personnelRepository;
     @Autowired
@@ -1105,4 +1109,35 @@ public class PersonnelController extends InitiateController {
          model.addAttribute("offres",offres2);
          return  "administration/partenaires/stock";
     }
+
+    @GetMapping("/partenaires/payement")
+    public String payement(Model model){
+        model.addAttribute("detail",new Details());
+        model.addAttribute("offres",offreService.findAll());
+         return  "administration/partenaires/payement/index";
+    }
+
+    @PostMapping("/payement/save")
+    public String savePayement(Model model, Details details,HttpSession session){
+         detailOffreRepository.save(details);
+         Offre offre=offreService.findOne(details.getOffre().getId());
+         List<Details> details2=offre.getDetails();
+         details2.add(details);
+         offre.setDetails(details2);
+         offreService.save(offre);
+         session.setAttribute("infos","Enregistrement effectuer");
+         return "redirect:/admin/partenaires/payement";
+    }
+
+    @GetMapping("/payements/show/{id}")
+        public String offrePayements(Model model,@PathVariable("id")  long id){
+         Offre offre=offreService.findOne(id);
+        double total =0.0;
+        for (Details detail: offre.getDetails()) {
+                total+=detail.getValeur();
+        }
+        model.addAttribute("total",total);
+         model.addAttribute("offre",offre);
+            return  "administration/partenaires/payement/show";
+        }
 }
