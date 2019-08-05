@@ -19,12 +19,12 @@
                 <a data-th-href="@{/admin/partenaire}">Partenaire</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><span>Sorties</span></li>
+            <li><span>Emprunt</span></li>
         </ul>
          <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une Sortie</h2>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un Emprunts</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -36,7 +36,7 @@
 					<button type="button" class="close" data-dismiss="alert">×</button>
 					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
 				  </div>
-             		<form class="form-horizontal" data-th-action="@{/admin/sortie/save}" method="post"  data-th-object="${sortie}">
+             		<form class="form-horizontal" data-th-action="@{/admin/emprunt/save}" method="post"  data-th-object="${sortie}">
                             <fieldset style="text-align:center">
 							    <div class="control-group">
 									<label class="control-label" for="offres">Produit Par Stock<span class="text-danger">*</span> </label>
@@ -66,6 +66,7 @@
 									<label class="control-label" for="quantite">Quantité<span class="text-danger">*</span> </label>
 									<div class="controls">
 										<input type="text" required class="span10" id="quantite"  data-th-field="${sortie.quantite}">
+                                        <input type="hidden" required data-th-field="${sortie.type}" value="Emprunt">
 										<span class="text-danger" data-th-errors="${sortie.quantite}"></span>
 									</div>
 								</div>
@@ -82,7 +83,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Sorties</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Emprunt</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -106,19 +107,19 @@
                         </thead>
                         <tbody>
                         <div data-th-each="sortie, uStat : ${sorties}">
-                        <tr data-th-if="${sortie.getType()}=='sortie'">
-                                <td data-th-text="${uStat.count}"></td>
-                                <td data-th-text="${sortie.offre.fournitures.description}"></td>
-                                <td data-th-text="${sortie.offre.partenaire.nom}"></td>
-                                <td data-th-text="${sortie.description}"></td>
-                                <td data-th-text="${sortie.quantite}"></td>
-                                <td data-th-text="${sortie.offre.pvp}+' FCFA'"></td>
-                                <td data-th-text="${sortie.quantite}*${sortie.offre.pvp} +' FCFA'"></td>
-                                <td>
-                                    <!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
-                                    <a href="#" data-th-href="@{'/admin/sorties/update/'+${sortie.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                    <a href="#" data-th-href="@{'/admin/sorties/delete/'+${sortie.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
-                                </td>
+                            <tr data-th-if="${sortie.getType()}!='sortie'">
+                            <td data-th-text="${uStat.count}"></td>
+                            <td data-th-text="${sortie.offre.fournitures.description}"></td>
+                            <td data-th-text="${sortie.offre.partenaire.nom}"></td>
+                            <td data-th-text="${sortie.description}"></td>
+							<td data-th-text="${sortie.quantite}"></td>
+							<td data-th-text="${sortie.offre.pvp}+' FCFA'"></td>
+                            <td data-th-text="${sortie.quantite}*${sortie.offre.pvp} +' FCFA'"></td>
+                            <td>  
+                            	<!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
+                                <a href="#" data-th-href="@{'/admin/emprunt/update/'+${sortie.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/emprunt/delete/'+${sortie.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            </td>
                         </tr>
                         </div>
                         </tbody>

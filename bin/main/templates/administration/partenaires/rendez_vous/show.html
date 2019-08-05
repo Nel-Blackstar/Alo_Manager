@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Payements</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/partenaire}">Partenaire</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Rendez-vous</span></li>
+        </ul>
+        <br><br><br>
+        <h2>RECAPITULATIF SUR LE RENDEZ-VOUS</h2>
+        <ul>
+            <li>Evenement : <b data-th-text="${rendezVous.libelle}"></b></li>
+            <li>Lieu : <b data-th-text="${rendezVous.lieu}"></b></li>
+            <li>Date : <b data-th-text="${rendezVous.date}"></b></li>
+            <li>Heur : <b data-th-text="${rendezVous.heur}"></b></li>
+        </ul>
+
+        <br><br><br>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Liste des Participants du rendez-vous</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Adresse mail</th>
+                            <th>Téléphone</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="partenaire, uStat : ${partenaires}">
+                            <td data-th-text="${uStat.count}"></td>
+                            <td data-th-text="${partenaire.nom}"></td>
+                            <td data-th-text="${partenaire.prenom}"></td>
+                            <td data-th-text="${partenaire.email}"></td>
+                            <td>
+                                <span data-th-text="${partenaire.telephone}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <!-- end: Content -->
+    </div>
+</div>
+</body>
+</html>

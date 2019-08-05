@@ -117,7 +117,8 @@
 							<td data-th-text="${rendezVous.date}"></td>
 							<td data-th-text="${rendezVous.heur}"></td>
                             <td>
-                            	<a href="#" data-th-href="@{'/admin/rendez-vous/update/'+${rendezVous.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                            	<a href="#" data-th-href="@{'/admin/partenaire/rendez-vous/'+${rendezVous.id} }"  class="btn btn-small btn-info"><i class="halflings-icon white folder-open"></i></a>
+                                <a href="#" data-th-href="@{'/admin/rendez-vous/update/'+${rendezVous.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
                                 <a href="#" data-th-href="@{'/admin/rendez-vous/delete/'+${rendezVous.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>

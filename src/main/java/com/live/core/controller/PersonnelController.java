@@ -705,6 +705,11 @@ public class PersonnelController extends InitiateController {
 		 model.addAttribute("partenaire",partenaireService.findOne(id));
 		 return "administration/partenaires/partenaires/update";
      }
+	 @RequestMapping("/partenaires/view/{id}")
+     public String viewPartenaire(HttpSession session,Model model,@PathVariable("id")  long id) {
+		 model.addAttribute("partenaire",partenaireService.findOne(id));
+		 return "administration/partenaires/partenaires/show";
+     }
 	 @RequestMapping("/partenaires/delete/{id}")
      public String deletePartenaire(HttpSession session,Model model,@PathVariable("id")  long id) {
 		 Partenaire partenaire=partenaireService.findOne(id);
@@ -1140,4 +1145,61 @@ public class PersonnelController extends InitiateController {
          model.addAttribute("offre",offre);
             return  "administration/partenaires/payement/show";
         }
+    // gestion des Entrées
+    @RequestMapping("/partenaires/entrees")
+    public String entreesStocks(HttpSession session,Model model) {
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("offres",offreService.findAll());
+        return "administration/partenaires/entrees/index";
+    }
+    @GetMapping("/partenaire/add-entrees/{id}")
+    public String formAddEntrees(Model model,@PathVariable("id")  long id){
+     Offre offre=offreService.findOne(id);
+     model.addAttribute("offre",offre);
+        return  "administration/partenaires/entrees/update";
+    }
+    @PostMapping(value = "/entrees/save")
+    public String saveEntrees(HttpSession session,@Valid Offre offre, BindingResult bindingResult, @RequestParam("nquantite") Long qt) {
+   	if (bindingResult.hasErrors()) {
+          	 return "administration/partenaires/entrees/update";
+   	}
+   	offre.setQuantite(offre.getQuantite()+qt);
+   	session.setAttribute("infos","Opération terminer avec succès!!");
+    	offreService.save(offre);
+    	List<Offre> offres= new ArrayList<>();
+    	offres.add(offre);
+    	Partenaire partenaire=offre.getPartenaire();
+    	if(!partenaire.getOffres().isEmpty()) {
+    		for(Offre o : partenaire.getOffres()) {
+        		offres.add(o);
+        	}
+    	}
+    	partenaire.setOffres(offres);
+    	try {
+    		partenaireService.save(partenaire);
+    	}catch(Exception $e) {
+    		session.setAttribute("infos","Opération terminer avec succès!!");
+    	}
+    	return"redirect:/admin/partenaires/entrees";
+
+    }
+    @GetMapping("/partenaire/rendez-vous/{id}")
+    public String showRendezVous(Model model,@PathVariable("id")  long id){
+     RendezVous rendezVous=rendezVousService.findOne(id);
+     List<Partenaire> partenaireRendezVous=new ArrayList<>();
+     List<Partenaire> partenaires=partenaireService.findAll();
+     for(Partenaire partenaire : partenaires) {
+    	 for(RendezVous r : partenaire.getRendezVous()) {
+    		 if(r.equals(rendezVous)) {
+    			 partenaireRendezVous.add(partenaire);
+    		 }
+    	 }
+     }
+     model.addAttribute("partenaires",partenaireRendezVous);
+     model.addAttribute("rendezVous",rendezVous);
+     return  "administration/partenaires/rendez_vous/show";
+    }
 }

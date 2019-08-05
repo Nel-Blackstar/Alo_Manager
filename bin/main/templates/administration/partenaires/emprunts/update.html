@@ -19,7 +19,7 @@
                 <a data-th-href="@{/admin/partenaire}">Partenaire</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><span>Offres</span></li>
+            <li><span>Emprunt</span></li>
         </ul>
 		<div class="row-fluid sortable">
 			<div class="box span12">
@@ -36,7 +36,7 @@
 						<button type="button" class="close" data-dismiss="alert">×</button>
 						<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
 					</div>
-					<form class="form-horizontal" data-th-action="@{/admin/sorties/update}" method="post"  data-th-object="${sortie}">
+					<form class="form-horizontal" data-th-action="@{/admin/emprunt/update}" method="post"  data-th-object="${sortie}">
 						<fieldset style="text-align:center">
 							<div class="control-group">
 								<label class="control-label" for="offres">Produit Par Stock<span class="text-danger">*</span> </label>
@@ -60,6 +60,7 @@
 								<label class="control-label" for="quantite">Quantité<span class="text-danger">*</span> </label>
 								<div class="controls">
 									<input type="text" required class="span10" id="quantite"  data-th-field="${sortie.quantite}">
+									<input type="hidden" required data-th-field="${sortie.type}" value="Emprunt">
 									<span class="text-danger" data-th-errors="${sortie.quantite}"></span>
 								</div>
 							</div>
