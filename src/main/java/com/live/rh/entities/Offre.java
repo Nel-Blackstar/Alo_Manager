@@ -8,6 +8,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Offre extends LiveEntity {
@@ -27,6 +28,10 @@ public class Offre extends LiveEntity {
     @ManyToOne
     @JoinColumn(name = "id_partenaire")
     private Partenaire partenaire;
+
+    @OneToMany
+    @JoinColumn(name = "id_offre")
+    private List<Details> details;
 
     public Offre() {
     }
@@ -85,5 +90,13 @@ public class Offre extends LiveEntity {
 	public void setPvp(double pvp) {
 		this.pvp = pvp;
 	}
+
+    public List<Details> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<Details> details) {
+        this.details = details;
+    }
     
 }
