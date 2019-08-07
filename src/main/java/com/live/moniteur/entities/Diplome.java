@@ -13,6 +13,7 @@ public class Diplome extends LiveEntity {
     @Temporal(TemporalType.DATE)
     private Date dateDelivrance;
     private boolean statut;
+    private String numero;
     
     @OneToOne
     private CodeValue categoriePermis;
@@ -36,6 +37,14 @@ public class Diplome extends LiveEntity {
 
 	public Inscription getInscrit() {
 		return inscrit;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
 	public void setInscrit(Inscription inscrit) {

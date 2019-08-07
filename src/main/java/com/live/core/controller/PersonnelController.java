@@ -661,22 +661,28 @@ public class PersonnelController extends InitiateController {
     	}catch(Exception $e) {
     		$e.printStackTrace();
     	}
-    	if(diplome!=null) {
-    		if(diplome.isStatut()==true) {
-        		diplome.setStatut(false);
-        	}else {
-        		diplome.setStatut(true);
-        	}
-        	diplomeService.save(diplome);
-            session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
-            return "redirect:/admin/formation/diplomes";
-    	}else {
-    		session.setAttribute("infos"," Echec de l'opï¿½ration!!");
-            return "redirect:/admin/formation/diplomes";
-    	}
+		 model.addAttribute("permis", diplome.getCategoriePermis().getId());
+		 model.addAttribute("diplome",diplome);
+        return "administration/formations/diplomes/update";
      }
+	 @PostMapping(value ="/formations/diplome/update")
+	 public String SaveNumeroDiplome(HttpSession session,@Valid Diplome diplome, BindingResult bindingResult,@RequestParam("permis") Long permis,@RequestParam("propietaire") Long propietaire) {
+    	if (bindingResult.hasErrors()) {
+           	 return "administration/formations/diplomes/update";
+    	}
+    	diplome.setCategoriePermis(codeValueService.findById(permis));
+    	diplome.setStatut(true);
+    	diplome.setInscrit(inscriptionService.findOne(propietaire));
+    	diplomeService.save(diplome);
+    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	return "redirect:/admin/formation/diplomes";
+	 }
 	 @RequestMapping("/partenaire")
      public String partenaire(HttpSession session,Model model) {
+		if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
     	return "administration/partenaires/index";
      }
 	 @RequestMapping("/partenaires/view")
@@ -1116,7 +1122,11 @@ public class PersonnelController extends InitiateController {
     }
 
     @GetMapping("/partenaires/payement")
-    public String payement(Model model){
+    public String payement(HttpSession session,Model model){
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         model.addAttribute("detail",new Details());
         model.addAttribute("offres",offreService.findAll());
          return  "administration/partenaires/payement/index";
@@ -1124,6 +1134,16 @@ public class PersonnelController extends InitiateController {
 
     @PostMapping("/payement/save")
     public String savePayement(Model model, Details details,HttpSession session){
+    	double total =0.0;
+        for (Details detail: details.getOffre().getDetails()) {
+                total+=detail.getValeur();
+        }
+    	if(total+details.getValeur()>(details.getOffre().getQuantite()*details.getOffre().getPp())) {
+    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entré supérieur a la transaction reste a versé: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
+    		model.addAttribute("detail",details);
+            model.addAttribute("offres",offreService.findAll());
+    		return  "administration/partenaires/payement/index";
+    	}
          detailOffreRepository.save(details);
          Offre offre=offreService.findOne(details.getOffre().getId());
          List<Details> details2=offre.getDetails();
@@ -1135,7 +1155,11 @@ public class PersonnelController extends InitiateController {
     }
 
     @GetMapping("/payements/show/{id}")
-        public String offrePayements(Model model,@PathVariable("id")  long id){
+        public String offrePayements(HttpSession session,Model model,@PathVariable("id")  long id){
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
          Offre offre=offreService.findOne(id);
         double total =0.0;
         for (Details detail: offre.getDetails()) {
@@ -1145,47 +1169,6 @@ public class PersonnelController extends InitiateController {
          model.addAttribute("offre",offre);
             return  "administration/partenaires/payement/show";
         }
-    // gestion des Entrées
-    @RequestMapping("/partenaires/entrees")
-    public String entreesStocks(HttpSession session,Model model) {
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("offres",offreService.findAll());
-        return "administration/partenaires/entrees/index";
-    }
-    @GetMapping("/partenaire/add-entrees/{id}")
-    public String formAddEntrees(Model model,@PathVariable("id")  long id){
-     Offre offre=offreService.findOne(id);
-     model.addAttribute("offre",offre);
-        return  "administration/partenaires/entrees/update";
-    }
-    @PostMapping(value = "/entrees/save")
-    public String saveEntrees(HttpSession session,@Valid Offre offre, BindingResult bindingResult, @RequestParam("nquantite") Long qt) {
-   	if (bindingResult.hasErrors()) {
-          	 return "administration/partenaires/entrees/update";
-   	}
-   	offre.setQuantite(offre.getQuantite()+qt);
-   	session.setAttribute("infos","Opération terminer avec succès!!");
-    	offreService.save(offre);
-    	List<Offre> offres= new ArrayList<>();
-    	offres.add(offre);
-    	Partenaire partenaire=offre.getPartenaire();
-    	if(!partenaire.getOffres().isEmpty()) {
-    		for(Offre o : partenaire.getOffres()) {
-        		offres.add(o);
-        	}
-    	}
-    	partenaire.setOffres(offres);
-    	try {
-    		partenaireService.save(partenaire);
-    	}catch(Exception $e) {
-    		session.setAttribute("infos","Opération terminer avec succès!!");
-    	}
-    	return"redirect:/admin/partenaires/entrees";
-
-    }
     @GetMapping("/partenaire/rendez-vous/{id}")
     public String showRendezVous(Model model,@PathVariable("id")  long id){
      RendezVous rendezVous=rendezVousService.findOne(id);

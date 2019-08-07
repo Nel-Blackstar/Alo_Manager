@@ -61,7 +61,7 @@
                         </td>
                         <td>Permis <b data-th-text="${inscription.getDiplome().getCategoriePermis().getValeur()}"></b></td>
                         <td>
-                            <b class="btn-success"  data-th-if="${inscription.getDiplome().isStatut()}==true"><span >Délivré</span></b>
+                            <b class="btn-success"  data-th-if="${inscription.getDiplome().isStatut()}==true"><span >Délivré Numéro = </span><span  data-th-text="${inscription.getDiplome().getNumero()}")></span></b>
                             <b class="btn-danger"  data-th-if="${inscription.getDiplome().isStatut()}==false" ><span >Non Délivré</span></b>
                         </td>
                     </tr>
