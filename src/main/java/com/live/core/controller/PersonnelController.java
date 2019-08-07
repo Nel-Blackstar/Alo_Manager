@@ -241,7 +241,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if(!roles.isEmpty()){
-                // Le rÃ´le selectionnÃ© existe dans le systÃ¨me
+                // Le rÃ´le selectionné existe dans le systÃ¨me
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -321,7 +321,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if (!roles.isEmpty()) {
-                // Le rÃ´le selectionnÃ© existe dans le systÃ¨me
+                // Le rÃ´le selectionné existe dans le systÃ¨me
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -349,7 +349,7 @@ public class PersonnelController extends InitiateController {
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         chargerLive(model);
-        // Charger la liste des rÃ´les disponibles et dÃ©poser dans le model
+        // Charger la liste des rÃ´les disponibles et déposer dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
         //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
@@ -379,7 +379,7 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /**
-     * Mï¿½thode d'ajout d'un Apprenant post
+     * Mèthode d'ajout d'un Apprenant post
      * @param model
      * @return
      */
@@ -420,7 +420,7 @@ public class PersonnelController extends InitiateController {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/update";
 	 	}
-		session.setAttribute("infos","Modification terminer avec succï¿½s!!");
+		session.setAttribute("infos","Modification terminer avec succès!!");
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
@@ -447,7 +447,7 @@ public class PersonnelController extends InitiateController {
     public String deleteApprenant(HttpSession session,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	apprenantService.delete(apprenant);
-    	session.setAttribute("infos","supprï¿½ssion terminer avec succï¿½s!!");
+    	session.setAttribute("infos","suppréssion terminer avec succès!!");
     	return "redirect:/admin/apprenants";
 
     }
@@ -468,7 +468,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/index";
     }
     /** 
-     * Mï¿½thode d'ajout d'un Apprenant get
+     * Mèthode d'ajout d'un Apprenant get
      * @param model
      * @return
      */
@@ -485,7 +485,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/create";
      }
      /**
-      * Mï¿½thode d'ajout d'un Apprenant post
+      * Mèthode d'ajout d'un Apprenant post
       * @param model
       * @return
       */
@@ -496,7 +496,7 @@ public class PersonnelController extends InitiateController {
 	 		}
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuerï¿½e avec succï¿½s!!");
+         session.setAttribute("infos","Nouvelle session de formation configuerèe avec succès!!");
          return "redirect:/admin/formations";
      }
      /**
@@ -525,7 +525,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/formations/update";
     	}
-    	session.setAttribute("infos","Nouvelle session de formation modifier avec succï¿½s!!");
+    	session.setAttribute("infos","Nouvelle session de formation modifier avec succès!!");
      	sessionFormationService.save(formation);
      	return"redirect:/admin/formations";
 
@@ -575,7 +575,7 @@ public class PersonnelController extends InitiateController {
         	 }
          }
          if(n==true) {
-        	 session.setAttribute("infos","Echec du procï¿½ssus de crï¿½ation. Cet apprï¿½nant a dï¿½jï¿½ ï¿½tï¿½ inscrit a cette session de formation!");
+        	 session.setAttribute("infos","Echec du procèssus de crèation. Cet apprènant a dèjè ètè inscrit a cette session de formation!");
          }else {
         	 Diplome diplome=new Diplome();
              diplome.setStatut(false);
@@ -587,7 +587,7 @@ public class PersonnelController extends InitiateController {
              diplome.setInscrit(inscription);
              diplomeService.save(diplome);
              model.addAttribute("state", "post");
-             session.setAttribute("infos","Procï¿½ssus de crï¿½ation terminer avec succï¿½s!"); 
+             session.setAttribute("infos","Procèssus de crèation terminer avec succès!"); 
          }
          return "redirect:/admin/formation/apprenant";
      }
@@ -610,11 +610,11 @@ public class PersonnelController extends InitiateController {
          	inscription.setDiplome(diplome);
          	inscriptionService.save(inscription);
          	diplomeService.save(diplome);
-     		session.setAttribute("infos","supprï¿½ssion echouer car plusieurs oppï¿½rations ont dï¿½jï¿½ ï¿½tï¿½ ï¿½ffectuers!!");
+     		session.setAttribute("infos","supprèssion echouer car plusieurs oppèrations ont dèjè ètè èffectuers!!");
      		return "redirect:/admin/formation/apprenant";
      	}
      	diplomeService.delete(diplome);
-     	session.setAttribute("infos","supprï¿½ssion terminer avec succï¿½s!!");
+     	session.setAttribute("infos","supprèssion terminer avec succès!!");
         return "redirect:/admin/formation/apprenant";
      }
      //modification de l'inscription
@@ -701,7 +701,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/partenaires/index";
     	}
-    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+    	session.setAttribute("infos","Opèration terminer avec succès!!");
      	partenaireService.save(partenaire);
      	return"redirect:/admin/partenaires/view";
 
@@ -721,9 +721,9 @@ public class PersonnelController extends InitiateController {
 		 Partenaire partenaire=partenaireService.findOne(id);
 		 try {
 			 partenaireService.delete(partenaire);
-			 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer ce partenaire existe et est lier a plusieurs opï¿½rations!!");
+			 session.setAttribute("infos","Opération non éffectuée ce partenaire existe et est lier a plusieurs opèrations!!");
 		 }
 		 return"redirect:/admin/partenaires/view";
      }
@@ -743,7 +743,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/fournitures/index";
     	}
-    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	fournitureService.save(fourniture);
      	return"redirect:/admin/partenaires/fournitures";
 
@@ -758,9 +758,9 @@ public class PersonnelController extends InitiateController {
 		 Fournitures fourniture=fournitureService.findOne(id);
 		 try {
 			 fournitureService.delete(fourniture);
-			 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer cette fourniture existe et est lier a plusieurs opï¿½rations!!");
+			 session.setAttribute("infos","Opération non èffectuer cette fourniture existe et est lier a plusieurs opèrations!!");
 		 }
 		 return"redirect:/admin/partenaires/fournitures";
      }
@@ -782,7 +782,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/offres/index";
     	}
-    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	offreService.save(offre);
      	List<Offre> offres= new ArrayList<>();
      	offres.add(offre);
@@ -796,7 +796,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+     		session.setAttribute("infos","Opèration terminer avec succès!!");
      	}
      	return"redirect:/admin/partenaires/offres";
 
@@ -824,18 +824,18 @@ public class PersonnelController extends InitiateController {
 				 p.setOffres(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+					 session.setAttribute("infos","Opération terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer cette prï¿½vision existe et est lier a plusieurs opï¿½rations!!");
+					 session.setAttribute("infos","Opération non éffectuer cette prévision existe et est lier a plusieurs opérations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 offreService.delete(offre);
-			 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer cette offre existe et est lier a plusieurs opï¿½rations!!");
+			 session.setAttribute("infos","Opération non éffectuer cette offre existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/offres";
      }
@@ -856,7 +856,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/previsions/index";
     	}
-    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	previsionService.save(prevision);
      	List<Prevision> previsions= new ArrayList<>();
      	previsions.add(prevision);
@@ -870,7 +870,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+     		session.setAttribute("infos","Opération terminer avec succès!!");
      	}
      	return"redirect:/admin/partenaires/previsions";
 
@@ -897,18 +897,18 @@ public class PersonnelController extends InitiateController {
 				 p.setPrevisions(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+					 session.setAttribute("infos","Opèration terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer cette prï¿½vision existe et est lier a plusieurs opï¿½rations!!");
+					 session.setAttribute("infos","Opèration non éffectuer cette prévision existe et est lier a plusieurs opérations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 previsionService.delete(prevision);
-			 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer cette prï¿½visions existe et est lier a plusieurs opï¿½rations!!");
+			 session.setAttribute("infos","Opération non èffectuer cette prévisions existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/previsions";
      }
@@ -929,7 +929,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+    	session.setAttribute("infos","Opèration terminer avec succès!!");
      	rendezVousService.save(rendezVous);
 		for(Long pId : partenaireId) {
 			List<RendezVous> rendez= new ArrayList<>();
@@ -944,7 +944,7 @@ public class PersonnelController extends InitiateController {
     	try {
     		partenaireService.save(partenaire);
 		}catch(Exception $e) {
-     		session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+     		session.setAttribute("infos","Opèration terminer avec succès!!");
      	}
     	}
      	return"redirect:/admin/partenaires/rendez-vous";
@@ -962,7 +962,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-		session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+		session.setAttribute("infos","Opèration terminer avec succès!!");
      	rendezVousService.save(rendezVous);
      	return"redirect:/admin/partenaires/rendez-vous";
 
@@ -983,18 +983,18 @@ public class PersonnelController extends InitiateController {
 				 p.setRendezVous(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+					 session.setAttribute("infos","Opération terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opï¿½ration non ï¿½ffectuer ce rendez-vous existe et est lier a plusieurs opï¿½rations!!");
+					 session.setAttribute("infos","Opération non èffectuer ce rendez-vous existe et est lier a plusieurs opèrations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 rendezVousService.delete(rendezVous);
-			 session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opï¿½ration non Ã©ffectuer ce rendez-vous existe et est lier a plusieurs opï¿½rations!!");
+			 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opèrations!!");
 		 }
 		 return"redirect:/admin/partenaires/rendez-vous";
      }
@@ -1018,7 +1018,7 @@ public class PersonnelController extends InitiateController {
             sortie.setType("sortie");
             sortieService.save(sortie);
         }catch(Exception $e) {
-            session.setAttribute("infos","OpÃ©ration terminer avec succï¿½s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }
         return"redirect:/admin/partenaires/sorties";
 
@@ -1028,9 +1028,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","OpÃ©ration terminer avec succï¿½s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette fourniture existe et est lier a plusieurs opÃ©rations!!");
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
         }
         return"redirect:/admin/partenaires/sorties";
     }
@@ -1070,7 +1070,7 @@ public class PersonnelController extends InitiateController {
             sortie.setType("Emprunt");
             sortieService.save(sortie);
         }catch(Exception $e) {
-            session.setAttribute("infos","OpÃ©ration terminer avec succï¿½s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }
         return"redirect:/admin/partenaires/Emprunts";
 
@@ -1080,9 +1080,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","OpÃ©ration terminer avec succï¿½s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette fourniture existe et est lier a plusieurs opÃ©rations!!");
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
         }
         return"redirect:/admin/partenaires/Emprunts";
     }
