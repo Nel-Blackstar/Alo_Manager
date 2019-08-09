@@ -24,17 +24,20 @@ public class Sortie extends LiveEntity {
 	@NotNull
     private  String description;
 	@NotNull
+    private  String auteur;
+	@NotNull
 	@DecimalMin("0")
     private Long quantite;
 
     public Sortie() {
     }
 
-    public Sortie(String type, String description, Long quantite, Date date) {
+    public Sortie(String type, String description, Long quantite, Date date,String auteur) {
         this.type = type;
         this.description = description;
         this.quantite = quantite;
         this.date=date;
+        this.auteur=auteur;
     }
 
     public String getType() {
@@ -76,5 +79,14 @@ public class Sortie extends LiveEntity {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public String getAuteur() {
+		return auteur;
+	}
+
+	public void setAuteur(String auteur) {
+		this.auteur = auteur;
+	}
+	
 	
 }

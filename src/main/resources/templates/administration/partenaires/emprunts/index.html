@@ -43,7 +43,7 @@
 									<div class="controls">
 										<select id="offres" required data-rel="chosen" data-th-field="${sortie.offre}" class="span10 typeahead">
 											<span data-th-each="offre : ${offres}">
-												<option data-th-value="${offre.getId()}" data-th-text="${offre.getFournitures().description}+' De '+${offre.getPartenaire().nom}+' - > '+${offre.getPvp()+' FCFA'}"></option>
+												<option data-th-value="${offre.getId()}" data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}+' qté: '+${offre.quantite}+' - > '+${offre.getPvp()+' FCFA'}"></option>
 											</span>
 										</select>
 									</div>
@@ -60,6 +60,13 @@
                                     <div class="controls">
                                         <input type="text" required class="span10" id="description"  data-th-field="${sortie.description}">
                                         <span class="text-danger" data-th-errors="${sortie.description}"></span>
+                                    </div>
+                                </div>
+                                 <div class="control-group">
+                                    <label class="control-label" for="auteur">Nom du client<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10" id="auteur"  data-th-field="${sortie.auteur}">
+                                        <span class="text-danger" data-th-errors="${sortie.auteur}"></span>
                                     </div>
                                 </div>
                                  <div class="control-group">
@@ -99,6 +106,7 @@
 							<th>Produit</th>
                             <th>Fournisseur</th>
                             <th>Description</th>
+                            <th>Nom du client</th>
                             <th>Quantité</th>
 							<th>Prix de vente public</th>
                             <th>Montant Total</th>
@@ -109,9 +117,10 @@
                         <div data-th-each="sortie, uStat : ${sorties}">
                             <tr data-th-if="${sortie.getType()}!='sortie'">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${sortie.offre.fournitures.description}"></td>
-                            <td data-th-text="${sortie.offre.partenaire.nom}"></td>
+                            <td data-th-text="${sortie.offre.fournitures.description}+' du '+${sortie.offre.fournitures.createdAt}"></td>
+                            <td data-th-text="${sortie.offre.partenaire.nom}+' '+${sortie.offre.partenaire.prenom}"></td>
                             <td data-th-text="${sortie.description}"></td>
+                            <td data-th-text="${sortie.auteur}"></td>
 							<td data-th-text="${sortie.quantite}"></td>
 							<td data-th-text="${sortie.offre.pvp}+' FCFA'"></td>
                             <td data-th-text="${sortie.quantite}*${sortie.offre.pvp} +' FCFA'"></td>

@@ -59,13 +59,15 @@
 					                                </span>
 	                                            </select>
 	                                        </div>
-	                                        <div class="control-group"><br>
-			                                    <label class="control-label"  for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
-			                                    <div class="controls">
-			                                        <input type="text" required class="typeahead" id="paiement" data-th-field="*{paiement}" >
-			                                        <span class="text-danger" data-th-errors="${inscription.paiement}"></span>
-			                                    </div>
-			                                </div>
+	                                    <br>
+	                                    <label class="control-label" for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
+	                                        <div class="controls">
+	                                            <select data-rel="chosen"class="typeahead" id="paiement" data-th-field="*{paiement}">
+					                                   <option value="Une tranche">Une tranche</option>
+					                                   <option value="Deux tranches">Deux tranches</option>
+					                                   <option value="Tatalité">Tatalité</option>
+	                                            </select>
+	                                        </div>
 	                                    </div>
 	                                    <div class="form-actions">
 	                                        <button type="submit" class="btn btn-primary">Ajouter</button>
@@ -97,7 +99,6 @@
                             <th>Téléphone</th>
                             <th>email</th>
                             <th>Paiement des frais</th>
-                            <th>Reste</th>
                             <th>Permis</th>
                             <th>Action</th>
                         </tr>
@@ -110,8 +111,7 @@
                             <td data-th-text="${inscription.getApprenant().adresse}"></td>
                             <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
                             <td data-th-text="${inscription.getApprenant().email}"></td>
-                            <td><span data-th-text="${inscription.paiement}"></span> FCFA sur <span data-th-text="${formation.fraisInscription}"></span> FCFA </td>
-                            <td><span data-th-text="${formation.fraisInscription}-${inscription.paiement}"></span> FCFA </td>
+                            <td><span data-th-text="${inscription.paiement}"></span></td>
                             <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
                             <td>
                                 <a data-th-href="@{/admin/formation/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>

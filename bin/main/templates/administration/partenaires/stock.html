@@ -44,7 +44,8 @@
                         <tr>
 							<th>Produit</th>
                             <th>Fournisseur</th>
-                            <th>Quantité</th>
+                            <th>Stocks Initiale</th>
+                            <th>Stocks réel</th>
 							<th>Prix de vente public</th>
                             <th>Montant Total</th>
                         </tr>
@@ -52,8 +53,9 @@
                         <tbody>
                         <div data-th-each="offre, uStat : ${offres}">
                         <tr>
-                                <td data-th-text="${offre.fournitures.description}"></td>
+                                <td data-th-text="${offre.fournitures.description}+' du '+${offre.createdAt}"></td>
                                 <td data-th-text="${offre.partenaire.nom}"></td>
+                                <td data-th-text="${offre.stocksInitial}"></td>
                                 <td data-th-text="${offre.quantite}"></td>
                                 <td data-th-text="${offre.pvp}+' FCFA'"></td>
                                 <td data-th-text="${offre.quantite}*${offre.pvp} +' FCFA'"></td>

@@ -57,7 +57,7 @@ public class AdministrationController {
     // Objet de cryptage et decryptage des mots de passe
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    // Rechercher l'autoecole et charger dans le modèle s'il existe, sinon, charger un autoecole par défaut
+    // Rechercher l'autoecole et charger dans le mod�le s'il existe, sinon, charger un autoecole par défaut
     public void chargerLive(Model model) {
         List<Live> lives = liveService.findAll();
 
@@ -109,7 +109,7 @@ public class AdministrationController {
         model.addAttribute("user", iLiveManager.userConnecte());
         chargerLive(model);
 
-        // Retrouver l'hotel à consulter et la placer dans le modèle
+        // Retrouver l'hotel à consulter et la placer dans le mod�le
         Live live = liveService.findOne(id);
         model.addAttribute("live", live);
 

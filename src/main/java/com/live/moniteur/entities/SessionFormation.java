@@ -20,8 +20,6 @@ public class SessionFormation extends LiveEntity {
 	@NotNull
     @Temporal(TemporalType.DATE)
     private Date dateFin;
-    @DecimalMin("1000")
-    private float fraisInscription;
 
     @OneToMany
     private Set<Inscription> inscriptions;
@@ -31,11 +29,10 @@ public class SessionFormation extends LiveEntity {
 
     public SessionFormation() { }
 
-    public SessionFormation(String delaiDossiers, Date dateDebut, Date dateFin, float fraisInscription) {
+    public SessionFormation(String delaiDossiers, Date dateDebut, Date dateFin) {
         this.delaiDossiers = delaiDossiers;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
-        this.fraisInscription = fraisInscription;
     }
 
     public String getDelaiDossiers() {
@@ -60,14 +57,6 @@ public class SessionFormation extends LiveEntity {
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
-    }
-
-    public float getFraisInscription() {
-        return fraisInscription;
-    }
-
-    public void setFraisInscription(float fraisInscription) {
-        this.fraisInscription = fraisInscription;
     }
 
     public Set<Inscription> getInscriptions() {

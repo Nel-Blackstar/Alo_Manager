@@ -55,7 +55,7 @@
 	                                        <select id="fournitures" required data-rel="chosen" name="fournitures" class="span10 typeahead">
 	                                        	<option data-th-value="${offre.fournitures.id}" selected data-th-text="${offre.fournitures.description}"></option>
 	                                            <span data-th-each="fourniture : ${fournitures}">
-	                                            	<option data-th-value="${fourniture.id}" data-th-text="${fourniture.description}"></option>
+	                                            	<option data-th-value="${fourniture.id}" data-th-text="${fourniture.description}+' du '+${fourniture.createdAt}"></option>
 	                                            </span>
 	                                        </select>
 	                                    </div>

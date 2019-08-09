@@ -44,7 +44,7 @@
                                 <div class="controls">
                                     <select id="offre" required data-rel="chosen" name="offre" class="span10 typeahead">
 	                                            <span data-th-each="offre : ${offres}">
-	                                            	<option data-th-value="${offre.id}" data-th-text="${offre.quantite}+' -> '+${offre.fournitures.description}+' -> '+${offre.pp}+' FCFA De  '+${offre.partenaire.nom} "></option>
+	                                            	<option data-th-value="${offre.getId()}" data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}+' qté: '+${offre.quantite}+' - > '+${offre.getPvp()+' FCFA'}"></option>
 	                                            </span>
                                     </select>
                                 </div>
@@ -108,8 +108,8 @@
                         <tbody>
                         <tr data-th-each="offre, uStat : ${offres}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${offre.fournitures.description}"></td>
-                            <td data-th-text="${offre.partenaire.nom}"></td>
+                            <td data-th-text="${offre.fournitures.description}+' du '+${offre.fournitures.createdAt}"></td>
+                            <td data-th-text="${offre.partenaire.nom}+' '+${offre.partenaire.prenom}"></td>
                             <td data-th-text="${offre.quantite}"></td>
                             <td data-th-text="${offre.pp}+' FCFA'"></td>
                             <td data-th-text="${offre.pvp}+' FCFA'"></td>

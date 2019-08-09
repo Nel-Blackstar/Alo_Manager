@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 public class Offre extends LiveEntity {
 	@DecimalMin("0")
+    private Long stocksInitial;
+	@DecimalMin("0")
 	@NotNull
     private Long quantite;
 	@NotNull
@@ -36,11 +38,12 @@ public class Offre extends LiveEntity {
     public Offre() {
     }
 
-    public Offre(Long quantite, double pp,double pvp, Date date) {
+    public Offre(Long quantite,Long stocksInitial, double pp,double pvp, Date date) {
         this.quantite = quantite;
         this.pp = pp;
         this.pvp = pvp;
         this.date = date;
+        this.stocksInitial=stocksInitial;
     }
 
     public Long getQuantite() {
@@ -50,8 +53,17 @@ public class Offre extends LiveEntity {
     public void setQuantite(Long quantite) {
         this.quantite = quantite;
     }
+    
+    
+	public void setStocksInitial(Long stocksInitial) {
+		this.stocksInitial = stocksInitial;
+	}
 
-    public double getPp() {
+	public Long getStocksInitial() {
+		return stocksInitial;
+	}
+
+	public double getPp() {
         return pp;
     }
 

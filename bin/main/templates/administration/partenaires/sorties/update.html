@@ -57,6 +57,20 @@
 								</div>
 							</div>
 							<div class="control-group">
+                                    <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10 datepicker" id="date" name="date"  data-th-value="${#dates.format(sortie.date, 'dd/MM/yyyy')}">
+                                        <span class="text-danger" data-th-errors="${sortie.date}"></span>
+                                    </div>
+                                </div>
+							 <div class="control-group">
+                                    <label class="control-label" for="auteur">Nom du client<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10" id="auteur"  data-th-field="${sortie.auteur}">
+                                        <span class="text-danger" data-th-errors="${sortie.auteur}"></span>
+                                    </div>
+                                </div>
+							<div class="control-group">
 								<label class="control-label" for="quantite">Quantité<span class="text-danger">*</span> </label>
 								<div class="controls">
 									<input type="text" required class="span10" id="quantite"  data-th-field="${sortie.quantite}">

@@ -41,7 +41,9 @@
                                 <div class="control-group">
                                     <label class="control-label" for="description">Description<span class="text-danger">*</span> </label>
                                     <div class="controls">
+                                    	<input type="hidden" class="span6 typeahead" data-th-value="${fourniture.id}" id="id" name="id" >
                                         <input type="text" class="span6 typeahead" data-th-value="${fourniture.description}" id="description" name="description" >
+                                        <span class="text-danger" data-th-text="${fourniture.createdAt}"></span>
                                     </div>
                                 </div>
                        			<div class="control-group">

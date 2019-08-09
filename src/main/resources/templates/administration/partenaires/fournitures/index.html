@@ -88,7 +88,7 @@
                         <tbody>
                         <tr data-th-each="fourniture, uStat : ${fournitures}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${fourniture.description}"></td>
+                            <td data-th-text="${fourniture.description}+' du '+${fourniture.createdAt}"></td>
                             <td data-th-text="${fourniture.type}"></td>
                             <td>
                                 <!--  <a href="#" data-th-href="@{'/admin/fourniture/update/'+${fourniture.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->

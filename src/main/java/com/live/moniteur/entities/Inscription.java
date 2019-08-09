@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Inscription extends LiveEntity {
 	@NotNull
-    private float paiement;
+    private String paiement;
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -34,11 +34,11 @@ public class Inscription extends LiveEntity {
     private Diplome diplome;
     
     
-	public float getPaiement() {
+	public String getPaiement() {
         return paiement;
     }
 
-    public void setPaiement(float paiement) {
+    public void setPaiement(String paiement) {
         this.paiement = paiement;
     }
 
