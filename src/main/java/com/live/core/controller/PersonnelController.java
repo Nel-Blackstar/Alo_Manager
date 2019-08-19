@@ -2,6 +2,7 @@ package com.live.core.controller;
 import com.live.common.entities.CodeValue;
 import com.live.common.entities.Detail;
 import com.live.common.service.CodeValueService;
+import com.live.core.entities.Live;
 import com.live.core.entities.Partenaire;
 import com.live.core.entities.Personnel;
 import com.live.core.entities.Roles;
@@ -20,17 +21,26 @@ import com.live.rh.entities.*;
 import com.live.rh.repository.DetailOffreRepository;
 import com.live.rh.service.*;
 
+import net.bytebuddy.utility.RandomString;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,6 +90,8 @@ public class PersonnelController extends InitiateController {
     PrevisionService previsionService;
     @Autowired
     RendezVousService rendezVousService;
+    @Autowired
+    FactureService factureService;
 
 
     // Objet de cryptage et decryptage des mots de passe
@@ -151,7 +163,51 @@ public class PersonnelController extends InitiateController {
         model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
-
+    
+    //gestion de l'entreprise
+    @RequestMapping("/live")
+    public String live(HttpSession session,Model model) {
+    	if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+    	try {
+    		Live live=liveService.findOne((long) 1);
+    		if(live.getNom().isEmpty()) {
+    			Live lives=new Live();
+        		model.addAttribute("live",lives);
+        		return "administration/live/create";
+    		}else {
+    			model.addAttribute("live",live);
+        		return "administration/live/update";
+    		}
+    	}catch(Exception $e) {
+    		Live live=new Live();
+    		model.addAttribute("live",live);
+    		return "administration/live/create";
+    	}
+    }
+    @PostMapping(value = "/ajouter")
+    public String ajouterLive(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,@Valid Live live) throws IOException {
+    	live.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+    	Files.write(Paths.get(System.getProperty("user.home")+"/alo/live/"+live.getPhoto()), photo.getBytes());
+    	try {
+        	liveService.save(live);
+        	session.setAttribute("infos","Actions terminer avec succès!!");
+        	return "redirect:/admin/live";
+        }catch(Exception $e) {
+        	session.setAttribute("infos","Action non terminer!!");
+        	return "redirect:/admin/live";
+        	
+        }
+    }
+    
+     @ResponseBody
+	 @GetMapping(value = "/live/images", produces = MediaType.IMAGE_PNG_VALUE)
+	 public byte[] getLivePhoto(@RequestParam("lid") Long id) throws IOException {
+	      Live p=liveService.findOne(id);
+	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/live/" + p.getPhoto()));
+	 }
     //management des utilisateurs
     
     /**
@@ -697,15 +753,23 @@ public class PersonnelController extends InitiateController {
     	return "administration/partenaires/partenaires/index";
      }
 	 @PostMapping(value = "/partenaires/save")
-     public String savePartenaire(HttpSession session,@Valid Partenaire partenaire, BindingResult bindingResult) {
+     public String savePartenaire(@RequestParam("photos") MultipartFile photo, HttpSession session,@Valid Partenaire partenaire, BindingResult bindingResult) throws IOException {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/partenaires/index";
     	}
+    	partenaire.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+    	Files.write(Paths.get(System.getProperty("user.home")+"/alo/partenaires/"+partenaire.getPhoto()), photo.getBytes());
     	session.setAttribute("infos","Opèration terminer avec succès!!");
      	partenaireService.save(partenaire);
      	return"redirect:/admin/partenaires/view";
 
      }
+	 @ResponseBody
+	 @GetMapping(value = "/partenaire/images", produces = MediaType.IMAGE_PNG_VALUE)
+	 public byte[] getPhoto(@RequestParam("pid") Long id) throws IOException {
+	      Partenaire p=partenaireService.findOne(id);
+	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/partenaires/" + p.getPhoto()));
+	 }
 	 @RequestMapping("/partenaires/update/{id}")
      public String updatePartenaire(HttpSession session,Model model,@PathVariable("id")  long id) {
 		 model.addAttribute("partenaire",partenaireService.findOne(id));
@@ -1011,7 +1075,24 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
-        model.addAttribute("sortie",new Sortie());
+        if (session.getAttribute("impression") != null){
+            model.addAttribute("impression",session.getAttribute("impression"));
+            session.removeAttribute("impression");
+        }
+        if (session.getAttribute("compteur") != null){
+            model.addAttribute("compteur",session.getAttribute("compteur"));
+            session.removeAttribute("compteur");
+        }
+        if (session.getAttribute("facture") != null){
+            model.addAttribute("facture",session.getAttribute("facture"));
+            session.removeAttribute("facture");
+        }
+        if (session.getAttribute("lettre") != null){
+            model.addAttribute("lettre",session.getAttribute("lettre"));
+            model.addAttribute("im", liveService.findOne((long) 1));
+            session.removeAttribute("lettre");
+            model.addAttribute("live",liveService.findOne((long) 1));
+        }
         List<Offre> offres1=offreService.findAll();
         List<Offre> offres2=new ArrayList<>();
        for (Offre offre : offres1) {
@@ -1029,22 +1110,61 @@ public class PersonnelController extends InitiateController {
     }
 
     @PostMapping(value = "/sortie/save")
-    public String saveSortie(HttpSession session,Sortie sortie) {
-    	List<Sortie> sorties = sortieService.findAllByOffre(sortie.getOffre());
-        long qte = sortie.getOffre().getQuantite();
-         for (Sortie sorti: sorties) {
-                 qte-=sorti.getQuantite();
-         }
-         if(qte<sortie.getQuantite()) {
-         	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
-         	return"redirect:/admin/partenaires/sorties";
-         }
-        try {
-            sortie.setType("sortie");
-            sortieService.save(sortie);
+    public String saveSortie(HttpSession session,Sortie sortie,@RequestParam("qte[]") List<Long> qtes,@RequestParam("o[]") List<Long> offresId) {
+    	int compteur=0;
+    	List<Sortie> sts=new ArrayList<>();
+    	Facture facture=new Facture();
+        facture.setActeur(sortie.getAuteur());
+        facture.setDescription(sortie.getDescription());
+        factureService.save(facture);
+    	for(Long of :  offresId) {
+    		Sortie s=new Sortie();
+    		s.setAuteur(sortie.getAuteur());
+    		s.setDate(sortie.getDate());
+    		s.setDescription(sortie.getDescription());
+    		s.setOffre(offreService.findOne(of));
+    		s.setQuantite(qtes.get(compteur));
+    		List<Sortie> sorties = sortieService.findAllByOffre(s.getOffre());
+            long qte = s.getOffre().getQuantite();
+             for (Sortie sorti: sorties) {
+                     qte-=sorti.getQuantite();
+             }
+             if(qte<s.getQuantite()) {
+              	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	return"redirect:/admin/partenaires/sorties";
+              }
+             try {
+                 s.setType("sortie");
+                 s.setFacture(facture);
+                 sortieService.save(s);
+             }catch(Exception $e) {
+                 session.setAttribute("infos","Opération terminer avec succès!!");
+             }
+             sts.add(s);
+             compteur++;
+    	}
+    	double compter=(double) 0;
+    	for(Sortie st: sts) {
+    		compter+=(double) st.getQuantite()*st.getOffre().getPvp();
+    	}
+    	String lettre = null;
+		try {
+			lettre = Nombre.CALCULATE.getValue(compter,"Francs CFA");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		NumberFormat nf = new DecimalFormat("0000000");
+		facture.setDescription(nf.format(facture.getId()));
+		try {
+			factureService.save(facture);
         }catch(Exception $e) {
-            session.setAttribute("infos","Opération terminer avec succès!!");
+        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
         }
+		session.setAttribute("impression",sts);
+        session.setAttribute("compteur",compter);
+		session.setAttribute("lettre",lettre);
+		session.setAttribute("facture",facture);
         return"redirect:/admin/partenaires/sorties";
 
     }
@@ -1080,43 +1200,99 @@ public class PersonnelController extends InitiateController {
 
     @RequestMapping("partenaires/Emprunts")
     public String saveEmprunt(HttpSession session,Model model) {
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
+    	 if (session.getAttribute("infos") != null){
+             model.addAttribute("info",session.getAttribute("infos"));
+             session.removeAttribute("infos");
+         }
+         if (session.getAttribute("impression") != null){
+             model.addAttribute("impression",session.getAttribute("impression"));
+             session.removeAttribute("impression");
+         }
+         if (session.getAttribute("compteur") != null){
+             model.addAttribute("compteur",session.getAttribute("compteur"));
+             session.removeAttribute("compteur");
+         }
+         if (session.getAttribute("facture") != null){
+             model.addAttribute("facture",session.getAttribute("facture"));
+             session.removeAttribute("facture");
+         }
+         if (session.getAttribute("lettre") != null){
+             model.addAttribute("lettre",session.getAttribute("lettre"));
+             model.addAttribute("im", liveService.findOne((long) 1));
+             session.removeAttribute("lettre");
+             model.addAttribute("live",liveService.findOne((long) 1));
+         }
+         List<Offre> offres1=offreService.findAll();
+         List<Offre> offres2=new ArrayList<>();
+        for (Offre offre : offres1) {
+                List<Sortie> sorties = sortieService.findAllByOffre(offre);
+                long qte = offre.getQuantite();
+            for (Sortie sortie: sorties) {
+                    qte-=sortie.getQuantite();
+            }
+            offre.setQuantite(qte);
+            offres2.add(offre);
         }
-        model.addAttribute("sortie",new Sortie());
-        List<Offre> offres1=offreService.findAll();
-        List<Offre> offres2=new ArrayList<>();
-       for (Offre offre : offres1) {
-               List<Sortie> sorties = sortieService.findAllByOffre(offre);
-               long qte = offre.getQuantite();
-           for (Sortie sortie: sorties) {
-                   qte-=sortie.getQuantite();
-           }
-           offre.setQuantite(qte);
-           offres2.add(offre);
-       }
-        model.addAttribute("offres",offres2);
-        model.addAttribute("sorties",sortieService.findAll());
+         model.addAttribute("offres",offres2);
+         model.addAttribute("sorties",sortieService.findAll());
         return "administration/partenaires/emprunts/index";
     }
     @PostMapping(value = "/emprunt/save")
-    public String saveEmprunt(HttpSession session,Sortie sortie) {
-       List<Sortie> sorties = sortieService.findAllByOffre(sortie.getOffre());
-       long qte = sortie.getOffre().getQuantite();
-        for (Sortie sorti: sorties) {
-                qte-=sorti.getQuantite();
-        }
-        if(qte<sortie.getQuantite()) {
-        	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
-        	return"redirect:/admin/partenaires/Emprunts";
-        }
-        try {
-            sortie.setType("Emprunt");
-            sortieService.save(sortie);
+    public String saveEmprunt(HttpSession session,Sortie sortie,@RequestParam("qte[]") List<Long> qtes,@RequestParam("o[]") List<Long> offresId) {
+    	int compteur=0;
+    	List<Sortie> sts=new ArrayList<>();
+    	Facture facture=new Facture();
+        facture.setActeur(sortie.getAuteur());
+        facture.setDescription(sortie.getDescription());
+        factureService.save(facture);
+    	for(Long of :  offresId) {
+    		Sortie s=new Sortie();
+    		s.setAuteur(sortie.getAuteur());
+    		s.setDate(sortie.getDate());
+    		s.setDescription(sortie.getDescription());
+    		s.setOffre(offreService.findOne(of));
+    		s.setQuantite(qtes.get(compteur));
+    		List<Sortie> sorties = sortieService.findAllByOffre(s.getOffre());
+            long qte = s.getOffre().getQuantite();
+             for (Sortie sorti: sorties) {
+                     qte-=sorti.getQuantite();
+             }
+             if(qte<s.getQuantite()) {
+              	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	return"redirect:/admin/partenaires/sorties";
+              }
+             try {
+            	 s.setType("emprunt");
+                 s.setFacture(facture);
+                 sortieService.save(s);
+             }catch(Exception $e) {
+                 session.setAttribute("infos","Opération terminer avec succès!!");
+             }
+             sts.add(s);
+             compteur++;
+    	}
+    	double compter=(double) 0;
+    	for(Sortie st: sts) {
+    		compter+=(double) st.getQuantite()*st.getOffre().getPvp();
+    	}
+    	String lettre = null;
+		try {
+			lettre = Nombre.CALCULATE.getValue(compter,"Francs CFA");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		NumberFormat nf = new DecimalFormat("0000000");
+		facture.setDescription(nf.format(facture.getId()));
+		try {
+			factureService.save(facture);
         }catch(Exception $e) {
-            session.setAttribute("infos","Opération terminer avec succès!!");
+        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
         }
+		session.setAttribute("impression",sts);
+        session.setAttribute("compteur",compter);
+		session.setAttribute("lettre",lettre);
+		session.setAttribute("facture",facture);
         return"redirect:/admin/partenaires/Emprunts";
 
     }
@@ -1229,5 +1405,221 @@ public class PersonnelController extends InitiateController {
      model.addAttribute("partenaires",partenaireRendezVous);
      model.addAttribute("rendezVous",rendezVous);
      return  "administration/partenaires/rendez_vous/show";
+    }
+    public enum Nombre {
+        //nombre simple
+        ZERO(0, "zero"),UN(1, "un"),DEUX(2, "deux"),TROIX(3, "trois"),
+        QUATRE(4,"quatre"),CINQ(5, "cinq"),SIX(6, "six"),SEPT(7, "sept"),
+        HUIT(8,"huit"),NEUF(9, "neuf"),DIX(10, "dix"),ONZE(11, "onze"), 
+        DOUZE(12, "douze"),TREIZE(13, "treize"),QUATORZE(14, "quatorze"),
+        QUINZE(15, "quinze"),SEIZE(16, "seize"),DIXSEPT(17, "dix-sept"),
+        DIXHUIT(18, "dix-huit"),DIXNEUF(19, "dix-neuf"),
+        
+        //de 20 à 99
+        VINGT(20, 29, "vingt"),
+        TRENTE(30, 39, "trente"),
+        QUARANTE(40, 49, "quarante"), 
+        CINQUANTE(50, 59, "cinquante"),
+        SOIXANTE(60, 69, "soixante"),
+        SOIXANTEDIX(70, 79, "soixante-dix", SOIXANTE),
+        QUATREVINGT(80, 89,"quatre-vingt","s"),
+        QUATREVINGTDIX(90, 99, "quatre-vingt-dix",QUATREVINGT),
+        
+        //de 10 à X milliard
+        DIXAINE(10, 99),
+        CENT(100, 999, "cent",DIXAINE),
+        MILLE(1000, 999999, "mille", CENT),
+        MILLION(1000000,99999999, "million", MILLE),
+        MILLIARD(1000000000, Long.MAX_VALUE,"milliard", MILLION),
+        
+        //enum de calcul
+        CALCULATE(){
+            protected String getValue(long value)throws Exception {
+                if (value == 0) return ZERO.label;
+                else return ((value < 0) ? "moins " : "")+ MILLIARD.getStringValue((Math.abs(value)));
+            }
+
+            protected String getValue(double value,String separator)throws Exception {
+                if (value == 0) return ZERO.label+" "+separator;
+                else{
+                    StringBuilder sb = new StringBuilder();
+                    sb.append((value < 0) ? "moins " : "");
+                    String vstr = Double.toString(value);
+                    
+                    int indexOf = vstr.indexOf('.');
+                    
+                    if(indexOf == -1){
+                        sb.append(MILLIARD.getStringValue((long)(Math.abs(value))));
+                        sb.append(" ");
+                        sb.append(separator);
+                    }else{
+                        sb.append(MILLIARD.getStringValue(Long.parseLong(vstr.substring(0, indexOf))));
+                        sb.append(" ");
+                        sb.append(separator);
+                        String floatting =vstr.substring(indexOf+1,(indexOf+3>=vstr.length())?vstr.length():indexOf+3)+(indexOf+3>=vstr.length()?"0":"");
+                        long v = Long.parseLong(floatting);
+                        if(v!=0){
+                            sb.append(" ");
+                            sb.append(MILLIARD.getStringValue(v));
+                        }
+                    }
+                    return sb.toString();
+                }
+            }
+
+        };
+
+        protected long min, max;
+        protected String label;
+        protected Nombre before;
+        // valeur à ajout à la fin d'un nombre entier
+        private String addMin;
+        /* constructeurs*/
+        Nombre() {
+        }
+
+        Nombre(long v, String s) {
+            this(v, v, s);
+        }
+
+        Nombre(long min, long max) {
+            this.min = min;
+            this.max = max;
+        }
+
+        Nombre(long min, long max, String label, Nombre before) {
+            this(min, max, label);
+            this.before = before;
+        }
+
+        Nombre(long min, long max, String label,String addMin) {
+            this(min, max, label);
+            this.addMin = addMin;
+        }
+        
+        Nombre(long min, long max, String label) {
+            this(min, max);
+            this.label = label;
+        }
+        
+        protected String getValue(long value)throws Exception{
+            throw new Exception("Vous devez appeller la méthode par l'énumération Chiffre.CALCULATE");
+        }
+
+        protected String getValue(double value,String separator)throws Exception{
+            throw new Exception("Vous devez appeller la méthode par l'énumération Chiffre.CALCULATE");
+        }
+
+        // fonction de transformation
+        private String getStringValue(long value) {
+            long v1 = value / this.min;
+            if (v1 == 0 && before != null)return before.getStringValue(value);
+
+            StringBuilder add = new StringBuilder();
+            Nombre[]values = Nombre.values();
+            if(value<20) return values[(int)value].label;
+            for (int i = 0; i < values.length; i++) {
+                Nombre nombre = values[i];
+                //si la valeur est inférieur à 100
+                if (value < 100 && nombre.min <= value && nombre.max >= value) {
+                    //cas des valeurs 20, 30, 40, etc...
+                    if (value == nombre.min) return nombre.label+((nombre.addMin!=null)?nombre.addMin:"");
+                    //cas de 71->79 et 91->99
+                    else if (nombre.before != null){
+                        StringBuilder sb = new StringBuilder(nombre.before.label);
+                        //71
+                        sb.append(((value - nombre.min + 10 == 11 && nombre.equals(SOIXANTEDIX)) ? " et " : "-"));
+                        sb.append(DIXAINE.getStringValue(value - nombre.min + 10));
+                        return sb.toString();
+                    }else{
+                        StringBuilder sb = new StringBuilder(nombre.label);
+                        //81
+                        sb.append(((value - nombre.min == 1 && !nombre.equals(QUATREVINGT)) ? " et " : "-"));
+                        //second chiffre
+                        sb.append(((value - nombre.min > 0) ? DIXAINE.getStringValue(value - nombre.min) : ""));
+                        return sb.toString();
+                    }
+                } else if (nombre.min <= v1 && nombre.max >= v1 && value >= 100) {
+                    //première partie du nombre
+                    
+                    //100 et 1000
+                    if ((this.equals(MILLE) || this.equals(CENT))&& Nombre.UN.equals(nombre))
+                        add.append(label);
+                    else{
+                        add.append(nombre.getStringValue(v1));
+                        //cas : Million de millard et Milliard de milliard 
+                        add.append(((MILLIARD.equals(this)&& (MILLION.equals(nombre) || MILLIARD.equals(nombre)) ? " de" : "")));
+                        //ajout du label si présent
+                        add.append(((label != null) ? " " + label : ""));
+                    }
+                    //deuxième partie du nombre
+                    add.append(((value - (v1 * this.min) > 0) ? (" " + before.getStringValue(value - (v1 * this.min))): (v1 > 1) ? "s" : ""));
+                    return add.toString();
+                }
+            }
+            return add.toString();
+        }
+    }
+    @GetMapping("/partenaire/vente")
+    public String vente(HttpSession session,Model model) {
+    	 model.addAttribute("sortie",new Sortie());
+         List<Offre> offres1=offreService.findAll();
+         List<Offre> offres2=new ArrayList<>();
+        for (Offre offre : offres1) {
+                List<Sortie> sorties = sortieService.findAllByOffre(offre);
+                long qte = offre.getQuantite();
+            for (Sortie sortie: sorties) {
+                    qte-=sortie.getQuantite();
+            }
+            offre.setQuantite(qte);
+            offres2.add(offre);
+        }
+         model.addAttribute("offres",offres2);
+         model.addAttribute("sorties",sortieService.findAll());
+    	return"administration/partenaires/sorties/create";
+    }
+    @GetMapping("/partenaire/credit")
+    public String credit(HttpSession session,Model model) {
+    	 model.addAttribute("sortie",new Sortie());
+         List<Offre> offres1=offreService.findAll();
+         List<Offre> offres2=new ArrayList<>();
+        for (Offre offre : offres1) {
+                List<Sortie> sorties = sortieService.findAllByOffre(offre);
+                long qte = offre.getQuantite();
+            for (Sortie sortie: sorties) {
+                    qte-=sortie.getQuantite();
+            }
+            offre.setQuantite(qte);
+            offres2.add(offre);
+        }
+         model.addAttribute("offres",offres2);
+         model.addAttribute("sorties",sortieService.findAll());
+    	return"administration/partenaires/emprunts/create";
+    }
+    @GetMapping("/partenaire/facture/{id}")
+    public String showFacture(HttpSession session,Model model,@PathVariable("id")  long id){
+	if (session.getAttribute("infos") != null){
+        model.addAttribute("info",session.getAttribute("infos"));
+        session.removeAttribute("infos");
+    }
+	Facture facture=factureService.findOne(id);
+	List<Sortie> sorties=sortieService.findAllByFacture(facture);
+	double compter=(double) 0;
+	for(Sortie st: sorties) {
+		compter+=(double) st.getQuantite()*st.getOffre().getPvp();
+	}
+	String lettre = null;
+	try {
+		lettre = Nombre.CALCULATE.getValue(compter,"Francs CFA");
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    model.addAttribute("impression",sorties);
+    model.addAttribute("compteur",compter);
+    model.addAttribute("facture",facture);
+    model.addAttribute("lettre",lettre);
+    model.addAttribute("live",liveService.findOne((long) 1));
+    return  "administration/partenaires/factures/show";
     }
 }

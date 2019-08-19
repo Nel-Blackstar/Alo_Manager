@@ -19,21 +19,30 @@
                 <a data-th-href="@{/admin/partenaire}">Partenaire</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><span>Rendez-vous</span></li>
+            <li><span>Recapitulatif</span></li>
         </ul>
         <br><br><br>
         <h2>RECAPITULATIF SUR LE PARTENAIRE</h2>
-        <ul>
-            <li>Nom : <b data-th-text="${partenaire.nom}"></b></li>
-            <li>Prénom : <b data-th-text="${partenaire.prenom}"></b></li>
-            <li>Sexe : <b data-th-text="${partenaire.sexe}"></b></li>
-            <li>Téléphone : <b data-th-text="${partenaire.telephone}"></b></li>
-            <li>Email : <b data-th-text="${partenaire.email}"></b></li>
-            <li>Adresse : <b data-th-text="${partenaire.adresse}"></b></li>
-            <li>Numéro CNI : <b data-th-text="${partenaire.numero_cni}"></b></li>
-            <li>Date de naissance : <b data-th-text="${partenaire.date_naissance}"></b></li>
-        </ul>
-
+		<table>
+	        <tr>
+			       <td>
+						<img data-th-if="${partenaire.photo}" class="avatar" width="250" data-th-src="'/admin/partenaire/images?pid='+${partenaire.id}" alt="..." src="">
+						<img data-th-unless="${partenaire.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
+					</td>
+					<td>
+			        <ul>
+			            <li>Nom : <b data-th-text="${partenaire.nom}"></b></li>
+			            <li>Prénom : <b data-th-text="${partenaire.prenom}"></b></li>
+			            <li>Sexe : <b data-th-text="${partenaire.sexe}"></b></li>
+			            <li>Téléphone : <b data-th-text="${partenaire.telephone}"></b></li>
+			            <li>Email : <b data-th-text="${partenaire.email}"></b></li>
+			            <li>Adresse : <b data-th-text="${partenaire.adresse}"></b></li>
+			            <li>Numéro CNI : <b data-th-text="${partenaire.numero_cni}"></b></li>
+			            <li>Date de naissance : <b data-th-text="${partenaire.date_naissance}"></b></li>
+			        </ul>
+			       </td>
+		       </tr>
+	      </table>
         <br><br><br>
         <div class="row-fluid sortable">
             <div class="box span12">
@@ -56,7 +65,6 @@
                             <th>Quantité</th>
 							<th>Prix de vente partenaire</th>
 							<th>Prix de vente public</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -67,11 +75,6 @@
 							<td data-th-text="${offre.quantite}"></td>
 							<td data-th-text="${offre.pp}+' FCFA'"></td>
 							<td data-th-text="${offre.pvp}+' FCFA'"></td>
-                            <td>  
-                            	<!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
-                                <a href="#" data-th-href="@{'/admin/offres/update/'+${offre.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/offres/delete/'+${offre.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -100,7 +103,6 @@
                             <th>Description</th>
                             <th>Quantité</th>
                             <th>Date</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -111,10 +113,6 @@
 							<td data-th-text="${prevision.description}"></td>
 							<td data-th-text="${prevision.quantite}"></td>
 							<td data-th-text="${prevision.date}"></td>
-                            <td>
-                                <a href="#" data-th-href="@{'/admin/previsions/update/'+${prevision.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/previsions/delete/'+${prevision.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -142,7 +140,6 @@
                             <th>Libelle</th>
                             <th>Date</th>
                             <th>Heur</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -152,11 +149,6 @@
                             <td data-th-text="${rendezVous.libelle}"></td>
 							<td data-th-text="${rendezVous.date}"></td>
 							<td data-th-text="${rendezVous.heur}"></td>
-                            <td>
-                            	<a href="#" data-th-href="@{'/admin/partenaire/rendez-vous/'+${rendezVous.id} }"  class="btn btn-small btn-info"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" data-th-href="@{'/admin/rendez-vous/update/'+${rendezVous.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/rendez-vous/delete/'+${rendezVous.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
-                            </td>
                         </tr>
                         </tbody>
                     </table>

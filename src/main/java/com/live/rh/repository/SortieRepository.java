@@ -1,5 +1,6 @@
 package com.live.rh.repository;
 
+import com.live.rh.entities.Facture;
 import com.live.rh.entities.Offre;
 import com.live.rh.entities.Sortie;
 
@@ -9,4 +10,5 @@ import java.util.List;
 
 public interface SortieRepository extends JpaRepository<Sortie, Long> {
     List<Sortie> findAllByOffre(Offre offre);
+    List<Sortie> findAllByFacture(Facture facture);
 }

@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="box-content)">
-                    <form class="form-horizontal" data-th-action="@{/admin/partenaires/save}" method="post"  data-th-object="${partenaire}">
+                    <form class="form-horizontal" data-th-action="@{/admin/partenaires/save}" method="post"  data-th-object="${partenaire}" enctype="multipart/form-data">
                         <fieldset>
                         	<div class="box">
                         	<table style="width:100%;" class="table">
@@ -136,7 +136,7 @@
 	                                <div class="control-group">
 	                                    <label class="control-label" for="photo">Photo<span class="text-danger">*</span> </label>
 	                                    <div class="controls">
-	                                        <input type="file" class="span12 typeahead" id="photo" data-th-field="*{photo}">
+	                                        <input type="file" class="span12 typeahead" id="photo" name="photos">
 	                                    </div>
 	                                </div>
 	                                </td>

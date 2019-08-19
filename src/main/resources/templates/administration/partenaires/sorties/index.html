@@ -22,70 +22,111 @@
             <li><span>Sorties</span></li>
         </ul>
          <div class="row-fluid sortable">
-            <div class="box span12">
-                <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une Sortie</h2>
-                    <div class="box-icon">
-                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-                    </div>
-                </div>
-                <div class="box-content">
-                <div class="alert alert-info" data-th-if="${info}">
-					<button type="button" class="close" data-dismiss="alert">×</button>
-					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
-				  </div>
-             		<form class="form-horizontal" data-th-action="@{/admin/sortie/save}" method="post"  data-th-object="${sortie}">
-                            <fieldset style="text-align:center">
-							    <div class="control-group">
-									<label class="control-label" for="offres">Produit Par Stock<span class="text-danger">*</span> </label>
-									<div class="controls">
-										<select id="offres" required data-rel="chosen" data-th-field="${sortie.offre}" class="span10 typeahead">
-											<span data-th-each="offre : ${offres}">
-												<option data-th-value="${offre.getId()}" data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}+' qté: '+${offre.quantite}+' - > '+${offre.getPvp()+' FCFA'}"></option>
-											</span>
-										</select>
-									</div>
-	                            </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" required class="span10 datepicker" id="date"  data-th-field="${sortie.date}">
-                                        <span class="text-danger" data-th-errors="${sortie.date}"></span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="description">Description<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" required class="span10" id="description"  data-th-field="${sortie.description}">
-                                        <span class="text-danger" data-th-errors="${sortie.description}"></span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="auteur">Nom du client<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" required class="span10" id="auteur"  data-th-field="${sortie.auteur}">
-                                        <span class="text-danger" data-th-errors="${sortie.auteur}"></span>
-                                    </div>
-                                </div>
-                                 <div class="control-group">
-									<label class="control-label" for="quantite">Quantité<span class="text-danger">*</span> </label>
-									<div class="controls">
-										<input type="text" required class="span10" id="quantite"  data-th-field="${sortie.quantite}">
-										<span class="text-danger" data-th-errors="${sortie.quantite}"></span>
-									</div>
-								</div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                                    <button type="reset" class="btn">Annuler</button>
-                                </div>
-                            </fieldset>
-                        </form>
-                </div>
+           <div class="box span12">
+                <span data-th-if="${impression}">
+			<div class="box">
+              <div class="box-header" data-original-title>
+                  <h4><i class="halflings-icon building"></i><span class="break"></span>Facture n° <span data-th-if="${facture}" data-th-text="${facture.getDescription()}"></span></h4>
+                  <div class="box-icon">
+                      <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                      <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                      <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                  </div>
+              </div>
+			  <div class="box-content">
+		           <textarea class="cleditor" style="width:100% !important;">
+				            	<!-- Blondin Kamgue -->
+								<html xmlns="http://www.w3.org/1999/xhtml">
+								<head>
+								<meta charset="utf-8"/>
+		
+								<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+				            	<title></title>
+								</head>
+								<body>
+								<br>
+				            	<center><table>
+								<tr>
+								<td rowspan="5">
+									<img width="200" heigth=150 data-th-if="${live.photo}" class="avatar" data-th-src="'/admin/live/images?lid=1'">
+								</td>
+								<td>
+									ETS: <span data-th-text="${live.nom}"></span>
+								</td>
+								</tr>
+								<tr>
+								<td>
+									Régistre de commerce: <span data-th-text="${live.numero_rc}"></span>
+								</td>
+								</tr>
+								<tr>
+								<td>
+								 	Adrèsse: <span data-th-text="${live.adresse}"></span>
+								</td>
+								</tr>
+								<tr>
+								<td>
+								 	Téléphone: <span data-th-text="${live.telephone_1}"></span>
+								</td>
+								</tr>
+								<tr>
+								<td>
+									Slogan: <span data-th-text="${live.slogan}"></span>
+								</td>
+								</tr>
+								</table>
+								</center>
+								<center><font align="center" color="green" size="12px">Facture n° <span data-th-if="${facture}" data-th-text="${facture.getDescription()}"></span></font></center>
+				            	<table class="table table-striped table-bordered bootstrap-datatable datatable" border="1" width="100%">
+			                        <thead>
+			                        <tr>
+			                            <th>#</th>
+			                            <th>Articles</th>
+			                            <th>Quantités</th>
+			                            <th>P.U</th>
+			                            <th>Sous Totaux</th>
+			                        </tr>
+			                        </thead>
+			                        <tbody>
+			                        <tr data-th-each="sortie, uStat : ${impression}">
+			                            <td data-th-text="${uStat.count}"></td>
+			                            <td data-th-text="${sortie.offre.fournitures.description}"></td>
+			                            <td data-th-text="${sortie.quantite}"></td>
+			                            <td><span data-th-text="${sortie.offre.pvp}"></span> Fcfa</td>
+			                            <td><span data-th-text="${sortie.quantite}*${sortie.offre.pvp}"></span> Fcfa</td>
+									</tr>
+									</tbody>
+									<tfoot>
+									<tr>
+			                            <td colspan="2" style="text-align:center"><h3>Nom du client : </h3></td>
+			                            <td colspan="3" data-th-text="${facture.acteur}"></td>
+			                        </tr>
+			                        <tr>
+			                            <td colspan="2" style="text-align:center"><h3>Net à payer : </h3></td>
+			                            <td colspan="3"><h3><span data-th-if="${compteur}" data-th-text="${compteur}"></span> Fcfa</h3></td>
+			                        </tr>
+			                        <tr>
+			                        <td colspan="2">Date <span data-th-if="${facture}" data-th-text="${#dates.format(facture.createdAt, 'dd/MM/yyyy')}"></span></td>
+			                            <td colspan="3" style="text-align:center">
+				                            <center>
+												<div  style="background-color:silver;border-color:gold;border-width:1px;border-style:solid">&nbsp;<span data-th-if="${lettre}" data-th-text="${lettre}"></span></div>
+											</center>
+										</td>
+			                        </tr>
+			                        </tfoot>
+			                    </table>
+			                    </body>
+								</html>
+				            </textarea>
+			          </div>
+			         </div>
+				</span>
             </div><!--/span-->
         </div><!--/row-->
         <div class="clearfix"></div>
+        <div style="margin-bottom: 7px">
+            <a data-th-href="@{/admin/partenaire/vente}" class="btn btn-small btn-primary">Faire une vente</a>
+        </div>
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
@@ -97,7 +138,10 @@
                     </div>
                 </div>
                 <div class="box-content"> 
-                
+                	<div class="alert alert-info" data-th-if="${info}">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+					 </div>
                     <table class="table table-striped table-bordered bootstrap-datatable datatable">
                         <thead>
                         <tr>
@@ -109,6 +153,8 @@
                             <th>Quantité</th>
 							<th>Prix de vente public</th>
                             <th>Montant Total</th>
+                            <th>Date</th>
+                            <th>n° Facture</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -123,10 +169,13 @@
                                 <td data-th-text="${sortie.quantite}"></td>
                                 <td data-th-text="${sortie.offre.pvp}+' FCFA'"></td>
                                 <td data-th-text="${sortie.quantite}*${sortie.offre.pvp} +' FCFA'"></td>
+                                <td data-th-text="${#dates.format(sortie.date, 'dd/MM/yyyy')}"></td>
+                                <td><span data-th-if="${sortie.getFacture()}"><a href="#" data-th-href="@{'/admin/partenaire/facture/'+${sortie.getFacture().id} }"><span data-th-text="${sortie.getFacture().description}"></span></a></span></td>
+                                
                                 <td>
                                     <!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
                                     <a href="#" data-th-href="@{'/admin/sorties/update/'+${sortie.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                    <a href="#" data-th-href="@{'/admin/sorties/delete/'+${sortie.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    <a href="#" data-th-href="@{'/admin/sorties/delete/'+${sortie.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette vente ? des repercutions aurons lieux sur la facture concernée.')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                 </td>
                         </tr>
                         </div>
@@ -140,3 +189,8 @@
 </div>
 </body>
 </html>
+<script language="javascript">
+$.cleditor.defaultOptions.width = 1060;
+$.cleditor.defaultOptions.height = 500;
+$("#input").cleditor();
+</script>

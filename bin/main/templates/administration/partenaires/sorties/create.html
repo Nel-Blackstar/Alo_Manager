@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Personnels</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/partenaire}">Partenaire</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Sorties</span></li>
+        </ul>
+         <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ventes au comptoir</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                <div class="alert alert-info" data-th-if="${info}">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+				  </div>
+             		<form class="form-horizontal" data-th-action="@{/admin/sortie/save}" method="post"  data-th-object="${sortie}">
+                            <fieldset style="text-align:center">
+                                <div class="control-group">
+                                    <label class="control-label" for="date">Date<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10 datepicker" id="date"  data-th-field="${sortie.date}">
+                                        <span class="text-danger" data-th-errors="${sortie.date}"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="description">Description<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10" id="description"  data-th-field="${sortie.description}">
+                                        <span class="text-danger" data-th-errors="${sortie.description}"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="auteur">Nom du client<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" required class="span10" id="auteur"  data-th-field="${sortie.auteur}">
+                                        <span class="text-danger" data-th-errors="${sortie.auteur}"></span>
+                                    </div>
+                                </div>
+								<table style="width:100%;" class="table table-striped table-bordered bootstrap-datatable datatable">
+								<thead>
+		                        <tr>
+		                            <th>Choisir</th>
+									<th>Offre</th>
+									<th>Stocks</th>
+									<th>P.U</th>
+		                            <th>Quantité</th>
+		                            <th>Sous total <span class="text-danger"> (FCFA)</span></th>
+		                        </tr>
+		                        </thead>
+		                        <tbody>
+								<span data-th-each="offre : ${offres}" data-th-if="${offre.quantite} > 0">
+                            	<tr>
+                            	<td>
+									<input type="checkbox" name="o[]" data-th-value="${offre.getId()}" onclick="if(document.getElementById(this.value).disabled==false){document.getElementById(this.value).disabled=true;document.getElementById(this.value).value='0';document.getElementById('to'+this.id).value='0';document.getElementById('t'+this.id).innerHTML='0';totalActuel();}else{document.getElementById(this.value).disabled=false;}">
+	                            </td>
+                            	<td>
+	                                <label data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}"></label>
+	                            </td>
+	                            <td>
+	                                <label data-th-text="${offre.quantite}"></label>
+	                            </td>
+	                            <td>
+	                                <label data-th-text="${offre.getPvp()+' FCFA'}"></label>
+	                                <input type="hidden" data-th-value="${offre.getPvp()}" data-th-id="'p'+${offre.getId()}">
+	                            </td>
+                                <td>
+                                   <input type="number"  name="qte[]" min="0" data-th-max="${offre.quantite}" disabled required class="span12 typeahead" data-th-id="${offre.getId()}" onkeyup="document.getElementById('t'+this.id).innerHTML=(document.getElementById('p'+this.id).value*this.value);document.getElementById('t'+this.id).value=(document.getElementById('p'+this.id).value*this.value);document.getElementById('to'+this.id).value=(document.getElementById('p'+this.id).value*this.value); totalActuel();">
+                                </td>
+                                <td>
+	                                <label  data-th-id="'t'+${offre.getId()}"></label>
+	                                <input type="hidden" class="totall" data-th-id="'to'+${offre.getId()}">
+	                            </td>
+                                </tr>
+                                </span>
+                                </tbody>
+		                       </table>
+		                       <div class="control-group">
+									<label class="control-label" for="quantite">Net a payer<span class="text-danger"> (FCFA)</span> </label>
+									<div class="controls">
+										<input type="text" class="span10" id="n">
+									</div>
+								</div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+</div>
+</body>
+</html>
+<script laguage="javascript">
+function totalActuel(){
+	document.getElementById('n').value="";
+	var checkedValue = 0; 
+	var total=0;
+	var inputElements = document.getElementsByClassName('totall');
+	for(var i=0; inputElements.length; ++i){
+	   checkedValue = parseFloat(inputElements[i].value);
+	   if(checkedValue){
+		   total+=parseFloat(checkedValue);
+		   document.getElementById('n').value=total; 
+	   }
+	}
+}
+</script>

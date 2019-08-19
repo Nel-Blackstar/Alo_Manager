@@ -28,6 +28,8 @@ public class Sortie extends LiveEntity {
 	@NotNull
 	@DecimalMin("0")
     private Long quantite;
+	@OneToOne
+	private Facture facture;
 
     public Sortie() {
     }
@@ -87,6 +89,13 @@ public class Sortie extends LiveEntity {
 	public void setAuteur(String auteur) {
 		this.auteur = auteur;
 	}
-	
+
+	public Facture getFacture() {
+		return facture;
+	}
+
+	public void setFacture(Facture facture) {
+		this.facture = facture;
+	}
 	
 }

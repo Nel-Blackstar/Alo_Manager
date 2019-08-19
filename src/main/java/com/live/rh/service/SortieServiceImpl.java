@@ -1,5 +1,6 @@
 package com.live.rh.service;
 
+import com.live.rh.entities.Facture;
 import com.live.rh.entities.Offre;
 import com.live.rh.entities.Sortie;
 import com.live.rh.repository.SortieRepository;
@@ -39,5 +40,9 @@ public class SortieServiceImpl implements SortieService{
     @Override
     public List<Sortie> findAllByOffre(Offre offre) {
         return sortieRepository.findAllByOffre(offre);
+    }
+    @Override
+    public List<Sortie> findAllByFacture(Facture facture) {
+        return sortieRepository.findAllByFacture(facture);
     }
 }

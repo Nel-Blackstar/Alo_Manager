@@ -1,5 +1,6 @@
 package com.live.rh.service;
 
+import com.live.rh.entities.Facture;
 import com.live.rh.entities.Offre;
 import com.live.rh.entities.Sortie;
 
@@ -11,4 +12,5 @@ public interface SortieService {
     Sortie findOne(Long id);
     List<Sortie> findAll();
     List<Sortie> findAllByOffre(Offre offre);
+    List<Sortie> findAllByFacture(Facture facture);
 }

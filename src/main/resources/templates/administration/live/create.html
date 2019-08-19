@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Configuration</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="index.html">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">Entreprise</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span href="#">Configuration de l'entreprise</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Configuration</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="text-center alert alert-info" data-th-if="${info}">
+                    <p class="fg-green" data-th-text="${info}">Info</p>
+                </div>
+                <div class="box-content">
+                    <form enctype="multipart/form-data" class="form-horizontal" data-th-action="@{/admin/ajouter}" method="post"  data-th-object="${live}">
+                            <div class="box offset3 span6">
+                                <div class="control-group">
+                                    <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="*{nom}" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="numero_rc">Régistre de commerce<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="numero_rc" data-th-field="*{numero_rc}" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="adresse">Adrèsse<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">Adresse Email<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="email" required class="span6 typeahead" id="email" data-th-field="*{email}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="telephone_1">Téléphone 1<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="number" required class="span6 typeahead" id="telephone_1" data-th-field="*{telephone_1}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="telephone_2">Téléphone 2<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="number" required class="span6 typeahead" id="telephone_2" data-th-field="*{telephone_2}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="slogan">slogan<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" min="0" class="span6 typeahead" id="salaire" data-th-field="*{slogan}" required >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="pt">Logo<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="file" class="span6 typeahead" multiple id="pt" name="pt" required >
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+    </div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>
+
+

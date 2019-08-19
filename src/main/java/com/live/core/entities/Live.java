@@ -11,6 +11,7 @@ import java.util.List;
 public class Live extends LiveEntity {
 
     private String nom;
+    private String photo;
     private String localisation;
     private String slogan;
     private String adresse;
@@ -159,4 +160,14 @@ public class Live extends LiveEntity {
     public void setDetails(List<Detail> details) {
         this.details = details;
     }
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+    
+   
 }
