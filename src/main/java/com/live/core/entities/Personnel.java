@@ -20,7 +20,6 @@ public class Personnel extends LiveEntity {
     private String matricule;
     private String adresse;
     private String situationFamiliale;
-    private int nombreEnfant;
     private String compteBancaire;
     private String numeroCNPS;
 
@@ -43,8 +42,8 @@ public class Personnel extends LiveEntity {
     @OneToMany(targetEntity = Prets.class)
     private List<Prets> prets;
 
-    @OneToOne(targetEntity = Banque.class)
-    private Banque banque;
+    @ManyToMany(targetEntity = Banque.class)
+    private List<Banque> banque;
 
     @OneToMany(targetEntity = Credits.class)
     private List<Credits> credits;
@@ -55,8 +54,11 @@ public class Personnel extends LiveEntity {
     @OneToMany(targetEntity = PrimesVariables.class)
     private List<PrimesVariables> primesVariables;
 
-    @OneToMany(targetEntity = PrimesFixes.class)
+    @ManyToMany(targetEntity = PrimesFixes.class)
     private List<PrimesFixes> primesFixes;
+    
+    @ManyToMany(targetEntity = Enfants.class)
+    private List<Enfants> enfants;
 
     @OneToMany(targetEntity = BulletinPaie.class)
     private List<BulletinPaie> bulletinPaie;
@@ -66,11 +68,14 @@ public class Personnel extends LiveEntity {
 
     @OneToMany(targetEntity = Conge.class)
     private List<Conge> conge;
+    
+    @OneToOne(targetEntity = CNPS.class)
+    private CNPS cnps;
     public Personnel() {
     }
 
     public Personnel(String nom, String prenom, String email, String telephone_1, String telephone_2, String numero_cni, Character sexe,
-                     String matricule, String adresse, String situationFamiliale, int nombreEnfant, String compteBancaire, String numeroCNPS,
+                     String matricule, String adresse, String situationFamiliale,
                      Date date_naissance, String lieu_naissance, String fonction, String photo) {
         this.nom = nom;
         this.prenom = prenom;
@@ -82,9 +87,6 @@ public class Personnel extends LiveEntity {
         this.matricule = matricule;
         this.adresse = adresse;
         this.situationFamiliale = situationFamiliale;
-        this.nombreEnfant = nombreEnfant;
-        this.compteBancaire = compteBancaire;
-        this.numeroCNPS = numeroCNPS;
         this.date_naissance = date_naissance;
         this.lieu_naissance = lieu_naissance;
         this.fonction = fonction;
@@ -219,14 +221,6 @@ public class Personnel extends LiveEntity {
         this.situationFamiliale = situationFamiliale;
     }
 
-    public int getNombreEnfant() {
-        return nombreEnfant;
-    }
-
-    public void setNombreEnfant(int nombreEnfant) {
-        this.nombreEnfant = nombreEnfant;
-    }
-
     public String getCompteBancaire() {
         return compteBancaire;
     }
@@ -259,15 +253,15 @@ public class Personnel extends LiveEntity {
         this.prets = prets;
     }
 
-    public Banque getBanque() {
-        return banque;
-    }
+    public List<Banque> getBanque() {
+		return banque;
+	}
 
-    public void setBanque(Banque banque) {
-        this.banque = banque;
-    }
+	public void setBanque(List<Banque> banque) {
+		this.banque = banque;
+	}
 
-    public List<Credits> getCredits() {
+	public List<Credits> getCredits() {
         return credits;
     }
 
@@ -322,4 +316,21 @@ public class Personnel extends LiveEntity {
     public void setConge(List<Conge> conge) {
         this.conge = conge;
     }
+
+	public List<Enfants> getEnfants() {
+		return enfants;
+	}
+
+	public void setEnfants(List<Enfants> enfants) {
+		this.enfants = enfants;
+	}
+
+	public CNPS getCnps() {
+		return cnps;
+	}
+
+	public void setCnps(CNPS cnps) {
+		this.cnps = cnps;
+	}
+    
 }
