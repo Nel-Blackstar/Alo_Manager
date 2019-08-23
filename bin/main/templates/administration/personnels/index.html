@@ -67,9 +67,9 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="numero_cni">Numéro CNI<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="numero_cni">Numéro CNI </label>
                                     <div class="controls">
-                                        <input type="text" required class="span12 typeahead" id="numero_cni" data-th-field="*{numero_cni}" >
+                                        <input type="text" class="span12 typeahead" id="numero_cni" data-th-field="*{numero_cni}" >
                                         <span class="text-danger" data-th-errors="${personnel.numero_cni}"></span>
                                     </div>
                                 </div>
@@ -138,13 +138,6 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="nombreEnfant">Nombre d'Enfant<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" required class="span12 typeahead" id="nombreEnfant" data-th-field="*{nombreEnfant}" >
-                                        <span class="text-danger" data-th-errors="${personnel.nombreEnfant}"></span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
                                     <label class="control-label" for="compteBancaire">Compte Bancaire<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text"  class="span12 typeahead" id="compteBancaire" data-th-field="*{compteBancaire}" >
@@ -159,9 +152,9 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="banque">Banque<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="banque">Banque </label>
                                     <div class="controls">
-                                        <select id="banque" required data-rel="chosen" data-th-field="*{banque}" class="span12 typeahead">
+                                        <select id="banque" data-rel="chosen" data-th-field="*{banque}" class="span12 typeahead">
                                             <option data-th-each="banque: ${banques}" data-th-value="${banque.id}" data-th-text="${banque.nom}"></option>
                                         </select>
                                     </div>

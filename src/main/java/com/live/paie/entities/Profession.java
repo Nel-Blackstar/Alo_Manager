@@ -3,8 +3,9 @@ package com.live.paie.entities;
 import com.live.common.entities.LiveEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import java.util.List;
 
 @Entity
@@ -12,6 +13,8 @@ public class Profession extends LiveEntity {
     String nom;
     @OneToMany(targetEntity = Contrat.class)
     private List<Contrat> contrats;
+    @OneToOne(targetEntity = CNPS.class)
+    private CNPS cnps;
 
     public Profession() {
     }
@@ -35,4 +38,13 @@ public class Profession extends LiveEntity {
     public void setContrats(List<Contrat> contrats) {
         this.contrats = contrats;
     }
+
+	public CNPS getCnps() {
+		return cnps;
+	}
+
+	public void setCnps(CNPS cnps) {
+		this.cnps = cnps;
+	}
+    
 }
