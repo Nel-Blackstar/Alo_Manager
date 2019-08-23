@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 public class TypeConge extends LiveEntity {
     private String type;
+
+    private String libeller;
     @OneToMany(targetEntity = Conge.class)
     private List<Conge> conges;
 
@@ -33,5 +35,13 @@ public class TypeConge extends LiveEntity {
 
     public void setConges(List<Conge> conges) {
         this.conges = conges;
+    }
+
+    public String getLibeller() {
+        return libeller;
+    }
+
+    public void setLibeller(String libeller) {
+        this.libeller = libeller;
     }
 }
