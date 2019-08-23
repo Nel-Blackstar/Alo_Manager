@@ -12,8 +12,6 @@ public class Banque extends LiveEntity {
     private String adresse;
     private String  fax;
     private String telephone;
-    @OneToOne(optional = true, targetEntity = Personnel.class)
-    private Personnel personnel;
 
     public Banque() {
     }
@@ -55,13 +53,5 @@ public class Banque extends LiveEntity {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public Personnel getPersonnel() {
-        return personnel;
-    }
-
-    public void setPersonnel(Personnel personnel) {
-        this.personnel = personnel;
     }
 }

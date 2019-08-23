@@ -120,7 +120,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vient d'etre cree !!");
+        session.setAttribute("infos"," Opéion éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
@@ -199,7 +199,7 @@ public class PersonnelController extends InitiateController {
     	Files.write(Paths.get(System.getProperty("user.home")+"/alo/live/"+live.getPhoto()), photo.getBytes());
     	try {
         	liveService.save(live);
-        	session.setAttribute("infos","Actions terminer avec succ�s!!");
+        	session.setAttribute("infos","Actions terminer avec succès!!");
         	return "redirect:/admin/live";
         }catch(Exception $e) {
         	session.setAttribute("infos","Action non terminer!!");
@@ -238,7 +238,7 @@ public class PersonnelController extends InitiateController {
     	personnel.setDate_naissance(date_naissance);
         chargerLive(model);
         personnelService.save(personnel);
-        session.setAttribute("infos","Modification terminer avec succ�s!!");
+        session.setAttribute("infos","Modification terminer avec succès!!");
         return "redirect:/admin/personnels";
 	    }
 	    
@@ -289,7 +289,7 @@ public class PersonnelController extends InitiateController {
             erreur.add("les mots de passe saisie ne sont pas identique \n");
       }
         if (usersService.findByLogin(users.getLogin()) != null){
-            erreur.add("Un utilisateur possedant se login existe dej� dans le systeme \n");
+            erreur.add("Un utilisateur possedant se login existe deja dans le systeme \n");
         }
         if(!erreur.isEmpty()){
             session.setAttribute("infos",erreur);
@@ -411,7 +411,7 @@ public class PersonnelController extends InitiateController {
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         chargerLive(model);
-        // Charger la liste des rôles disponibles et d�poser dans le model
+        // Charger la liste des rôles disponibles et déposer dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
         //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
@@ -441,7 +441,11 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /**
+<<<<<<< HEAD
      * M�thode d'ajout d'un Apprenant post
+=======
+     * Méthode d'ajout d'un Apprenant post
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -482,7 +486,7 @@ public class PersonnelController extends InitiateController {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/update";
 	 	}
-		session.setAttribute("infos","Modification terminer avec succ�s!!");
+		session.setAttribute("infos","Modification terminer avec succès!!");
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
@@ -509,7 +513,7 @@ public class PersonnelController extends InitiateController {
     public String deleteApprenant(HttpSession session,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	apprenantService.delete(apprenant);
-    	session.setAttribute("infos","suppr�ssion terminer avec succ�s!!");
+    	session.setAttribute("infos","suppréssion terminer avec succès!!");
     	return "redirect:/admin/apprenants";
 
     }
@@ -530,7 +534,11 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/index";
     }
     /** 
+<<<<<<< HEAD
      * M�thode d'ajout d'un Apprenant get
+=======
+     * Méthode d'ajout d'un Apprenant get
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -547,7 +555,11 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/create";
      }
      /**
+<<<<<<< HEAD
       * M�thode d'ajout d'un Apprenant post
+=======
+      * Méthode d'ajout d'un Apprenant post
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
       * @param model
       * @return
       */
@@ -558,7 +570,7 @@ public class PersonnelController extends InitiateController {
 	 		}
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuer�e avec succ�s!!");
+         session.setAttribute("infos","Nouvelle session de formation configuré avec succès!!");
          return "redirect:/admin/formations";
      }
      /**
@@ -587,7 +599,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/formations/update";
     	}
-    	session.setAttribute("infos","Nouvelle session de formation modifier avec succ�s!!");
+    	session.setAttribute("infos","Nouvelle session de formation modifier avec succès!!");
      	sessionFormationService.save(formation);
      	return"redirect:/admin/formations";
 
@@ -637,7 +649,7 @@ public class PersonnelController extends InitiateController {
         	 }
          }
          if(n==true) {
-        	 session.setAttribute("infos","Echec du proc�ssus de cr�ation. Cet appr�nant a d�j� �t� inscrit a cette session de formation!");
+        	 session.setAttribute("infos","Echec du procéssus de création. Cet apprénant a déja ete inscrit a cette session de formation!");
          }else {
         	 Diplome diplome=new Diplome();
              diplome.setStatut(false);
@@ -649,7 +661,7 @@ public class PersonnelController extends InitiateController {
              diplome.setInscrit(inscription);
              diplomeService.save(diplome);
              model.addAttribute("state", "post");
-             session.setAttribute("infos","Proc�ssus de cr�ation terminer avec succ�s!"); 
+             session.setAttribute("infos","Procéssus de création terminer avec succès!");
          }
          return "redirect:/admin/formation/apprenant";
      }
@@ -672,11 +684,11 @@ public class PersonnelController extends InitiateController {
          	inscription.setDiplome(diplome);
          	inscriptionService.save(inscription);
          	diplomeService.save(diplome);
-     		session.setAttribute("infos","suppr�ssion echouer car plusieurs opp�rations ont d�j� �t� �ffectuers!!");
+     		session.setAttribute("infos","suppréssion echouer car plusieurs opérations ont déj& été éffectuer!!");
      		return "redirect:/admin/formation/apprenant";
      	}
      	diplomeService.delete(diplome);
-     	session.setAttribute("infos","suppr�ssion terminer avec succ�s!!");
+     	session.setAttribute("infos","suppréssion terminer avec succès!!");
         return "redirect:/admin/formation/apprenant";
      }
      //modification de l'inscription
@@ -765,7 +777,7 @@ public class PersonnelController extends InitiateController {
     	}
     	partenaire.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
     	Files.write(Paths.get(System.getProperty("user.home")+"/alo/partenaires/"+partenaire.getPhoto()), photo.getBytes());
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	partenaireService.save(partenaire);
      	return"redirect:/admin/partenaires/view";
 
@@ -791,9 +803,9 @@ public class PersonnelController extends InitiateController {
 		 Partenaire partenaire=partenaireService.findOne(id);
 		 try {
 			 partenaireService.delete(partenaire);
-			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectu�e ce partenaire existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Opération non éffectué ce partenaire existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/view";
      }
@@ -813,7 +825,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/fournitures/index";
     	}
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	fournitureService.save(fourniture);
      	return"redirect:/admin/partenaires/fournitures";
 
@@ -828,9 +840,9 @@ public class PersonnelController extends InitiateController {
 		 Fournitures fourniture=fournitureService.findOne(id);
 		 try {
 			 fournitureService.delete(fourniture);
-			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectuer cette fourniture existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/fournitures";
      }
@@ -857,7 +869,7 @@ public class PersonnelController extends InitiateController {
     		 model.addAttribute("info","Echec de l'operation!!");
            	 return "administration/partenaires/offres/index";
     	}
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	offreService.save(offre);
      	List<Offre> offres= new ArrayList<>();
      	offres.add(offre);
@@ -871,7 +883,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+     		session.setAttribute("infos","Opération terminer avec succès!!");
      	}
      	return"redirect:/admin/partenaires/offres";
 
@@ -899,18 +911,18 @@ public class PersonnelController extends InitiateController {
 				 p.setOffres(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+					 session.setAttribute("infos","Opération terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Op�ration non �ffectuer cette pr�vision existe et est lier a plusieurs op�rations!!");
+					 session.setAttribute("infos","Opération non éffectuer cette prévision existe et est lier a plusieurs opérations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 offreService.delete(offre);
-			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectuer cette offre existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Opération non éffectuer cette offre existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/offres";
      }
@@ -931,7 +943,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/previsions/index";
     	}
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	previsionService.save(prevision);
      	List<Prevision> previsions= new ArrayList<>();
      	previsions.add(prevision);
@@ -945,7 +957,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+     		session.setAttribute("infos","Opération terminer avec succès!!");
      	}
      	return"redirect:/admin/partenaires/previsions";
 
@@ -972,18 +984,18 @@ public class PersonnelController extends InitiateController {
 				 p.setPrevisions(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+					 session.setAttribute("infos","Opération terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Op�ration non �ffectuer cette pr�vision existe et est lier a plusieurs op�rations!!");
+					 session.setAttribute("infos","Opération non éffectuer cette pr�vision existe et est lier a plusieurs Opérations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 previsionService.delete(prevision);
-			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectuer cette pr�visions existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Opération non éffectuer cette prévisions existe et est lier a plusieurs Opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/previsions";
      }
@@ -1004,7 +1016,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
      	rendezVousService.save(rendezVous);
 		for(Long pId : partenaireId) {
 			List<RendezVous> rendez= new ArrayList<>();
@@ -1019,7 +1031,7 @@ public class PersonnelController extends InitiateController {
     	try {
     		partenaireService.save(partenaire);
 		}catch(Exception $e) {
-     		session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+     		session.setAttribute("infos","Opération terminer avec succès!!");
      	}
     	}
      	return"redirect:/admin/partenaires/rendez-vous";
@@ -1037,7 +1049,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-		session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+		session.setAttribute("infos","Opération terminer avec succès!!");
      	rendezVousService.save(rendezVous);
      	return"redirect:/admin/partenaires/rendez-vous";
 
@@ -1058,18 +1070,19 @@ public class PersonnelController extends InitiateController {
 				 p.setRendezVous(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+					 session.setAttribute("infos","Opération terminer avec succès!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Op�ration non �ffectuer ce rendez-vous existe et est lier a plusieurs op�rations!!");
+					 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opérations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 rendezVousService.delete(rendezVous);
-			 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+
+			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Op�ration non �ffectuer ce rendez-vous existe et est lier a plusieurs op�rations!!");
+			 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opérations!!");
 		 }
 		 return"redirect:/admin/partenaires/rendez-vous";
      }
@@ -1136,7 +1149,7 @@ public class PersonnelController extends InitiateController {
                      qte-=sorti.getQuantite();
              }
              if(qte<s.getQuantite()) {
-              	session.setAttribute("infos","Quantit� inf�rieur au stock!! quantit� entr�: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	session.setAttribute("infos","Quantité inf�rieur au stock!! Quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
               	return"redirect:/admin/partenaires/sorties";
               }
              try {
@@ -1144,7 +1157,7 @@ public class PersonnelController extends InitiateController {
                  s.setFacture(facture);
                  sortieService.save(s);
              }catch(Exception $e) {
-                 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+                 session.setAttribute("infos","Opération terminer avec succès!!");
              }
              sts.add(s);
              compteur++;
@@ -1165,7 +1178,7 @@ public class PersonnelController extends InitiateController {
 		try {
 			factureService.save(facture);
         }catch(Exception $e) {
-        	session.setAttribute("infos","Echec de la cr�ation de la facture "+$e.getLocalizedMessage());
+        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
         }
 		session.setAttribute("impression",sts);
         session.setAttribute("compteur",compter);
@@ -1179,9 +1192,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","Op�ration non �ffectuer cette fourniture existe et est lier a plusieurs op�rations!!");
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs Opérations!!");
         }
         return"redirect:/admin/partenaires/sorties";
     }
@@ -1264,7 +1277,7 @@ public class PersonnelController extends InitiateController {
                      qte-=sorti.getQuantite();
              }
              if(qte<s.getQuantite()) {
-              	session.setAttribute("infos","Quantit� inf�rieur au stock!! quantit� entr�: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	session.setAttribute("infos","Quantité inf�rieur au stock!! Quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
               	return"redirect:/admin/partenaires/sorties";
               }
              try {
@@ -1272,7 +1285,7 @@ public class PersonnelController extends InitiateController {
                  s.setFacture(facture);
                  sortieService.save(s);
              }catch(Exception $e) {
-                 session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+                 session.setAttribute("infos","Opération terminer avec succès!!");
              }
              sts.add(s);
              compteur++;
@@ -1293,7 +1306,7 @@ public class PersonnelController extends InitiateController {
 		try {
 			factureService.save(facture);
         }catch(Exception $e) {
-        	session.setAttribute("infos","Echec de la cr�ation de la facture "+$e.getLocalizedMessage());
+        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
         }
 		session.setAttribute("impression",sts);
         session.setAttribute("compteur",compter);
@@ -1307,9 +1320,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+            session.setAttribute("infos","Opération terminer avec succès!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","Op�ration non �ffectuer cette fourniture existe et est lier a plusieurs op�rations!!");
+            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs Opérations!!");
         }
         return"redirect:/admin/partenaires/Emprunts";
     }
@@ -1366,7 +1379,7 @@ public class PersonnelController extends InitiateController {
                 total+=detail.getValeur();
         }
     	if(total+details.getValeur()>(details.getOffre().getQuantite()*details.getOffre().getPp())) {
-    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entr� sup�rieur a la transaction reste a vers�: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
+    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entré supérieur a la transaction reste a verser: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
     		model.addAttribute("detail",details);
             model.addAttribute("offres",offreService.findAll());
     		return  "administration/partenaires/payement/index";
