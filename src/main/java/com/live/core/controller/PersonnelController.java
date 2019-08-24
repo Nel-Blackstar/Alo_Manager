@@ -128,10 +128,10 @@ public class PersonnelController extends InitiateController {
         return "redirect:/admin/personnels";
     }
     @ResponseBody
-	 @GetMapping(value = "/partenaire/images", produces = MediaType.IMAGE_PNG_VALUE)
-	 public byte[] getPartenairePhoto(@RequestParam("lid") Long id) throws IOException {
-	      Live p=liveService.findOne(id);
-	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/live/" + p.getPhoto()));
+	 @GetMapping(value = "/personnels/images", produces = MediaType.IMAGE_PNG_VALUE)
+	 public byte[] getPersonnelPhoto(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/personnels/" + p.getPhoto()));
 	 }
 
     /**

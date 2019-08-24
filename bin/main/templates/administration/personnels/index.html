@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <form class="form-horizontal" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post"  data-th-object="${personnel}">
+                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post"  data-th-object="${personnel}">
                         <fieldset>
                             <div class="box span6">
                                 <div class="control-group">
@@ -80,7 +80,7 @@
                                         <span class="text-danger" data-th-errors="${personnel.email}"></span>
                                     </div>
                                 </div>
-                                <div class="control-group">
+                                 <div class="control-group">
                                     <label class="control-label" for="fonction">Fonction<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" required class="span12 typeahead" id="fonction" data-th-field="*{fonction}" >
@@ -166,6 +166,7 @@
                                         <span class="text-danger" data-th-errors="${personnel.photo}"></span>
                                     </div>
                                 </div>
+                                <br><br><br>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -212,9 +213,6 @@
                             <td data-th-text="${personnel.fonction}"></td>
                             <td data-th-text="${personnel.telephone_1}"></td>
                             <td>
-                              	<a data-th-href="@{/admin/consulter-personnel/{id}(id = ${personnel.getId()})}"
-                                   title="Consulter le batiment" class="btn btn-small btn-primary">
-                                    <i class="halflings-icon white folder-open"></i></a>
                                 <a data-th-href="@{/admin/personnels/modifier-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-success" title="Modifier la banque"><i class="halflings-icon white edit"></i></a>
                                 <a data-th-href="@{/admin/personnels/supprimer-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-danger" title="Supprimer la banque"><i class="halflings-icon white trash"></i></a>  
                             </td>
