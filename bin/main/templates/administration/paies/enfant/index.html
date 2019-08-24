@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Enfants</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/paies/show}">Paies</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Enfants</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une Profession</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                <div class="alert alert-info" data-th-if="${info}">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+				  </div>
+             		<form class="form-horizontal" data-th-action="@{/admin/paies/profession/save}" method="post"  data-th-object="${profession}">
+                            <fieldset style="text-align:center">
+                                <div class="control-group">
+                                    <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="${profession.nom}">
+                                        <input type="hidden" data-th-field="${profession.id}" data-th-value="${profession.id}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                <label class="control-label" for="libeller">Libeller<span class="text-danger">*</span> </label>
+                                <div class="controls">
+                                    <input type="text" class="span6 typeahead" id="libeller" data-th-field="${profession.libeller}">
+                                </div>
+                            </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="libeller">CNPS<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select data-rel="chosen"class="typeahead span6" data-th-field="${profession.cnps}">
+	                                                <span data-th-each="cnps : ${cnpss}">
+					                                    <option data-th-value="${cnps.id}" data-th-text="${cnps.nom}"></option>
+					                                </span>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Professions</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content"> 
+                
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Libeller</th>
+                            <th>CNPS</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="profession, uStat : ${professions}">
+                            <td data-th-text="${uStat.count}"></td>
+                            <td data-th-text="${profession.nom}"></td>
+                            <td data-th-text="${profession.libeller}"></td>
+                            <td data-th-text="${profession.cnps.nom.toString()}"></td>
+                            <td>
+                                <a href="#" data-th-href="@{'/admin/paies/profession/update/'+${profession.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/profession/delete/'+${profession.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette profession ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+    <!-- end: Content -->
+        </div>
+</div>
+</body>
+</html>
