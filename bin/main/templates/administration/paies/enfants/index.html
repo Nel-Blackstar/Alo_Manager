@@ -36,27 +36,48 @@
 					<button type="button" class="close" data-dismiss="alert">×</button>
 					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
 				  </div>
-             		<form class="form-horizontal" data-th-action="@{/admin/paies/profession/save}" method="post"  data-th-object="${profession}">
+             		<form class="form-horizontal" data-th-action="@{/admin/paies/enfants/save}" method="post"  data-th-object="${enfant}">
                             <fieldset style="text-align:center">
                                 <div class="control-group">
                                     <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="${enfant.nom}">
-                                        <input type="hidden" data-th-field="${enfant.id}" data-th-value="${enfant.id}">
+                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="*{nom}">
+                                        <input type="hidden" data-th-field="*{id}" data-th-value="${enfant.id}">
+                                        <span class="text-danger" data-th-errors="${enfant.nom}"></span>
                                     </div>
                                 </div>
 
                                 <div class="control-group">
-                                <label class="control-label" for="prenom">Prénom<span class="text-danger">*</span> </label>
-                                <div class="controls">
-                                    <input type="text" class="span6 typeahead" id="prenom" data-th-field="${enfant.prenom}">
-                                </div>
-                            </div>
+	                                <label class="control-label" for="date">Date de naissance<span class="text-danger">*</span> </label>
+	                                <div class="controls">
+	                                    <input type="text" class="span6 typeahead datepicker" id="date" data-th-field="*{date_naissance}">
+	                                    <span class="text-danger" data-th-errors="${enfant.date_naissance}"></span>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="control-group">
+	                                <label class="control-label" for="prenom">Prénom<span class="text-danger">*</span> </label>
+	                                <div class="controls">
+	                                    <input type="text" class="span6 typeahead" id="prenom" data-th-field="*{prenom}">
+	                                    <span class="text-danger" data-th-errors="${enfant.prenom}"></span>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="control-group">
+	                                    <label class="control-label" for="sexe">Sexe<span class="text-danger">*</span> </label>
+	                                    <div class="controls">
+	                                        <select id="sexe" required data-rel="chosen" data-th-field="*{sexe}" class="span6 typeahead">
+	                                            <option data-th-value="M" selected>Homme</option>
+	                                            <option data-th-value="F">Femme</option>
+	                                            <option data-th-value="A">Autre</option>
+	                                        </select>
+	                                    </div>
+	                                </div>
 
                                 <div class="control-group">
                                     <label class="control-label" for="libeller">Personnels<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select data-rel="chosen"class="typeahead span6" name="personnels" multiple>
+                                        <select data-rel="chosen"class="typeahead span6" required name="personnels" multiple>
 	                                                <span data-th-each="personnel : ${personnels}">
 					                                    <option data-th-value="${personnel.id}" data-th-text="${personnel.nom}+' '+${personnel.prenom}"></option>
 					                                </span>
@@ -93,7 +114,7 @@
                             <th>Nom</th>
                             <th>Prénom</th>
                             <th>Sexe</th>
-                            <th>Age</th>
+                            <th>Date de naissance</th>
                             <th>Personnels</th>
                             <th>Actions</th>
                         </tr>
@@ -103,12 +124,19 @@
                             <td data-th-text="${uStat.count}"></td>
                             <td data-th-text="${enfant.nom}"></td>
                             <td data-th-text="${enfant.prenom}"></td>
-                            <td data-th-text="${enfant.sexe}"></td>
-                            <td data-th-text="${enfant.date_naissance}"></td>
-                            <td data-th-text=""></td>
                             <td>
-                                <a href="#" data-th-href="@{'/admin/paies/profession/update/'+${enfant.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/paies/profession/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette profession ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            	<span data-th-if="${enfant.sexe} == 'M'">Monsieur</span>
+                                <span data-th-if="${enfant.sexe} == 'F'">Madame</span>
+                            </td>
+                            <td data-th-text="${enfant.date_naissance}"></td>
+                            <td>
+                            	<b  data-th-each="p : ${enfant.getPersonnel()}">
+                                    -<span data-th-text=" ${p.nom}+' '+${p.prenom}"></span>
+                                </b>
+                            </td>
+                            <td>
+                                <a href="#" data-th-href="@{'/admin/paies/enfants/update/'+${enfant.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/enfants/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette enfant?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

@@ -1,17 +1,25 @@
 package com.live.paie.controller;
 
+import com.live.core.entities.Personnel;
 import com.live.core.service.PersonnelService;
 import com.live.paie.entities.*;
 import com.live.paie.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/admin/paies")
@@ -58,7 +66,56 @@ public class PaieController {
         model.addAttribute("enfant",new Enfants());
         model.addAttribute("enfants",enfantsService.findAll());
         model.addAttribute("personnels",personnelService.findAll());
-        return "/administration/paies/enfants/index";
+        return "administration/paies/enfants/index";
+    }
+    @PostMapping("/enfants/save")
+    public String saveEnfants(HttpSession session, @Valid Enfants enfant, BindingResult bindingResult, Model model,@RequestParam("personnels") List<Personnel> ps){
+    	if(bindingResult.hasErrors()) {
+    		model.addAttribute("enfant",enfant);
+            model.addAttribute("enfants",enfantsService.findAll());
+            model.addAttribute("personnels",personnelService.findAll());
+       	 	return "administration/paies/enfants/index";
+	 	}
+    	enfantsService.save(enfant);
+    	enfant.setPersonnel(ps);
+    	if (enfant.getId() != null){
+        	enfant.setId((Long) enfant.getId());
+        }
+    	List<Enfants> e=new ArrayList<>();
+    	e.add(enfant);
+    	for(Personnel p : ps) {
+    		for(Enfants ef : p.getEnfants()) {
+    			e.add(ef);
+    		}
+    		p.setEnfants(e);
+    		personnelService.save(p);
+    	}
+    	enfantsService.save(enfant);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/enfants";
+    }
+    @RequestMapping("/enfants/update/{id}")
+    public String updateEnfant(HttpSession session,Model model,@PathVariable long id) {
+
+        Enfants enfant = enfantsService.findOne(id);
+        model.addAttribute("enfant", enfant);
+        model.addAttribute("enfants",enfantsService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
+        return "administration/paies/enfants/index";
+
+    }
+    @RequestMapping("/enfants/delete/{id}")
+    public String deleteEnfants(HttpSession session,@PathVariable long id) {
+
+        try {
+            Enfants enfant = enfantsService.findOne(id);
+            this.enfantsService.delete(enfant);
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression Impossible , Les Personnels sont aussi parents de cette enfants, Supprimer le Personnel et Réessayer");
+        }
+        session.setAttribute("infos","Suppression Effectuer !");
+        return "redirect:/admin/paies/enfants";
+
     }
     /*
      *******************************
