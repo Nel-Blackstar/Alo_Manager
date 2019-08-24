@@ -123,7 +123,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos"," Opéion éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
+        session.setAttribute("infos"," Opération éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }

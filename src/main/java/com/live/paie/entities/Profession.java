@@ -11,6 +11,8 @@ import java.util.List;
 @Entity
 public class Profession extends LiveEntity {
     String nom;
+
+    private String libeller;
     @OneToMany(targetEntity = Contrat.class)
     private List<Contrat> contrats;
     @OneToOne(targetEntity = CNPS.class)
@@ -39,6 +41,14 @@ public class Profession extends LiveEntity {
         this.contrats = contrats;
     }
 
+    public String getLibeller() {
+        return libeller;
+    }
+
+    public void setLibeller(String libeller) {
+        this.libeller = libeller;
+    }
+
 	public CNPS getCnps() {
 		return cnps;
 	}
@@ -46,5 +56,4 @@ public class Profession extends LiveEntity {
 	public void setCnps(CNPS cnps) {
 		this.cnps = cnps;
 	}
-    
 }
