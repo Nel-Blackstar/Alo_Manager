@@ -325,6 +325,7 @@ public class PaieController {
         }
         model.addAttribute("credit",new Credits());
         model.addAttribute("credits",creditsService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
         return "/administration/paies/credit/index";
     }
 
@@ -361,6 +362,62 @@ public class PaieController {
         return "redirect:/admin/paies/credits";
 
     }
+
+    /*
+     *******************************
+     * Contrats
+     * **********************
+     */
+    @GetMapping("/contrats")
+    public String contrats(HttpSession session, Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("contrat",new Contrat());
+        model.addAttribute("contrats",contratService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
+        model.addAttribute("typeContrats",typeContratService.findAll());
+        model.addAttribute("professions",professionService.findAll());
+        return "/administration/paies/contrat/index";
+    }
+
+    @PostMapping("/contrat/save")
+    public String saveContrat(HttpSession session, Contrat contrat){
+        if (contrat.getId() != null){
+            contrat.setId((Long) contrat.getId());
+        }
+        this.contratService.save(contrat);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/contrats";
+    }
+
+    @RequestMapping("/contrat/update/{id}")
+    public String updateContrat(HttpSession session,Model model,@PathVariable long id) {
+
+        Contrat contrat = contratService.findOne(id);
+        model.addAttribute("contrat", contrat);
+        model.addAttribute("contrats",contratService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
+        model.addAttribute("typeContrats",typeContratService.findAll());
+        model.addAttribute("professions",professionService.findAll());
+        return "/administration/paies/contrat/index";
+
+    }
+    @RequestMapping("/contrat/delete/{id}")
+    public String deleteContrat(HttpSession session,@PathVariable long id) {
+
+        Contrat contrat = contratService.findOne(id);
+        try {
+            this.contratService.delete(contrat);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/contrats";
+
+    }
+
 
 
 }

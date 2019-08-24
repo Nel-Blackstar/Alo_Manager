@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <title>Cnsp</title>
+    <title>Credits</title>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -24,7 +24,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une Credit</h2>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un Credit</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -43,7 +43,7 @@
                                     <div class="controls">
                                         <select data-rel="chosen"class="typeahead span6"  id="personnel" data-th-field="${credit.personnel}">
 	                                                <span data-th-each="personnel : ${personnels}">
-					                                    <option data-th-value="${personnel.id}" data-th-text="${personnel.nom}"></option>
+					                                    <option data-th-value="${personnel.id}" data-th-text="${personnel.matricule} +' : '+${personnel.nom} +' '+${personnel.prenom} "></option>
 					                                </span>
                                         </select>
                                         <input type="hidden" data-th-field="${credit.id}" data-th-value="${credit.id}">
@@ -100,20 +100,20 @@
                             <th>#</th>
                             <th>Personnel</th>
                             <th>Valeur</th>
-                            <th>Retenue/th>
+                            <th>Retenue</th>
                             <th>Taux d'interêt</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr data-th-each="credit, uStat : ${credits}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${credit.personnel.tostring(}"></td>
-                            <td data-th-text="${credit.valeur} + ' %'"></td>
+                            <td data-th-text="${credit.personnel.nom} + ' ' + ${credit.personnel.prenom}"></td>
+                            <td data-th-text="${credit.valeur}"></td>
                             <td data-th-text="${credit.retenue}"></td>
                             <td data-th-text="${credit.tauxInteret} + ' %'"></td>
                             <td>
-                                <a href="#" data-th-href="@{'/admin/paies/cnps/update/'+${cnps.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/paies/cnps/delete/'+${cnps.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette CNPS ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/credit/update/'+${credit.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/credit/delete/'+${credit.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce Credit ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
