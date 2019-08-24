@@ -24,7 +24,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'une Profession</h2>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un Enfant</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -41,24 +41,24 @@
                                 <div class="control-group">
                                     <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="${profession.nom}">
-                                        <input type="hidden" data-th-field="${profession.id}" data-th-value="${profession.id}">
+                                        <input type="text" class="span6 typeahead" id="nom" data-th-field="${enfant.nom}">
+                                        <input type="hidden" data-th-field="${enfant.id}" data-th-value="${enfant.id}">
                                     </div>
                                 </div>
 
                                 <div class="control-group">
-                                <label class="control-label" for="libeller">Libeller<span class="text-danger">*</span> </label>
+                                <label class="control-label" for="prenom">Prénom<span class="text-danger">*</span> </label>
                                 <div class="controls">
-                                    <input type="text" class="span6 typeahead" id="libeller" data-th-field="${profession.libeller}">
+                                    <input type="text" class="span6 typeahead" id="prenom" data-th-field="${enfant.prenom}">
                                 </div>
                             </div>
 
                                 <div class="control-group">
-                                    <label class="control-label" for="libeller">CNPS<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="libeller">Personnels<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <select data-rel="chosen"class="typeahead span6" data-th-field="${profession.cnps}">
-	                                                <span data-th-each="cnps : ${cnpss}">
-					                                    <option data-th-value="${cnps.id}" data-th-text="${cnps.nom}"></option>
+                                        <select data-rel="chosen"class="typeahead span6" name="personnels" multiple>
+	                                                <span data-th-each="personnel : ${personnels}">
+					                                    <option data-th-value="${personnel.id}" data-th-text="${personnel.nom}+' '+${personnel.prenom}"></option>
 					                                </span>
                                         </select>
                                     </div>
@@ -77,7 +77,7 @@
         <div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Professions</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Enfants</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -91,20 +91,24 @@
                         <tr>
                             <th>#</th>
                             <th>Nom</th>
-                            <th>Libeller</th>
-                            <th>CNPS</th>
+                            <th>Prénom</th>
+                            <th>Sexe</th>
+                            <th>Age</th>
+                            <th>Personnels</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="profession, uStat : ${professions}">
+                        <tr data-th-each="enfant, uStat : ${enfants}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${profession.nom}"></td>
-                            <td data-th-text="${profession.libeller}"></td>
-                            <td data-th-text="${profession.cnps.nom.toString()}"></td>
+                            <td data-th-text="${enfant.nom}"></td>
+                            <td data-th-text="${enfant.prenom}"></td>
+                            <td data-th-text="${enfant.sexe}"></td>
+                            <td data-th-text="${enfant.date_naissance}"></td>
+                            <td data-th-text=""></td>
                             <td>
-                                <a href="#" data-th-href="@{'/admin/paies/profession/update/'+${profession.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/paies/profession/delete/'+${profession.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette profession ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/profession/update/'+${enfant.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/profession/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette profession ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
