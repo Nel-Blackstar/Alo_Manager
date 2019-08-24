@@ -120,7 +120,7 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vient d'etre cree !!");
+        session.setAttribute("infos"," Opération éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
@@ -158,8 +158,14 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        List<Personnel> ps=personnelService.findAll();
+        int i= ps.size()+1;
+        Personnel Dernier=personnelService.findOne((long) (i));
         model.addAttribute("state", "get");
-        model.addAttribute("personnel", new Personnel());
+        NumberFormat nf = new DecimalFormat("00000");
+        Personnel p=new Personnel();
+        p.setMatricule("ALO-"+nf.format(Dernier.getId()));
+        model.addAttribute("personnel", p);
         model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
@@ -297,7 +303,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if(!roles.isEmpty()){
-                // Le rôle selectionné existe dans le système
+                // Le rôle selectionn� existe dans le système
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -377,7 +383,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if (!roles.isEmpty()) {
-                // Le rôle selectionné existe dans le système
+                // Le rôle selectionn� existe dans le système
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -435,7 +441,11 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /**
+<<<<<<< HEAD
+     * M�thode d'ajout d'un Apprenant post
+=======
      * Méthode d'ajout d'un Apprenant post
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -524,7 +534,11 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/index";
     }
     /** 
+<<<<<<< HEAD
+     * M�thode d'ajout d'un Apprenant get
+=======
      * Méthode d'ajout d'un Apprenant get
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -541,7 +555,11 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/create";
      }
      /**
+<<<<<<< HEAD
+      * M�thode d'ajout d'un Apprenant post
+=======
       * Méthode d'ajout d'un Apprenant post
+>>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
       * @param model
       * @return
       */
@@ -730,7 +748,7 @@ public class PersonnelController extends InitiateController {
     	diplome.setStatut(true);
     	diplome.setInscrit(inscriptionService.findOne(propietaire));
     	diplomeService.save(diplome);
-    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
     	return "redirect:/admin/formation/diplomes";
 	 }
 	 @RequestMapping("/partenaire")
@@ -1061,6 +1079,7 @@ public class PersonnelController extends InitiateController {
 		 }
 		 try {
 			 rendezVousService.delete(rendezVous);
+
 			 session.setAttribute("infos","Opération terminer avec succès!!");
 		 }catch(Exception $e) {
 			 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opérations!!");
@@ -1360,7 +1379,7 @@ public class PersonnelController extends InitiateController {
                 total+=detail.getValeur();
         }
     	if(total+details.getValeur()>(details.getOffre().getQuantite()*details.getOffre().getPp())) {
-    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entré sup�rieur a la transaction reste a vers�: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
+    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entré supérieur a la transaction reste a verser: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
     		model.addAttribute("detail",details);
             model.addAttribute("offres",offreService.findAll());
     		return  "administration/partenaires/payement/index";
