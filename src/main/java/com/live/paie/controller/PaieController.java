@@ -1,5 +1,6 @@
 package com.live.paie.controller;
 
+import com.live.core.service.PersonnelService;
 import com.live.paie.entities.*;
 import com.live.paie.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ public class PaieController {
     public ContratService contratService;
     @Autowired
     public PrimesFixesService primesFixesService;
+    @Autowired
+    public EnfantsService enfantsService;
+    @Autowired
+    public PersonnelService personnelService;
     /*
      *******************************
      * Debut du module de paies
@@ -36,6 +41,22 @@ public class PaieController {
     public String paies(HttpSession session, Model model){
 
         return "/administration/paies/index";
+    }
+    /*
+     *******************************
+     * Gestion des enfants
+     * **********************
+     */
+    @GetMapping("/enfants")
+    public String enfants(HttpSession session, Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("enfant",new Enfants());
+        model.addAttribute("enfants",enfantsService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
+        return "/administration/paies/enfants/index";
     }
     /*
      *******************************
