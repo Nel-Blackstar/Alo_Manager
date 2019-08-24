@@ -109,11 +109,11 @@ public class PaieController {
 
         try {
             Enfants enfant = enfantsService.findOne(id);
+            session.setAttribute("infos","Suppression Effectuer !");
             this.enfantsService.delete(enfant);
         }catch (Exception e){
             session.setAttribute("infos","Suppression Impossible , Les Personnels sont aussi parents de cette enfants, Supprimer le Personnel et Réessayer");
         }
-        session.setAttribute("infos","Suppression Effectuer !");
         return "redirect:/admin/paies/enfants";
 
     }
