@@ -111,12 +111,15 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @param personnel personnel a ajouter
      * @return
+     * @throws IOException 
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) {
+    public String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/personnels/index";
 	 	}
+        personnel.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+    	Files.write(Paths.get(System.getProperty("user.home")+"/alo/personnels/"+personnel.getPhoto()), photo.getBytes());
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         model.addAttribute("state", "post");
@@ -124,6 +127,12 @@ public class PersonnelController extends InitiateController {
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
+    @ResponseBody
+	 @GetMapping(value = "/partenaire/images", produces = MediaType.IMAGE_PNG_VALUE)
+	 public byte[] getPartenairePhoto(@RequestParam("lid") Long id) throws IOException {
+	      Live p=liveService.findOne(id);
+	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/live/" + p.getPhoto()));
+	 }
 
     /**
      *     <b> Modifiction des information d'un personnel du system  </b>
@@ -441,11 +450,7 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /**
-<<<<<<< HEAD
-     * M�thode d'ajout d'un Apprenant post
-=======
      * Méthode d'ajout d'un Apprenant post
->>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -534,11 +539,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/index";
     }
     /** 
-<<<<<<< HEAD
-     * M�thode d'ajout d'un Apprenant get
-=======
      * Méthode d'ajout d'un Apprenant get
->>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
      * @param model
      * @return
      */
@@ -555,11 +556,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/create";
      }
      /**
-<<<<<<< HEAD
-      * M�thode d'ajout d'un Apprenant post
-=======
       * Méthode d'ajout d'un Apprenant post
->>>>>>> a7c472068b3e9af87de3018eeba64dbaa7b72809
       * @param model
       * @return
       */
