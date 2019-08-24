@@ -24,6 +24,8 @@ public class PaieController {
     @Autowired
     public TypeContratService typeContratService;
     @Autowired
+    public CreditsService creditsService;
+    @Autowired
     public ContratService contratService;
     @Autowired
     public PrimesFixesService primesFixesService;
@@ -284,6 +286,58 @@ public class PaieController {
             session.setAttribute("infos","Suppression impossible, Cette Prime est Attribuer a un ou plusieur personnel");
         }
         return "redirect:/admin/paies/primeFixe";
+
+    }
+
+
+
+    /*
+     *******************************
+     * Credits
+     * **********************
+     */
+    @GetMapping("/credits")
+    public String credits(HttpSession session, Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("credit",new Credits());
+        model.addAttribute("credits",creditsService.findAll());
+        return "/administration/paies/credit/index";
+    }
+
+    @PostMapping("/credit/save")
+    public String saveCredit(HttpSession session, Credits credit){
+        if (credit.getId() != null){
+            credit.setId((Long) credit.getId());
+        }
+        this.creditsService.save(credit);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/credits";
+    }
+
+    @RequestMapping("/credit/update/{id}")
+    public String updateCredit(HttpSession session,Model model,@PathVariable long id) {
+
+        Credits credit = creditsService.findOne(id);
+        model.addAttribute("credit", credit);
+        model.addAttribute("credits",creditsService.findAll());
+        model.addAttribute("personnels",personnelService.findAll());
+        return "/administration/paies/credit/index";
+
+    }
+    @RequestMapping("/credit/delete/{id}")
+    public String deleteCredit(HttpSession session,@PathVariable long id) {
+
+        Credits credit = creditsService.findOne(id);
+        try {
+            this.creditsService.delete(credit);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/credits";
 
     }
 

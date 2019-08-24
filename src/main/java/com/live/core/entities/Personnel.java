@@ -43,7 +43,7 @@ public class Personnel extends LiveEntity {
     private List<Prets> prets;
 
     @ManyToOne(optional = true,targetEntity = Banque.class)
-    private List<Banque> banque;
+    private Banque banque;
 
     @OneToMany(targetEntity = Credits.class)
     private List<Credits> credits;
@@ -252,11 +252,11 @@ public class Personnel extends LiveEntity {
         this.prets = prets;
     }
 
-    public List<Banque> getBanque() {
+    public Banque getBanque() {
 		return banque;
 	}
 
-	public void setBanque(List<Banque> banque) {
+	public void setBanque(Banque banque) {
 		this.banque = banque;
 	}
 
