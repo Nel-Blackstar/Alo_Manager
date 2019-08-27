@@ -2,29 +2,15 @@ package com.live;
 
 import java.io.File;
 
-import com.live.core.entities.Users;
-import com.live.core.repository.UsersRepository;
-import com.live.core.service.UsersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class LiveApplication {
 
-	public static void main(String[] args) { //SpringApplication.run(LiveApplication.class, args);
+	public static void main(String[] args) { SpringApplication.run(LiveApplication.class, args);
 
-        ApplicationContext ctx=SpringApplication.run(LiveApplication.class, args);
-        UsersRepository usersRepository=ctx.getBean(UsersRepository.class);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Users gest=new Users("admin","admin");
-        gest.setActive(true);
-        gest.setUsername("admin");
-        gest.setPassword(encoder.encode(gest.getPassword()));
-        Users savedUser = usersRepository.save(gest);
 	}
 	@Bean
     public boolean createImportantsDir(){
