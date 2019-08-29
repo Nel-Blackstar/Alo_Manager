@@ -5,6 +5,7 @@ import com.live.core.service.PersonnelService;
 import com.live.paie.entities.*;
 import com.live.paie.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,9 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -474,7 +482,41 @@ public class PaieController {
         return "redirect:/admin/paies/contrats";
 
     }
-
+    
+    /*
+     *******************************
+     * Contrats
+     * **********************
+     */
+    @GetMapping("/conges")
+    public String conges(HttpSession session, Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("personnels",personnelService.findAll());
+        model.addAttribute("conge",new Conge());
+        model.addAttribute("typeConge",typeCongeService.findAll());
+        return "/administration/paies/conges/index";
+    }
+    
+    @ResponseBody
+	 @GetMapping(value = "/conges/personnel")
+	 public String getPersonnelConge(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      Date personnelCreated= p.getCreatedAt();
+	      LocalDate date = LocalDate.now();
+	      LocalDate arrive=p.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	      LocalDate naissance= p.getDate_naissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	      int year=arrive.getYear();
+	      int mont=arrive.getMonthValue();
+	      int thisYear=date.getYear();
+	      int thisMont=date.getMonthValue();
+	      int personnelNaisance=naissance.getYear();
+	      int personnelMont=naissance.getMonthValue();
+	      int ageActuel=thisYear-personnelNaisance;
+	      return " Age: "+ageActuel+" date naissance: "+personnelNaisance;
+	 }
 
 
 }
