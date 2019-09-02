@@ -85,7 +85,7 @@ public class PaieController {
        	 	return "administration/paies/enfants/index";
 	 	}
     	enfantsService.save(enfant);
-    	enfant.setPersonnel(ps);
+    	//enfant.setPersonnel(ps);
     	if (enfant.getId() != null){
         	enfant.setId((Long) enfant.getId());
         }

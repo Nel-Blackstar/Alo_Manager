@@ -20,8 +20,8 @@ public class Enfants extends LiveEntity {
     private String  sexe;
     @Temporal(TemporalType.DATE)
     private Date date_naissance;
-    @ManyToMany(targetEntity = Personnel.class)
-    private java.util.List<Personnel> personnel;
+    @OneToOne(targetEntity = Personnel.class)
+    private Personnel personnel;
     
 	public Enfants() {
 	}
@@ -49,10 +49,10 @@ public class Enfants extends LiveEntity {
 	public void setDate_naissance(Date date_naissance) {
 		this.date_naissance = date_naissance;
 	}
-	public java.util.List<Personnel> getPersonnel() {
+	public Personnel getPersonnel() {
 		return personnel;
 	}
-	public void setPersonnel(java.util.List<Personnel> personnel) {
+	public void setPersonnel(Personnel personnel) {
 		this.personnel = personnel;
 	}
     
