@@ -36,8 +36,8 @@ public class Personnel extends LiveEntity {
     @OneToMany(targetEntity = Detail.class)
     List<Detail> details;
 
-    @OneToMany(targetEntity = Contrat.class)
-    private List<Contrat> contrats;
+    @OneToOne(targetEntity = Contrat.class)
+    private Contrat contrats;
 
     @OneToMany(targetEntity = Prets.class)
     private List<Prets> prets;
@@ -57,7 +57,7 @@ public class Personnel extends LiveEntity {
     @ManyToMany(targetEntity = PrimesFixes.class)
     private List<PrimesFixes> primesFixes;
     
-    @ManyToMany(targetEntity = Enfants.class)
+    @OneToMany(targetEntity = Enfants.class)
     private List<Enfants> enfants;
 
     @OneToMany(targetEntity = BulletinPaie.class)
@@ -236,11 +236,11 @@ public class Personnel extends LiveEntity {
         this.numeroCNPS = numeroCNPS;
     }
 
-    public List<Contrat> getContrats() {
+    public Contrat getContrats() {
         return contrats;
     }
 
-    public void setContrats(List<Contrat> contrats) {
+    public void setContrats(Contrat contrats) {
         this.contrats = contrats;
     }
 

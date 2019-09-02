@@ -60,43 +60,43 @@
                                     </div>
                                 </div>
 								<table style="width:100%;" class="table table-striped table-bordered bootstrap-datatable datatable">
-								<thead>
-		                        <tr>
-		                            <th>Choisir</th>
-									<th>Offre</th>
-									<th>Stocks</th>
-									<th>P.U</th>
-		                            <th>Quantité</th>
-		                            <th>Sous total <span class="text-danger"> (FCFA)</span></th>
-		                        </tr>
-		                        </thead>
-		                        <tbody>
-								<span data-th-each="offre : ${offres}" data-th-if="${offre.quantite} > 0">
-                            	<tr>
-                            	<td>
-									<input type="checkbox" name="o[]" data-th-value="${offre.getId()}" onclick="if(document.getElementById(this.value).disabled==false){document.getElementById(this.value).disabled=true;document.getElementById(this.value).value='0';document.getElementById('to'+this.id).value='0';document.getElementById('t'+this.id).innerHTML='0';totalActuel();}else{document.getElementById(this.value).disabled=false;}">
-	                            </td>
-                            	<td>
-	                                <label data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}"></label>
-	                            </td>
-	                            <td>
-	                                <label data-th-text="${offre.quantite}"></label>
-	                            </td>
-	                            <td>
-	                                <label data-th-text="${offre.getPvp()+' FCFA'}"></label>
-	                                <input type="hidden" data-th-value="${offre.getPvp()}" data-th-id="'p'+${offre.getId()}">
-	                            </td>
-                                <td>
-                                   <input type="number"  name="qte[]" min="0" data-th-max="${offre.quantite}" disabled required class="span12 typeahead" data-th-id="${offre.getId()}" onkeyup="document.getElementById('t'+this.id).innerHTML=(document.getElementById('p'+this.id).value*this.value);document.getElementById('t'+this.id).value=(document.getElementById('p'+this.id).value*this.value);document.getElementById('to'+this.id).value=(document.getElementById('p'+this.id).value*this.value); totalActuel();">
-                                </td>
-                                <td>
-	                                <label  data-th-id="'t'+${offre.getId()}"></label>
-	                                <input type="hidden" class="totall" data-th-id="'to'+${offre.getId()}">
-	                            </td>
-                                </tr>
-                                </span>
-                                </tbody>
-		                       </table>
+									<thead>
+										<tr>
+											<th>Choisir</th>
+											<th>Offre</th>
+											<th>Stocks</th>
+											<th>P.U</th>
+											<th>Quantité</th>
+											<th>Sous total <span class="text-danger"> (FCFA)</span></th>
+										</tr>
+									</thead>
+									<tbody>
+									<span data-th-each="offre : ${offres}" data-th-if="${offre.quantite} > 0">
+									<tr>
+									<td>
+										<input type="checkbox" name="o[]" data-th-value="${offre.getId()}" onclick="if(document.getElementById(this.value).disabled==false){document.getElementById(this.value).disabled=true;document.getElementById(this.value).value='0';document.getElementById('to'+this.id).value='0';document.getElementById('t'+this.id).innerHTML='0';totalActuel();}else{document.getElementById(this.value).disabled=false;}">
+									</td>
+									<td>
+										<label data-th-text="${offre.getFournitures().description}+' du '+${offre.getFournitures().createdAt}+' De '+${offre.getPartenaire().nom}+' '+${offre.getPartenaire().prenom}"></label>
+									</td>
+									<td>
+										<label data-th-text="${offre.quantite}"></label>
+									</td>
+									<td>
+										<label data-th-text="${offre.getPvp()+' FCFA'}"></label>
+										<input type="hidden" data-th-value="${offre.getPvp()}" data-th-id="'p'+${offre.getId()}">
+									</td>
+									<td>
+									   <input type="number"  name="qte[]" min="0" data-th-max="${offre.quantite}" disabled required class="span12 typeahead" data-th-id="${offre.getId()}" onkeyup="document.getElementById('t'+this.id).innerHTML=(document.getElementById('p'+this.id).value*this.value);document.getElementById('t'+this.id).value=(document.getElementById('p'+this.id).value*this.value);document.getElementById('to'+this.id).value=(document.getElementById('p'+this.id).value*this.value); totalActuel();">
+									</td>
+									<td>
+										<label  data-th-id="'t'+${offre.getId()}"></label>
+										<input type="hidden" class="totall" data-th-id="'to'+${offre.getId()}">
+									</td>
+									</tr>
+									</span>
+									</tbody>
+		                        </table>
 		                       <div class="control-group">
 									<label class="control-label" for="quantite">Net a payer<span class="text-danger"> (FCFA)</span> </label>
 									<div class="controls">
