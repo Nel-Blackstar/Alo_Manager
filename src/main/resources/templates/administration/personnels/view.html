@@ -49,7 +49,26 @@
                     </ul>
                 </td>
             </tr>
-        </table>
+        </table><br><br><br><br><br>
+                <h2>RECAPITULATIF SUR LE CONTRACT</h2>
+                <table width="100%" style="margin-left:3%;">
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>Date D'Embauche : <b data-th-text="${personnel.contrat.dateEmbauche}"></b></li>
+                                <li>Frequence de Payement : <b data-th-text="${personnel.contrat.frequencePaie}"></b></li>
+                                <li>Base de Payement : <b data-th-text="${personnel.contrat.basePaie}"></b></li>
+                                <li>Mode de Reglement : <b data-th-text="${personnel.contrat.modeReglement}"></b></li>
+                                <li>Salaire de Base : <b data-th-text="${personnel.contrat.salaireBase}+' FCFA'"></b></li>
+                                <li>Poste : <b data-th-text="${personnel.contrat.profession.nom}"></b>
+                                <ul>
+                                    <li data-th-text="${personnel.contrat.profession.libeller}"></li>
+                                </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
         </div>
             <div class="span8">
                 <h2>DONNEES PERSONNEL</h2>
