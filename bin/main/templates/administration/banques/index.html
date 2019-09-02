@@ -101,9 +101,6 @@
                             <td data-th-text="${banque.telephone}"></td>
                             <td data-th-text="${banque.fax}"></td>
                             <td>
-                                <a data-th-href="@{/admin/consulter-banque/{id}(id = ${banque.getId()})}"
-                                   title="Consulter le batiment" class="btn btn-small btn-primary">
-                                    <i class="halflings-icon white folder-open"></i></a>
                                 <a data-th-href="@{/admin/update-banque/{id}(id = ${banque.getId()})}" class="btn btn-small btn-success" title="Modifier la banque"><i class="halflings-icon white edit"></i></a>
                                 <a data-th-href="@{/admin/delete-banque/{id}(id = ${banque.getId()})}" class="btn btn-small btn-danger" title="Supprimer la banque"><i class="halflings-icon white trash"></i></a>
                             </td>

@@ -50,6 +50,8 @@ public class PaieController {
     public EnfantsService enfantsService;
     @Autowired
     public PersonnelService personnelService;
+    @Autowired
+    public CongeService congeService;
     /*
      *******************************
      * Debut du module de paies
@@ -510,6 +512,21 @@ public class PaieController {
         model.addAttribute("conge",new Conge());
         model.addAttribute("typeConge",typeCongeService.findAll());
         return "/administration/paies/conges/index";
+    }
+    
+    @PostMapping("/conges/save")
+    public String saveConges(HttpSession session, Conge conge,@RequestParam("personnel") Personnel personnel){
+        if (conge.getId() != null){
+        	conge.setId((Long) conge.getId());
+        }
+        List<Conge> c=new ArrayList<>();
+        c.add(conge);
+        personnel.setConge(c);
+        personnelService.save(personnel);
+        
+        this.congeService.save(conge);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/conges";
     }
     
     @ResponseBody
