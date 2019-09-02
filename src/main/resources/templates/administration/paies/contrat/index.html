@@ -144,7 +144,6 @@
                         <tr>
                             <th>#</th>
                             <th>Personnel</th>
-                            <th>Type de Contrat</th>
                             <th>Poste</th>
                             <th>Salaire de Base</th>
                             <th>Frequence de paie</th>
@@ -158,7 +157,6 @@
                         <tr data-th-each="contrat, uStat : ${contrats}">
                             <td data-th-text="${uStat.count}"></td>
                             <td data-th-text="${contrat.personnel.nom} + ' ' + ${contrat.personnel.prenom}"></td>
-                            <td data-th-text="${contrat.typeContrat.nomType}"></td>
                             <td data-th-text="${contrat.profession.nom}"></td>
                             <td data-th-text="${contrat.salaireBase}"></td>
                             <td data-th-text="${contrat.frequencePaie}"></td>
