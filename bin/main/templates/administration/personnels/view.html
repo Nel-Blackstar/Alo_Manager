@@ -49,7 +49,26 @@
                     </ul>
                 </td>
             </tr>
-        </table>
+        </table><br><br><br><br><br>
+                <h2>RECAPITULATIF SUR LE CONTRACT</h2>
+                <table width="100%" style="margin-left:3%;">
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>Date D'Embauche : <b data-th-text="${personnel.contrat.dateEmbauche}"></b></li>
+                                <li>Frequence de Payement : <b data-th-text="${personnel.contrat.frequencePaie}"></b></li>
+                                <li>Base de Payement : <b data-th-text="${personnel.contrat.basePaie}"></b></li>
+                                <li>Mode de Reglement : <b data-th-text="${personnel.contrat.modeReglement}"></b></li>
+                                <li>Salaire de Base : <b data-th-text="${personnel.contrat.salaireBase}+' FCFA'"></b></li>
+                                <li>Poste : <b data-th-text="${personnel.contrat.profession.nom}"></b>
+                                <ul>
+                                    <li data-th-text="${personnel.contrat.profession.libeller}"></li>
+                                </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
         </div>
             <div class="span8">
                 <h2>DONNEES PERSONNEL</h2>
@@ -58,7 +77,7 @@
                             <div class="box-header" data-original-title>
                                 <h2>Enfants</h2>
                                 <div class="box-icon">
-                                    <a href="#" class="btn-primary">Ajouter</a>
+                                    <a href="#" class="btn-primary" data-toggle="modal" data-target="#enfantModal">Ajouter</a>
                                 </div>
                             </div>
                             <div class="box-content">
@@ -99,7 +118,7 @@
                     <div class="box-header" data-original-title>
                         <h2>Primes</h2>
                         <div class="box-icon">
-                            <a href="#" class="btn-primary">Ajouter</a>
+                            <a href="#" class="btn-primary" data-toggle="modal" data-target="#primeModal">Ajouter</a>
                         </div>
                     </div>
                     <div class="box-content">
@@ -138,7 +157,7 @@
                         <div class="box-header" data-original-title>
                             <h2>Credits</h2>
                             <div class="box-icon">
-                                <a href="#" class="btn-primary">Ajouter</a>
+                                <a href="#" class="btn-primary" data-toggle="modal" data-target="#creditModal">Ajouter</a>
                             </div>
                         </div>
                         <div class="box-content">
@@ -173,7 +192,7 @@
                         <div class="box-header" data-original-title>
                             <h2>Avances</h2>
                             <div class="box-icon">
-                                <a href="#" class="btn-primary">Ajouter</a>
+                                <a href="#" class="btn-primary"  data-toggle="modal" data-target="#avanceModal">Ajouter</a>
                             </div>
                         </div>
                         <div class="box-content">
@@ -205,7 +224,7 @@
                         <div class="box-header" data-original-title>
                             <h2>Emprunts</h2>
                             <div class="box-icon">
-                                <a href="#" class="btn-primary">Ajouter</a>
+                                <a href="#" class="btn-primary" data-toggle="modal" data-target="#empruntModal">Ajouter</a>
                             </div>
                         </div>
                         <div class="box-content">
@@ -238,7 +257,7 @@
                         <div class="box-header" data-original-title>
                             <h2>Congés</h2>
                             <div class="box-icon">
-                                <a href="#" class="btn-primary">Ajouter</a>
+                                <a href="#" class="btn-primary" data-toggle="modal" data-target="#congeModal">Ajouter</a>
                             </div>
                         </div>
                         <div class="box-content">
@@ -272,3 +291,94 @@
 </div>
 </body>
 </html>
+<div class="modal hide fade" id="enfantModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>Settings</h3>
+	</div>
+	<div class="modal-body">
+		<p>first modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="enfantModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>enfantModa</h3>
+	</div>
+	<div class="modal-body">
+		<p>first modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="primeModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>primeModal</h3>
+	</div>
+	<div class="modal-body">
+		<p>first modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="creditModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>creditModal</h3>
+	</div>
+	<div class="modal-body">
+		<p>first modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="avanceModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>avanceModal</h3>
+	</div>
+	<div class="modal-body">
+		<p>first modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="empruntModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>empruntModal</h3>
+	</div>
+	<div class="modal-body">
+		<p>one modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
+<div class="modal hide fade" id="congeModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>congeModal</h3>
+	</div>
+	<div class="modal-body">
+		<p>one modals...</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary">Save changes</a>
+	</div>
+</div>
