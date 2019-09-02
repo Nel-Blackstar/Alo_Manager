@@ -1,10 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Payements</title>
 </head>
 <body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/partenaire}">Personnel</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Recapitulatif</span></li>
+        </ul>
+        <br><br><br>
+        <div class="row-fluid sortable">
+            <div style="display:inline-block">
+        <h2>RECAPITULATIF SUR LE PERSONNEL</h2>
+        <table width="100%" style="margin-left:3%;">
+            <tr>
+                <td>
+                    <img data-th-if="${personnel.photo}" class="avatar" width="250" data-th-src="'/admin/personnel/images?pid='+${personnel.id}" alt="..." src="">
+                    <img data-th-unless="${personnel.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
+<br>
+                    <ul>
+                        <li>Matricule : <b data-th-text="${personnel.matricule}"></b></li>
+                        <li>Compte Bancaire : <b data-th-text="${personnel.compteBancaire}"></b></li>
+                        <li>Numero CNPS : <b data-th-text="${personnel.numeroCNPS}"></b></li>
+                        <li>Nom : <b data-th-text="${personnel.nom}"></b></li>
+                        <li>Prénom : <b data-th-text="${personnel.prenom}"></b></li>
+                        <li>Sexe : <b data-th-text="${personnel.sexe}"></b></li>
+                        <li>Téléphone : <b data-th-text="${personnel.telephone_1}"></b></li>
+                        <li>Téléphone 2: <b data-th-text="${personnel.telephone_2}"></b></li>
+                        <li>Email : <b data-th-text="${personnel.email}"></b></li>
+                        <li>Adresse : <b data-th-text="${personnel.adresse}"></b></li>
+                        <li>Numéro CNI : <b data-th-text="${personnel.numero_cni}"></b></li>
+                        <li>Date de naissance : <b data-th-text="${personnel.date_naissance}"></b></li>
+                        <li>Addresse : <b data-th-text="${personnel.adresse}"></b></li>
+                        <li>Situation Familiale : <b data-th-text="${personnel.situationFamiliale}"></b></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        </div>
+            <div class="span8">
+                <h2>DONNEES PERSONNEL</h2>
+                    <div class="row-fluid">
+                        <div class="box span12">
+                            <div class="box-header" data-original-title>
+                                <h2>Enfants</h2>
+                                <div class="box-icon">
+                                    <a href="#" class="btn-primary">Ajouter</a>
+                                </div>
+                            </div>
+                            <div class="box-content">
 
+                                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Sexe</th>
+                                        <th>Date de naissance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr data-th-each="enfant, uStat : ${personnel.getEnfants()}">
+                                        <td data-th-text="${uStat.count}"></td>
+                                        <td data-th-text="${enfant.nom}"></td>
+                                        <td data-th-text="${enfant.prenom}"></td>
+                                        <td>
+                                            <span data-th-if="${enfant.sexe} == 'M'">Monsieur</span>
+                                            <span data-th-if="${enfant.sexe} == 'F'">Madame</span>
+                                        </td>
+                                        <td data-th-text="${enfant.date_naissance}"></td>
+                                        <td>
+                                            <a href="#" data-th-href="@{'/admin/paies/enfants/update/'+${enfant.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                            <a href="#" data-th-href="@{'/admin/paies/enfants/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette enfant?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--/span-->
+                    </div><!--/row-->
+                    <div class="row-fluid">
+                <div class="box span12">
+                    <div class="box-header" data-original-title>
+                        <h2>Primes</h2>
+                        <div class="box-icon">
+                            <a href="#" class="btn-primary">Ajouter</a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+
+                        <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom</th>
+                                <th>Type</th>
+                                <th>Code</th>
+                                <th> Valeur</th>
+                                <th>Exoneree</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-th-each="prime, uStat : ${personnel.getPrimesVariables()}">
+                                <td data-th-text="${uStat.count}"></td>
+                                <td data-th-text="${prime.nom}"></td>
+                                <td data-th-text="${prime.type}"></td>
+                                <td data-th-text="${prime.code}"></td>
+                                <td data-th-text="${prime.valeur}"></td>
+                                <td data-th-text="${prime.exoneree}"></td>
+                                <td>
+                                    <a href="#" data-th-href="@{'/admin/paies/primeVariable/delete/'+${prime.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette Prime ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--/span-->
+            </div><!--/row-->
+                <div class="row-fluid">
+                    <div class="box span12">
+                        <div class="box-header" data-original-title>
+                            <h2>Credits</h2>
+                            <div class="box-icon">
+                                <a href="#" class="btn-primary">Ajouter</a>
+                            </div>
+                        </div>
+                        <div class="box-content">
+
+                            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>valeur</th>
+                                    <th>Retenue</th>
+                                    <th>taux d'interêt</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-th-each="credit, uStat : ${personnel.getCredits()}">
+                                    <td data-th-text="${uStat.count}"></td>
+                                    <td data-th-text="${credit.valeur}"></td>
+                                    <td data-th-text="${credit.retenue}"></td>
+                                    <td data-th-text="${credit.tauxInteret}"></td>
+                                    <td>
+                                        <a href="#" data-th-href="@{'/admin/paies/credit/delete/'+${credit.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce Credit ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--/span-->
+                </div><!--/row-->
+                <div class="row-fluid">
+                    <div class="box span12">
+                        <div class="box-header" data-original-title>
+                            <h2>Avances</h2>
+                            <div class="box-icon">
+                                <a href="#" class="btn-primary">Ajouter</a>
+                            </div>
+                        </div>
+                        <div class="box-content">
+
+                            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>date</th>
+                                    <th>Valeur</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-th-each="avance, uStat : ${personnel.getAvances()}">
+                                    <td data-th-text="${uStat.count}"></td>
+                                    <td data-th-text="${avance.created_at}"></td>
+                                    <td data-th-text="${avance.createdAt}"></td>
+                                    <td>
+                                        <a href="#" data-th-href="@{'/admin/paies/avance/delete/'+${avance.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cet avance?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--/span-->
+                </div><!--/row-->
+                <div class="row-fluid">
+                    <div class="box span12">
+                        <div class="box-header" data-original-title>
+                            <h2>Emprunts</h2>
+                            <div class="box-icon">
+                                <a href="#" class="btn-primary">Ajouter</a>
+                            </div>
+                        </div>
+                        <div class="box-content">
+
+                            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>valeur</th>
+                                    <th>Retenue Mensuel</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-th-each="pret, uStat : ${personnel.getPrets()}">
+                                    <td data-th-text="${uStat.count}"></td>
+                                    <td data-th-text="${pret.valeur}"></td>
+                                    <td data-th-text="${pret.retenueMensuel}"></td>
+                                    <td>
+                                        <a href="#" data-th-href="@{'/admin/paies/pret/delete/'+${pret.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce Pret ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--/span-->
+                </div><!--/row-->
+                <div class="row-fluid">
+                    <div class="box span12">
+                        <div class="box-header" data-original-title>
+                            <h2>Congés</h2>
+                            <div class="box-icon">
+                                <a href="#" class="btn-primary">Ajouter</a>
+                            </div>
+                        </div>
+                        <div class="box-content">
+
+                            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>duree</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-th-each="conge, uStat : ${personnel.getConge()}">
+                                    <td data-th-text="${uStat.count}"></td>
+                                    <td data-th-text="${conge.duree}"></td>
+                                    <td data-th-text="${conge.description}"></td>
+                                    <td>
+                                        <a href="#" data-th-href="@{'/admin/paies/conge/delete/'+${conge.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce congé ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--/span-->
+                </div><!--/row-->
+            </div>
+    </div>
+    </div>
+</div>
 </body>
 </html>

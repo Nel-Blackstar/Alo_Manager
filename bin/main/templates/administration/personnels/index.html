@@ -35,8 +35,14 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post"  data-th-object="${personnel}">
-                        <fieldset>
+                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post" >
+                        <div class="row-fluid">
+                            <div class="box span12">
+                                <div class="box-header" data-original-title>
+                                    <h2>Information Personnel</h2>
+                                </div>
+                                <div class="box-content">
+                        <div data-th-object="${personnel}">
                             <div class="box span6">
                                 <div class="control-group">
                                     <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
@@ -168,12 +174,87 @@
                                 </div>
                                 <br><br><br>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                                <button type="reset" class="btn">Annuler</button>
+                        </div>
+                                </div>
                             </div>
-                        </fieldset>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="box span12">
+                                <div class="box-header" data-original-title>
+                                    <h2>Information Relative au contrat</h2>
+                                </div>
+                                <div class="box-content">
+                        <div data-th-object="${contrat}">
+                            <fieldset style="text-align:center">
+                                <div class="control-group">
+                                </div>
 
+                                <div class="control-group">
+                                    <label class="control-label" for="poste">Poste<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select data-rel="chosen"class="typeahead span6"  id="poste" data-th-field="${contrat.profession}">
+	                                                <span data-th-each="profession : ${professions}">
+					                                    <option data-th-value="${profession.id}" data-th-text="${profession.nom} +' -> '+ ${profession.libeller}"></option>
+					                                </span>
+                                        </select>
+                                        <input type="hidden" data-th-field="${contrat.id}" data-th-value="${contrat.id}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="dateEmbauche">Date D'Embauche<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text"  class="span6 typeahead datepicker" id="dateEmbauche" data-th-field="${contrat.dateEmbauche}">
+                                    </div>
+                                </div>
+
+
+                                <div class="control-group">
+                                    <label class="control-label" for="frequence">Frequence de paie<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select  class="span6 typeahead"  data-rel="chosen" id="frequence" data-th-field="${contrat.frequencePaie}">
+                                            <option value="quizaine">Quizaine</option>
+                                            <option value="mensuel">Mensuel</option>
+                                            <option value="semestrielle">Semestrielle</option>
+                                            <option value="annuelle">Annuelle</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="base de Paie">Base de Paie<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select class="span6 typeahead" id="base de Paie" data-th-field="${contrat.basePaie}" data-rel="chosen">
+                                            <option value="ancune">Aucune</option>
+                                            <option value="heure">Heure</option>
+                                            <option value="performance">Performance</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="modeReglement">Mode Reglement<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="modeReglement" data-th-field="${contrat.modeReglement}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="salaire">Salaire De Base<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="salaire" data-th-field="${contrat.salaireBase}">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </div>
+                        </div><!--/span-->
+                                </div><!--/row-->
+                        </div>
 
                     </form>
                 </div>
@@ -213,14 +294,16 @@
                             <td data-th-text="${personnel.fonction}"></td>
                             <td data-th-text="${personnel.telephone_1}"></td>
                             <td>
-                                <a data-th-href="@{/admin/personnels/modifier-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-success" title="Modifier la banque"><i class="halflings-icon white edit"></i></a>
-                                <a data-th-href="@{/admin/personnels/supprimer-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-danger" title="Supprimer la banque"><i class="halflings-icon white trash"></i></a>  
+                                <a data-th-href="@{/admin/paies/voir-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white folder-open"></i></a>
+                                <a data-th-href="@{/admin/personnels/modifier-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-success" title="Modifier le personnel"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/personnels/supprimer-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-danger" title="Supprimer la personnel"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div><!--/span-->
+
         </div><!--/row-->
     </div>
     <!-- end: Content -->
