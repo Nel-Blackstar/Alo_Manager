@@ -37,7 +37,7 @@ public class Personnel extends LiveEntity {
     List<Detail> details;
 
     @OneToOne(targetEntity = Contrat.class)
-    private Contrat contrats;
+    private Contrat contrat;
 
     @OneToMany(targetEntity = Prets.class)
     private List<Prets> prets;
@@ -236,12 +236,12 @@ public class Personnel extends LiveEntity {
         this.numeroCNPS = numeroCNPS;
     }
 
-    public Contrat getContrats() {
-        return contrats;
+    public Contrat getContrat() {
+        return contrat;
     }
 
-    public void setContrats(Contrat contrats) {
-        this.contrats = contrats;
+    public void setContrat(Contrat contrats) {
+        this.contrat = contrats;
     }
 
     public List<Prets> getPrets() {

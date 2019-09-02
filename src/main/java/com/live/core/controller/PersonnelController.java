@@ -131,7 +131,9 @@ public class PersonnelController extends InitiateController {
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
         contrat.setPersonnel(personnel1);
-        contratService.save(contrat);
+        Contrat c=contratService.save(contrat);
+        personnel1.setContrat(c);
+        personnel1 = personnelService.save(personnel1);
         model.addAttribute("state", "post");
         session.setAttribute("infos"," Opération éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
