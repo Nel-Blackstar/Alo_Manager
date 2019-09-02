@@ -1,5 +1,6 @@
 package com.live.paie.service;
 
+import com.live.core.entities.Personnel;
 import com.live.paie.entities.Enfants;
 
 import java.util.List;

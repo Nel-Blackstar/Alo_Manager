@@ -62,6 +62,18 @@ public class PaieController {
     }
     /*
      *******************************
+     * Recapitulatif du personnel
+     * **********************
+     */
+    @RequestMapping("/voir-personnel/{id}")
+    public String voirPersonnel(HttpSession session,Model model,@PathVariable long id) {
+
+        Personnel personnel = personnelService.findOne(id);
+        model.addAttribute("personnel", personnel);
+        return "administration/personnels/view";
+    }
+    /*
+     *******************************
      * Gestion des enfants
      * **********************
      */

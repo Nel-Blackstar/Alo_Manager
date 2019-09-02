@@ -1,5 +1,6 @@
 package com.live.paie.service;
 
+import com.live.core.entities.Personnel;
 import com.live.paie.entities.Enfants;
 import com.live.paie.repository.EnfantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,5 @@ public class EnfantsServiceImpl implements EnfantsService {
     public List<Enfants> findAll() {
         return enfantsRepository.findAll();
     }
+
 }

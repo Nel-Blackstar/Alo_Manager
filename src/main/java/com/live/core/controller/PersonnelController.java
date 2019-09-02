@@ -16,7 +16,11 @@ import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.service.DiplomeService;
 import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
+import com.live.paie.entities.Contrat;
 import com.live.paie.service.BanqueService;
+import com.live.paie.service.ContratService;
+import com.live.paie.service.ProfessionService;
+import com.live.paie.service.TypeContratService;
 import com.live.rh.entities.*;
 import com.live.rh.repository.DetailOffreRepository;
 import com.live.rh.service.*;
@@ -50,6 +54,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class PersonnelController extends InitiateController {
+    @Autowired
+    public ProfessionService professionService;
+    @Autowired
+    public ContratService contratService;
     @Autowired
     SortieService sortieService;
     @Autowired
@@ -114,7 +122,7 @@ public class PersonnelController extends InitiateController {
      * @throws IOException 
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
+    public @ResponseBody String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/personnels/index";
 	 	}
@@ -125,7 +133,8 @@ public class PersonnelController extends InitiateController {
         model.addAttribute("state", "post");
         session.setAttribute("infos"," Opération éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
-        return "redirect:/admin/personnels";
+        //return "redirect:/admin/personnels";
+        return contrat.toString();
     }
     @ResponseBody
 	 @GetMapping(value = "/personnels/images", produces = MediaType.IMAGE_PNG_VALUE)
@@ -175,6 +184,9 @@ public class PersonnelController extends InitiateController {
         Personnel p=new Personnel();
         p.setMatricule("ALO-"+nf.format(Dernier.getId()));
         model.addAttribute("personnel", p);
+        model.addAttribute("contrat", new Contrat());
+        model.addAttribute("contrats",contratService.findAll());
+        model.addAttribute("professions",professionService.findAll());
         model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
