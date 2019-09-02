@@ -13,8 +13,7 @@ public class Profession extends LiveEntity {
     String nom;
 
     private String libeller;
-    @OneToMany(targetEntity = Contrat.class)
-    private List<Contrat> contrats;
+
     @OneToOne(targetEntity = CNPS.class)
     private CNPS cnps;
 
@@ -31,14 +30,6 @@ public class Profession extends LiveEntity {
 
     public void setNom(String nom) {
         this.nom = nom;
-    }
-
-    public List<Contrat> getContrats() {
-        return contrats;
-    }
-
-    public void setContrats(List<Contrat> contrats) {
-        this.contrats = contrats;
     }
 
     public String getLibeller() {

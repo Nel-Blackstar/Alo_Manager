@@ -122,7 +122,7 @@ public class PersonnelController extends InitiateController {
      * @throws IOException 
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public @ResponseBody String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
+    public String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/personnels/index";
 	 	}
@@ -130,11 +130,12 @@ public class PersonnelController extends InitiateController {
     	Files.write(Paths.get(System.getProperty("user.home")+"/alo/personnels/"+personnel.getPhoto()), photo.getBytes());
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
+        contrat.setPersonnel(personnel1);
+        contratService.save(contrat);
         model.addAttribute("state", "post");
         session.setAttribute("infos"," Opération éffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succès !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
-        //return "redirect:/admin/personnels";
-        return contrat.toString();
+        return "redirect:/admin/personnels";
     }
     @ResponseBody
 	 @GetMapping(value = "/personnels/images", produces = MediaType.IMAGE_PNG_VALUE)
