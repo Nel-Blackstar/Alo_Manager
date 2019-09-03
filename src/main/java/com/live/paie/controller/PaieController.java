@@ -69,7 +69,10 @@ public class PaieController {
      */
     @RequestMapping("/voir-personnel/{id}")
     public String voirPersonnel(HttpSession session,Model model,@PathVariable long id) {
-
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
         Personnel personnel = personnelService.findOne(id);
         model.addAttribute("personnel", personnel);
         model.addAttribute("enfant", new Enfants());
@@ -77,6 +80,7 @@ public class PaieController {
         model.addAttribute("conge", new Conge());
         model.addAttribute("credit", new Credits());
         model.addAttribute("avance", new Avances());
+        model.addAttribute("typeConge", this.typeCongeService.findAll());
         model.addAttribute("prime", new PrimesVariables());
         model.addAttribute("pret", new Prets());
         return "administration/personnels/view";
@@ -86,24 +90,13 @@ public class PaieController {
      * Gestion des enfants
      * **********************
      */
-    @GetMapping("/enfants")
-    public String enfants(HttpSession session, Model model){
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("enfant",new Enfants());
-        model.addAttribute("enfants",enfantsService.findAll());
-        model.addAttribute("personnels",personnelService.findAll());
-        return "administration/paies/enfants/index";
-    }
     @PostMapping("/enfants/save")
     public String saveEnfants(HttpSession session,@RequestParam("personne") long parent ,@Valid Enfants enfant, BindingResult bindingResult, Model model){
     	if(bindingResult.hasErrors()) {
     		model.addAttribute("enfant",enfant);
             model.addAttribute("enfants",enfantsService.findAll());
             model.addAttribute("personnels",personnelService.findAll());
-       	 	return "administration/paies/enfants/index";
+            return "redirect:/admin/paies/voir-personnel/"+enfant.getPersonnel().getId();
 	 	}
     	Personnel perso=personnelService.findOne(parent);
     	enfant.setPersonnel(perso);
@@ -120,28 +113,20 @@ public class PaieController {
         session.setAttribute("infos","Enregistrement effectuer");
         return "redirect:/admin/paies/voir-personnel/"+enfant.getPersonnel().getId();
     }
-    /*
-    @RequestMapping("/enfants/update/{id}")
-    public String updateEnfant(HttpSession session,Model model,@PathVariable long id) {
-
-        Enfants enfant = enfantsService.findOne(id);
-        model.addAttribute("enfant", enfant);
-        model.addAttribute("enfants",enfantsService.findAll());
-        model.addAttribute("personnels",personnelService.findAll());
-        return "administration/paies/enfants/index";
-
-    }
-
-     */
     @RequestMapping("/enfants/delete/{id}")
     public String deleteEnfants(HttpSession session,@PathVariable long id) {
         Enfants enfant = enfantsService.findOne(id);
         try {
+            Personnel personnel=enfant.getPersonnel();
+            List<Enfants> enfs=personnel.getEnfants();
+            enfs.remove(enfant);
+            personnel.setEnfants(enfs);
+            this.personnelService.save(personnel);
             this.enfantsService.delete(enfant);
+            session.setAttribute("infos","Suppression Effectuer !");
         }catch (Exception e){
             session.setAttribute("infos","Suppression Impossible");
         }
-        session.setAttribute("infos","Suppression Effectuer !");
         return "redirect:/admin/paies/voir-personnel/"+enfant.getPersonnel().getId();
 
     }
@@ -402,49 +387,39 @@ public class PaieController {
      * Credits
      * **********************
      */
-    @GetMapping("/credits")
-    public String credits(HttpSession session, Model model){
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("credit",new Credits());
-        model.addAttribute("credits",creditsService.findAll());
-        model.addAttribute("personnels",personnelService.findAll());
-        return "/administration/paies/credit/index";
-    }
-
     @PostMapping("/credit/save")
     public String saveCredit(HttpSession session, Credits credit){
-        if (credit.getId() != null){
-            credit.setId((Long) credit.getId());
+        Personnel perso=credit.getPersonnel();
+        Personnel p=credit.getPersonnel();
+        List<Credits> credits= new ArrayList<Credits>();
+        if (p.getCredits() != null){
+            for (Credits crd : p.getCredits()){
+                credits.add(crd);
+            }
         }
-        this.creditsService.save(credit);
+        credits.add(this.creditsService.save(credit));
+        p.setCredits(credits);
+        personnelService.save(p);
         session.setAttribute("infos","Enregistrement effectuer");
-        return "redirect:/admin/paies/credits";
+        return "redirect:/admin/paies/voir-personnel/"+credit.getPersonnel().getId();
     }
 
-    @RequestMapping("/credit/update/{id}")
-    public String updateCredit(HttpSession session,Model model,@PathVariable long id) {
-
-        Credits credit = creditsService.findOne(id);
-        model.addAttribute("credit", credit);
-        model.addAttribute("credits",creditsService.findAll());
-        model.addAttribute("personnels",personnelService.findAll());
-        return "/administration/paies/credit/index";
-
-    }
     @RequestMapping("/credit/delete/{id}")
     public String deleteCredit(HttpSession session,@PathVariable long id) {
 
         Credits credit = creditsService.findOne(id);
         try {
+            Personnel personnel=credit.getPersonnel();
+            List<Credits> credits=personnel.getCredits();
+            credits.remove(credit);
+            personnel.setCredits(credits);
+            this.personnelService.save(personnel);
             this.creditsService.delete(credit);
             session.setAttribute("infos","Suppression Effectuer !");
         }catch (Exception e){
             session.setAttribute("infos","Suppression impossible");
         }
-        return "redirect:/admin/paies/credits";
+        return "redirect:/admin/paies/voir-personnel/"+credit.getPersonnel().getId();
 
     }
 
@@ -505,34 +480,24 @@ public class PaieController {
     
     /*
      *******************************
-     * Contrats
+     * Conger
      * **********************
      */
-    @GetMapping("/conges")
-    public String conges(HttpSession session, Model model){
-        if (session.getAttribute("infos") != null){
-            model.addAttribute("info",session.getAttribute("infos"));
-            session.removeAttribute("infos");
-        }
-        model.addAttribute("personnels",personnelService.findAll());
-        model.addAttribute("conge",new Conge());
-        model.addAttribute("typeConge",typeCongeService.findAll());
-        return "/administration/paies/conges/index";
-    }
-    
     @PostMapping("/conges/save")
-    public String saveConges(HttpSession session, Conge conge,@RequestParam("personnel") Personnel personnel){
+    public String saveConges(HttpSession session, Conge conge){
         if (conge.getId() != null){
         	conge.setId((Long) conge.getId());
         }
-        List<Conge> c=new ArrayList<>();
-        c.add(conge);
+        Personnel personnel=conge.getPersonnel();
+        List<Conge> c=new ArrayList<Conge>();
+        for (Conge con : personnel.getConge()){
+            c.add(con);
+        }
+        c.add(this.congeService.save(conge));
         personnel.setConge(c);
         personnelService.save(personnel);
-        
-        this.congeService.save(conge);
         session.setAttribute("infos","Enregistrement effectuer");
-        return "redirect:/admin/paies/conges";
+        return "redirect:/admin/paies/voir-personnel/"+conge.getPersonnel().getId();
     }
     
     @ResponseBody

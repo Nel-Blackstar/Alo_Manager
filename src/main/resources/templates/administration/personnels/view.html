@@ -22,6 +22,9 @@
             <li><span>Recapitulatif</span></li>
         </ul>
         <br><br><br>
+        <div class="alert alert-info text-center" data-th-if="${info}">
+            <p class="fg-green" data-th-text="${info}">Info</p>
+        </div>
         <div class="row-fluid sortable">
             <div style="display:inline-block">
         <h2>RECAPITULATIF SUR LE PERSONNEL</h2>
@@ -49,7 +52,7 @@
                     </ul>
                 </td>
             </tr>
-        </table><br><br><br><br><br>
+        </table><br>
                 <h2>RECAPITULATIF SUR LE CONTRACT</h2>
                 <table width="100%" style="margin-left:3%;">
                     <tr>
@@ -265,6 +268,7 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Type</th>
                                     <th>duree</th>
                                     <th>Description</th>
                                     <th>Actions</th>
@@ -273,7 +277,8 @@
                                 <tbody>
                                 <tr data-th-each="conge, uStat : ${personnel.getConge()}">
                                     <td data-th-text="${uStat.count}"></td>
-                                    <td data-th-text="${conge.duree}"></td>
+                                    <td data-th-text="${conge.typeConge.type}"></td>
+                                    <td data-th-text="${conge.duree} + ' Jour(s)'"></td>
                                     <td data-th-text="${conge.description}"></td>
                                     <td>
                                         <a href="#" data-th-href="@{'/admin/paies/conge/delete/'+${conge.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce congé ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
@@ -355,17 +360,40 @@
 	</div>
 </div>
 <div class="modal hide fade" id="creditModal">
+    <form class="form-horizontal" data-th-action="@{/admin/paies/credit/save}" method="post"  data-th-object="${credit}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h3>creditModal</h3>
+		<h3>Enregistrer un Credit</h3>
 	</div>
 	<div class="modal-body">
-		<p>first modals...</p>
+        <div class="control-group">
+            <label class="control-label" for="valeur">Valeur<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="text" class="span4 typeahead" id="valeur" data-th-field="${credit.valeur}">
+            </div>
+        </div>
+
+
+        <div class="control-group">
+            <label class="control-label" for="retenue">Retenue<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="text" class="span4 typeahead" id="retenue" data-th-field="${credit.retenue}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="Taux interet">Taux D'interêt<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="text" class="span4 typeahead" id="Taux interet" data-th-field="${credit.tauxInteret}">
+            </div>
+            <input type="hidden" name="personnel" data-th-value="${personnel.id}">
+        </div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a>
-		<a href="#" class="btn btn-primary">Save changes</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Annuler</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
 	</div>
+    </form>
 </div>
 <div class="modal hide fade" id="avanceModal">
 	<div class="modal-header">
@@ -394,15 +422,43 @@
 	</div>
 </div>
 <div class="modal hide fade" id="congeModal">
+    <form class="form-horizontal" data-th-action="@{/admin/paies/conges/save}" method="post"  data-th-object="${conge}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h3>congeModal</h3>
+		<h3>Enregistrement Du Congés</h3>
 	</div>
 	<div class="modal-body">
-		<p>one modals...</p>
+
+        <div class="control-group">
+            <label class="control-label" for="conges">Type de congé<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <select data-rel="chosen"class="span3 typeahead"  id="conges" data-th-field="*{TypeConge}">
+                                                <span data-th-each="tconge : ${typeConge}">
+				                                    <option data-th-value="${tconge.id}" data-th-text="${tconge.type} "></option>
+				                                </span>
+                </select>
+                <input type="hidden" name="personnel" data-th-value="${personnel.id}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="duree">Durée<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="number"  min="0"  required class="span4 typeahead" id="duree" data-th-field="*{duree}">
+            </div>
+        </div>
+
+
+        <div class="control-group">
+            <label class="control-label" for="description">Description<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="text" class="span4 typeahead" id="description" data-th-field="*{description}">
+            </div>
+        </div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a>
-		<a href="#" class="btn btn-primary">Save changes</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
 	</div>
+    </form>
 </div>
