@@ -72,6 +72,13 @@ public class PaieController {
 
         Personnel personnel = personnelService.findOne(id);
         model.addAttribute("personnel", personnel);
+        model.addAttribute("enfant", new Enfants());
+        model.addAttribute("enfants", enfantsService.findByPersonnel(personnel));
+        model.addAttribute("conge", new Conge());
+        model.addAttribute("credit", new Credits());
+        model.addAttribute("avance", new Avances());
+        model.addAttribute("prime", new PrimesVariables());
+        model.addAttribute("pret", new Prets());
         return "administration/personnels/view";
     }
     /*
@@ -91,31 +98,29 @@ public class PaieController {
         return "administration/paies/enfants/index";
     }
     @PostMapping("/enfants/save")
-    public String saveEnfants(HttpSession session, @Valid Enfants enfant, BindingResult bindingResult, Model model,@RequestParam("personnels") List<Personnel> ps){
+    public String saveEnfants(HttpSession session,@RequestParam("personne") long parent ,@Valid Enfants enfant, BindingResult bindingResult, Model model){
     	if(bindingResult.hasErrors()) {
     		model.addAttribute("enfant",enfant);
             model.addAttribute("enfants",enfantsService.findAll());
             model.addAttribute("personnels",personnelService.findAll());
        	 	return "administration/paies/enfants/index";
 	 	}
-    	enfantsService.save(enfant);
-    	//enfant.setPersonnel(ps);
-    	if (enfant.getId() != null){
-        	enfant.setId((Long) enfant.getId());
+    	Personnel perso=personnelService.findOne(parent);
+    	enfant.setPersonnel(perso);
+    	Personnel p=enfant.getPersonnel();
+    	List<Enfants> enfs= new ArrayList<Enfants>();
+    	if (p.getEnfants() != null){
+            for (Enfants enf : p.getEnfants()){
+                enfs.add(enf);
+            }
         }
-    	List<Enfants> e=new ArrayList<>();
-    	e.add(enfant);
-    	for(Personnel p : ps) {
-    		for(Enfants ef : p.getEnfants()) {
-    			e.add(ef);
-    		}
-    		p.setEnfants(e);
-    		personnelService.save(p);
-    	}
-    	enfantsService.save(enfant);
+    	enfs.add(enfantsService.save(enfant));
+    	p.setEnfants(enfs);
+    	personnelService.save(p);
         session.setAttribute("infos","Enregistrement effectuer");
-        return "redirect:/admin/paies/enfants";
+        return "redirect:/admin/paies/voir-personnel/"+enfant.getPersonnel().getId();
     }
+    /*
     @RequestMapping("/enfants/update/{id}")
     public String updateEnfant(HttpSession session,Model model,@PathVariable long id) {
 
@@ -126,17 +131,18 @@ public class PaieController {
         return "administration/paies/enfants/index";
 
     }
+
+     */
     @RequestMapping("/enfants/delete/{id}")
     public String deleteEnfants(HttpSession session,@PathVariable long id) {
-
+        Enfants enfant = enfantsService.findOne(id);
         try {
-            Enfants enfant = enfantsService.findOne(id);
-            session.setAttribute("infos","Suppression Effectuer !");
             this.enfantsService.delete(enfant);
         }catch (Exception e){
-            session.setAttribute("infos","Suppression Impossible , Les Personnels sont aussi parents de cette enfants, Supprimer le Personnel et Réessayer");
+            session.setAttribute("infos","Suppression Impossible");
         }
-        return "redirect:/admin/paies/enfants";
+        session.setAttribute("infos","Suppression Effectuer !");
+        return "redirect:/admin/paies/voir-personnel/"+enfant.getPersonnel().getId();
 
     }
     /*

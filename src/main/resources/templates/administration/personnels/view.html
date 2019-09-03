@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <title>Payements</title>
+    <title data-th-text="${personnel.nom}"></title>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -25,7 +25,7 @@
         <div class="row-fluid sortable">
             <div style="display:inline-block">
         <h2>RECAPITULATIF SUR LE PERSONNEL</h2>
-        <table width="100%" style="margin-left:3%;">
+        <table width="90%" style="margin-left:1%;">
             <tr>
                 <td>
                     <img data-th-if="${personnel.photo}" class="avatar" width="250" data-th-src="'/admin/personnel/images?pid='+${personnel.id}" alt="..." src="">
@@ -99,12 +99,11 @@
                                         <td data-th-text="${enfant.nom}"></td>
                                         <td data-th-text="${enfant.prenom}"></td>
                                         <td>
-                                            <span data-th-if="${enfant.sexe} == 'M'">Monsieur</span>
-                                            <span data-th-if="${enfant.sexe} == 'F'">Madame</span>
+                                            <span data-th-if="${enfant.sexe} == 'M'">Masculin</span>
+                                            <span data-th-if="${enfant.sexe} == 'F'">Feminin</span>
                                         </td>
                                         <td data-th-text="${enfant.date_naissance}"></td>
                                         <td>
-                                            <a href="#" data-th-href="@{'/admin/paies/enfants/update/'+${enfant.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
                                             <a href="#" data-th-href="@{'/admin/paies/enfants/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette enfant?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                         </td>
                                     </tr>
@@ -291,31 +290,56 @@
 </div>
 </body>
 </html>
-<div class="modal hide fade" id="enfantModal">
+<div class="modal hide modal-lg fade" id="enfantModal">
+    <form class="form-horizontal" data-th-action="@{/admin/paies/enfants/save}" method="post"  data-th-object="${enfant}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h3>Settings</h3>
+		<h3>Enregistré Un Enfant</h3>
 	</div>
 	<div class="modal-body">
-		<p>first modals...</p>
-	</div>
+                <div class="control-group">
+                    <label class="control-label" for="nom">Nom<span class="text-danger">*</span> </label>
+                    <div class="controls">
+                        <input type="text" class="span4 typeahead" id="nom" data-th-field="*{nom}">
+                        <input type="hidden" data-th-field="*{id}" data-th-value="${enfant.id}">
+                        <span class="text-danger" data-th-errors="${enfant.nom}"></span>
+                    </div>
+                </div>
+
+        <div class="control-group">
+            <label class="control-label" for="prenom">Prénom<span class="text-danger">*</span> </label>
+            <div class="controls">
+                <input type="text" class="span4 typeahead" id="prenom" data-th-field="${enfant.prenom}">
+                <span class="text-danger" data-th-errors="${enfant.prenom}"></span>
+            </div>
+        </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="date">Date de naissance<span class="text-danger">*</span> </label>
+                    <div class="controls">
+                        <input type="text" class="span4 typeahead datepicker" id="date" data-th-field="${enfant.date_naissance}">
+                        <span class="text-danger" data-th-errors="${enfant.date_naissance}"></span>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label" for="sexe">Sexe<span class="text-danger">*</span> </label>
+                    <div class="controls">
+                        <select id="sexe" required data-rel="chosen" data-th-field="${enfant.sexe}" class="span3 typeahead">
+                            <option data-th-value="M" selected>Masculin</option>
+                            <option data-th-value="F">Feminin</option>
+                            <option data-th-value="A">Autre</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="personne" data-th-value="${personnel.id}">
+                </div>
+    </div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a>
-		<a href="#" class="btn btn-primary">Save changes</a>
+		<a href="#" class="btn btn-danger" data-dismiss="modal">Annuler</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
 	</div>
-</div>
-<div class="modal hide fade" id="enfantModal">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h3>enfantModa</h3>
-	</div>
-	<div class="modal-body">
-		<p>first modals...</p>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a>
-		<a href="#" class="btn btn-primary">Save changes</a>
-	</div>
+    </form>
 </div>
 <div class="modal hide fade" id="primeModal">
 	<div class="modal-header">

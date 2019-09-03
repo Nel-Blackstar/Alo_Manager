@@ -10,4 +10,5 @@ public interface EnfantsService {
     void delete(Enfants enfants);
     Enfants findOne(Long id);
     List<Enfants> findAll();
+    List<Enfants> findByPersonnel(Personnel personnel);
 }

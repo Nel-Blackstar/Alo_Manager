@@ -36,4 +36,9 @@ public class EnfantsServiceImpl implements EnfantsService {
         return enfantsRepository.findAll();
     }
 
+    @Override
+    public List<Enfants> findByPersonnel(Personnel personnel) {
+        return enfantsRepository.findByPersonnel(personnel);
+    }
+
 }
