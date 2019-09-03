@@ -511,22 +511,48 @@ public class PaieController {
         model.addAttribute("personnels",personnelService.findAll());
         model.addAttribute("conge",new Conge());
         model.addAttribute("typeConge",typeCongeService.findAll());
+        model.addAttribute("conges",congeService.findAll());
         return "/administration/paies/conges/index";
     }
     
     @PostMapping("/conges/save")
-    public String saveConges(HttpSession session, Conge conge,@RequestParam("personnel") Personnel personnel){
+    public String saveConges(HttpSession session, Conge conge,@RequestParam("personnel") Personnel personnel,@RequestParam("type_conge") Long type){
         if (conge.getId() != null){
         	conge.setId((Long) conge.getId());
         }
+        conge.setTypeConge(typeCongeService.findOne(type));
         List<Conge> c=new ArrayList<>();
         c.add(conge);
+        c.addAll(personnel.getConge());
         personnel.setConge(c);
-        personnelService.save(personnel);
         
         this.congeService.save(conge);
+        personnelService.save(personnel);
         session.setAttribute("infos","Enregistrement effectuer");
         return "redirect:/admin/paies/conges";
+    }
+    
+    @RequestMapping("/conge/delete/{id}")
+    public String deleteConge(HttpSession session,@PathVariable long id) {
+
+        Conge conge = congeService.findOne(id);
+        Personnel personnel=conge.getPersonnel();
+        List<Conge> c=new ArrayList<>();
+        for(Conge co : personnel.getConge()) {
+        	if(!co.equals(conge)) {
+        		c.add(co);
+        	}
+        }
+        personnel.setConge(c);
+        personnelService.save(personnel);
+        try {
+            this.congeService.delete(conge);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/conges";
+
     }
     
     @ResponseBody
