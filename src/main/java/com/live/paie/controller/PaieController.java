@@ -33,6 +33,12 @@ import javax.validation.Valid;
 @RequestMapping(value = "/admin/paies")
 public class PaieController {
     @Autowired
+    public  AvancesService avancesService;
+    @Autowired
+    public PretsService pretsService;
+    @Autowired
+    public PrimesVariablesService primeVariableService;
+    @Autowired
     public ProfessionService professionService;
     @Autowired
     public CNPSService cnpsService;
@@ -82,7 +88,7 @@ public class PaieController {
         model.addAttribute("avance", new Avances());
         model.addAttribute("typeConge", this.typeCongeService.findAll());
         model.addAttribute("prime", new PrimesVariables());
-        model.addAttribute("pret", new Prets());
+        model.addAttribute("prets", new Prets());
         return "administration/personnels/view";
     }
     /*
@@ -500,6 +506,26 @@ public class PaieController {
         return "redirect:/admin/paies/voir-personnel/"+conge.getPersonnel().getId();
     }
     
+    @RequestMapping("/conge/delete/{id}")
+    public String deleteConge(HttpSession session,@PathVariable long id) {
+
+        Conge conge = congeService.findOne(id);
+        try {
+            Personnel personnel=conge.getPersonnel();
+            List<Conge> c = personnel.getConge();
+            c.remove(conge);
+            personnel.setConge(c);
+            personnelService.save(personnel);
+            this.congeService.delete(conge);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/voir-personnel/"+conge.getPersonnel().getId();
+
+    }
+	
+    /*
     @ResponseBody
 	 @GetMapping(value = "/conges/personnel")
 	 public String getPersonnelConge(@RequestParam("pid") Long id) throws IOException {
@@ -517,6 +543,131 @@ public class PaieController {
 	      int ageActuel=thisYear-personnelNaisance;
 	      return " Age: "+ageActuel+" date naissance: "+personnelNaisance;
 	 }
+
+     */
+
+
+    /*
+     *******************************
+     * Prime Variable
+     * **********************
+     */
+    @PostMapping("/primeVariable/save")
+    public String savePv(HttpSession session, PrimesVariables pv){
+        if (pv.getId() != null){
+            pv.setId((Long) pv.getId());
+        }
+        Personnel personnel=pv.getPersonnel();
+        List<PrimesVariables> pvs=new ArrayList<PrimesVariables>();
+        for (PrimesVariables p : personnel.getPrimesVariables()){
+            pvs.add(p);
+        }
+        pvs.add(this.primeVariableService.save(pv));
+        personnel.setPrimesVariables(pvs);
+        personnelService.save(personnel);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/voir-personnel/"+pv.getPersonnel().getId();
+    }
+
+    @RequestMapping("/primeVariable/delete/{id}")
+    public String deletePv(HttpSession session,@PathVariable long id) {
+
+        PrimesVariables pv = primeVariableService.findOne(id);
+        try {
+            Personnel personnel=pv.getPersonnel();
+            List<PrimesVariables> c = personnel.getPrimesVariables();
+            c.remove(pv);
+            personnel.setPrimesVariables(c);
+            personnelService.save(personnel);
+            this.primeVariableService.delete(pv);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/voir-personnel/"+pv.getPersonnel().getId();
+
+    }
+
+    /*
+     *******************************
+     * Avances
+     * **********************
+     */
+    @PostMapping("/avance/save")
+    public String saveAvance(HttpSession session, Avances avances){
+        if (avances.getId() != null){
+            avances.setId((Long) avances.getId());
+        }
+        Personnel personnel=avances.getPersonnel();
+        List<Avances> avs=new ArrayList<Avances>();
+        for (Avances av : personnel.getAvances()){
+            avs.add(av);
+        }
+        avs.add(this.avancesService.save(avances));
+        personnel.setAvances(avs);
+        personnelService.save(personnel);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/voir-personnel/"+avances.getPersonnel().getId();
+    }
+
+    @RequestMapping("/avance/delete/{id}")
+    public String deleteAvance(HttpSession session,@PathVariable long id) {
+
+        Avances avances = avancesService.findOne(id);
+        try {
+            Personnel personnel=avances.getPersonnel();
+            List<Avances> avs = personnel.getAvances();
+            avs.remove(avances);
+            personnel.setAvances(avs);
+            personnelService.save(personnel);
+            this.avancesService.delete(avances);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/voir-personnel/"+avances.getPersonnel().getId();
+
+    }
+    /*
+     *******************************
+     * Prets
+     * **********************
+     */
+    @PostMapping("/prets/save")
+    public String savePrets(HttpSession session, Prets prets){
+        if (prets.getId() != null){
+            prets.setId((Long) prets.getId());
+        }
+        Personnel personnel=prets.getPersonnel();
+        List<Prets> prts=new ArrayList<Prets>();
+        for (Prets prt : personnel.getPrets()){
+            prts.add(prt);
+        }
+        prts.add(this.pretsService.save(prets));
+        personnel.setPrets(prts);
+        personnelService.save(personnel);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/paies/voir-personnel/"+prets.getPersonnel().getId();
+    }
+
+    @RequestMapping("/prets/delete/{id}")
+    public String deletePrets(HttpSession session,@PathVariable long id) {
+
+        Prets prets = pretsService.findOne(id);
+        try {
+            Personnel personnel=prets.getPersonnel();
+            List<Prets> prts = personnel.getPrets();
+            prts.remove(prets);
+            personnel.setPrets(prts);
+            personnelService.save(personnel);
+            this.pretsService.delete(prets);
+            session.setAttribute("infos","Suppression Effectuer !");
+        }catch (Exception e){
+            session.setAttribute("infos","Suppression impossible");
+        }
+        return "redirect:/admin/paies/voir-personnel/"+prets.getPersonnel().getId();
+
+    }
 
 
 }

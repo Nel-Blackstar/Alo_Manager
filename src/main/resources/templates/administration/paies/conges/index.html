@@ -100,26 +100,22 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Sexe</th>
-                            <th>Fonction</th>
-                            <th>Téléphone</th>
-                            <th>Nombre de jours de congé(s)</th>
+                            <th>Personnel</th>
+                            <th>Type de congé</th>
+                            <th>Durée</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-th-each="personnel, pStat : ${personnels}">
+                        <tr data-th-each="conge, pStat : ${conges}">
                             <td data-th-text="${pStat.count}"></td>
-                            <td data-th-text="${personnel.nom}"></td>
-                            <td data-th-text="${personnel.prenom}"></td>
-                            <td data-th-text="${personnel.sexe}"></td>
-                            <td data-th-text="${personnel.fonction}"></td>
-                            <td data-th-text="${personnel.telephone_1}"></td>
-                            <td><img class="avatar" width="250" data-th-src="'/admin/paies/conges/personnel?pid='+${personnel.id}" alt="..." src=""></td>
+                            <td data-th-text="${conge.personnel.nom}+' '+${conge.personnel.prenom}"></td>
+                            <td data-th-text="${conge.typeConge.type}"></td>
+                            <td data-th-text="${conge.duree}"></td>
+                            <td data-th-text="${conge.description}"></td>
                             <td>
-                            	<a data-th-href="@{/admin/personnels/conges-personnel/{id}(id = ${personnel.getId()})}" class="btn btn-small btn-success" title="Afficher le congé du personnel"><i class="halflings-icon white file"></i></a> 
+                            	<a data-th-href="@{/admin/paies/conge/delete/{id}(id = ${conge.getId()})}" class="btn btn-small btn-danger" title="Supprimer"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
