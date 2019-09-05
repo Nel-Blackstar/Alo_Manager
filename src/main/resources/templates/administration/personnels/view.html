@@ -27,7 +27,7 @@
         </div>
         <div class="row-fluid sortable">
             <div style="display:inline-block">
-        <h2>RECAPITULATIF SUR LE PERSONNEL</h2><br><br>
+        <h2 align="center">RECAPITULATIF SUR LE PERSONNEL</h2><br><br>
         <table width="90%" style="margin-left:1%;">
             <tr>
                 <td>
@@ -53,7 +53,7 @@
                 </td>
             </tr>
         </table><br>
-                <h2>RECAPITULATIF SUR LE CONTRACT</h2>
+                <h2 align="center">RECAPITULATIF SUR LE CONTRACT</h2>
                 <table width="100%" style="margin-left:3%;">
                     <tr>
                         <td>
@@ -69,6 +69,20 @@
                                 </ul>
                                 </li>
                             </ul>
+                        </td>
+                    </tr>
+                </table>
+                <h2 align="center">Prime Fixe Accordé</h2>
+                <table width="100%" style="margin-left:3%;">
+                    <tr>
+                        <td>
+                            <ul>
+                                <li data-th-each="primeFixe, uStat : ${personnel.getPrimesFixes()}" class="btn-primary">
+                                    <div class="btn" style="max-width:300px;letter-spacing:0.2px;box-sixing:border-box;background:none;background-transparent;border-right:none;"><span data-th-text="${uStat.count} +'  '   "></span> |<span data-th-text="${primeFixe.nom}  "></span>   |   <span data-th-text="${primeFixe.type}"></span>   |   <span data-th-text="${primeFixe.valeur }+ ' FCFA'"></span>
+                                    </div> <a href="#" data-th-href="@{'/admin/paies/addPrimeFixe/delete/'+${primeFixe.id}+'/'+${personnel.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir Enlever cette prime?')" class="btn btn-danger"><i class="halflings-icon white trash"></i></a>
+                                </li>
+                            </ul>
+                            <center><button class="btn btn-success" data-toggle="modal" data-target="#pfModal">Nouvelle prime</button></center>
                         </td>
                     </tr>
                 </table>
@@ -107,7 +121,7 @@
                                         </td>
                                         <td data-th-text="${enfant.date_naissance}"></td>
                                         <td>
-                                            <a href="#" data-th-href="@{'/admin/paies/enfants/delete/'+${enfant.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette enfant?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                            <a href="#" data-th-href="@{'/admin/paies/enfants/delete/'+${enfant.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer cette enfant?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -146,7 +160,7 @@
                                 <td data-th-text="${prime.valeur}  + ' FCFA'"></td>
                                 <td data-th-text="${prime.exoneree}"></td>
                                 <td>
-                                    <a href="#" data-th-href="@{'/admin/paies/primeVariable/delete/'+${prime.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette Prime ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                    <a href="#" data-th-href="@{'/admin/paies/primeVariable/delete/'+${prime.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer cette Prime ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -181,7 +195,7 @@
                                     <td data-th-text="${credit.retenue} + ' FCFA'"></td>
                                     <td data-th-text="${credit.tauxInteret} + ' %'"></td>
                                     <td>
-                                        <a href="#" data-th-href="@{'/admin/paies/credit/delete/'+${credit.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce Credit ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                        <a href="#" data-th-href="@{'/admin/paies/credit/delete/'+${credit.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer ce Credit ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -213,7 +227,7 @@
                                     <td data-th-text="${avance.date}"></td>
                                     <td data-th-text="${avance.valeur} + ' FCFA'"></td>
                                     <td>
-                                        <a href="#" data-th-href="@{'/admin/paies/avance/delete/'+${avance.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cet avance?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                        <a href="#" data-th-href="@{'/admin/paies/avance/delete/'+${avance.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer cet avance?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -248,7 +262,7 @@
                                     <td data-th-text="${pret.valeur} + ' FCFA'"></td>
                                     <td data-th-text="${pret.retenueMensuelle} + ' FCFA'"></td>
                                     <td>
-                                        <a href="#" data-th-href="@{'/admin/paies/prets/delete/'+${pret.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce Pret ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                        <a href="#" data-th-href="@{'/admin/paies/prets/delete/'+${pret.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer ce Pret ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -283,7 +297,7 @@
                                     <td data-th-text="${conge.duree} + ' Jour(s)'"></td>
                                     <td data-th-text="${conge.description}"></td>
                                     <td>
-                                        <a href="#" data-th-href="@{'/admin/paies/conge/delete/'+${conge.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce congé ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                        <a href="#" data-th-href="@{'/admin/paies/conge/delete/'+${conge.id} }" style="float:right" onclick="return confirm('Etes vous sure de vouloir supprimer ce congé ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -522,9 +536,35 @@
             </div>
         </div>
 	</div>
-	<div class="modal-footer">
+        <div class="modal-footer">
 		<a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
         <button type="submit" class="btn btn-primary">Enregistrer</button>
 	</div>
+    </form>
+</div>
+
+<div class="modal hide fade" id="pfModal">
+    <form class="form-horizontal" data-th-action="@{/admin/paies/addPrimeFixe/save}" method="post">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Attribuer une prime</h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="primeFixe">Choisissez une Prime<span class="text-danger">*</span> </label>
+                <div class="controls">
+                    <select data-rel="chosen" class="span3 typeahead"  id="primeFixe" name="primeFixe">
+                                                <span data-th-each="primeFixe : ${primesFixes}">
+				                                    <option data-th-value="${primeFixe.id}" data-th-text="${primeFixe.nom} +' '+${primeFixe.valeur}"></option>
+				                                </span>
+                    </select>
+                    <input type="hidden" name="personnel" data-th-value="${personnel.id}">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
     </form>
 </div>
