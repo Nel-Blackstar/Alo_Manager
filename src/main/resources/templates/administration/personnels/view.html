@@ -555,10 +555,14 @@
                 <div class="controls">
                     <select data-rel="chosen" class="span3 typeahead"  id="primeFixe" name="primeFixe">
                                                 <span data-th-each="primeFixe : ${primesFixes}">
-				                                    <option data-th-value="${primeFixe.id}" data-th-text="${primeFixe.nom} +' '+${primeFixe.valeur}"></option>
+				                                    <option data-th-value="${primeFixe.id}" data-th-text="${primeFixe.nom} +' '+${primeFixe.valeur}+ ' FCFAgitpull' "></option>
 				                                </span>
                     </select>
                     <input type="hidden" name="personnel" data-th-value="${personnel.id}">
+                    <br><br><br><br>
+                    <br><br>
+                    <small>Une prime ne peut etre attribuer qu'une seul fois</small>
+                    <br>
                 </div>
             </div>
         </div>
