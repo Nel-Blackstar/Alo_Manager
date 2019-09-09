@@ -58,6 +58,8 @@ public class PaieController {
     public PersonnelService personnelService;
     @Autowired
     public CongeService congeService;
+    @Autowired
+    public BulletinPaieService bulletinPaieService;
 
     /*
      *******************************
@@ -719,6 +721,32 @@ public class PaieController {
         return "redirect:/admin/paies/voir-personnel/" + perso.getId();
 
     }
+    /*
+     *******************************
+     * Bulletin
+     * **********************
+     */
+    @GetMapping("/bulletins")
+    public String bulletin(HttpSession session, Model model) {
+        if (session.getAttribute("infos") != null) {
+            model.addAttribute("info", session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("personnels", personnelService.findAll());
+
+        return "/administration/paies/bulletin/index";
+    }
+    @GetMapping("/bulletin/personnel/{id}")
+    public String viewBulletin(HttpSession session, Model model,@PathVariable("id") Long id) {
+        if (session.getAttribute("infos") != null) {
+            model.addAttribute("info", session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("personnel", personnelService.findOne(id));
+
+        return "/administration/paies/bulletin/liste";
+    }
+
 
 
 }
