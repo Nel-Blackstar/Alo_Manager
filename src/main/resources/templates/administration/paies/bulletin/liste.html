@@ -16,8 +16,11 @@
                 <a href="">Paies</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><a data-th-href="@{/admin/paies/bulletins}">Bulletins</a></li>
-            <li><a data-th-text="${personnel.nom}">Bulletins</a></li>
+            <li>
+                <a data-th-href="@{/admin/paies/bulletins}">Bulletins</a>
+                <i class="icon-angle-right"></i>
+                <a data-th-text="${personnel.nom}+' '+${personnel.prenom}">Bulletins</a>
+            </li>
         </ul>
 
         <div class="row-fluid">

@@ -2,6 +2,7 @@ package com.live.moniteur.entities;
 
 import com.live.common.entities.LiveEntity;
 import com.live.rh.entities.Apprenant;
+import com.live.rh.entities.Details;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -13,10 +14,11 @@ import java.util.List;
 @Entity
 public class Inscription extends LiveEntity {
 	@NotNull
-    private String paiement;
+    private float paiement;
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    private  String lieu_examen;
     @ManyToOne
     @JoinColumn(name = "id_formation")
     private SessionFormation formation;
@@ -32,13 +34,17 @@ public class Inscription extends LiveEntity {
     private Apprenant apprenant;
     @OneToOne
     private Diplome diplome;
+
+    @OneToMany
+    @JoinColumn(name = "id_inscription")
+    private List<Details> details;
     
     
-	public String getPaiement() {
+	public float getPaiement() {
         return paiement;
     }
 
-    public void setPaiement(String paiement) {
+    public void setPaiement(float paiement) {
         this.paiement = paiement;
     }
 
@@ -89,6 +95,20 @@ public class Inscription extends LiveEntity {
 	public void setSuivres(List<Suivre> suivres) {
 		this.suivres = suivres;
 	}
-    
-    
+
+    public String getLieu_examen() {
+        return lieu_examen;
+    }
+
+    public void setLieu_examen(String lieu_examen) {
+        this.lieu_examen = lieu_examen;
+    }
+
+    public List<Details> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<Details> details) {
+        this.details = details;
+    }
 }

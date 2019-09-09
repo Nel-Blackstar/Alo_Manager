@@ -12,6 +12,8 @@ import java.util.Set;
 
 @Entity
 public class SessionFormation extends LiveEntity {
+
+    private  String libeller;
 	@NotNull
     private String delaiDossiers;
 	@NotNull
@@ -73,5 +75,13 @@ public class SessionFormation extends LiveEntity {
 
     public void setFormationCours(List<Cours> formationCours) {
         this.formationCours = formationCours;
+    }
+
+    public String getLibeller() {
+        return libeller;
+    }
+
+    public void setLibeller(String libeller) {
+        this.libeller = libeller;
     }
 }
