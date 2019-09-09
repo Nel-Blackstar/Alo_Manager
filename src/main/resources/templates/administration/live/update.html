@@ -57,9 +57,21 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
+                                    <label class="control-label" for="numero_cb">Numero de Contribuable<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="numero_cb" data-th-field="*{numero_contribuable}" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
                                     <label class="control-label" for="adresse">Adrèsse<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead" id="adresse" data-th-field="*{adresse}" required>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="bp">Code Postal<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="bp" data-th-field="*{code_postal}" required>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -78,6 +90,12 @@
                                     <label class="control-label" for="telephone_2">Téléphone 2<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="number" required class="span6 typeahead" id="telephone_2" data-th-field="*{telephone_2}" >
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="site">Site WEB<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" min="0" class="span6 typeahead" id="site" data-th-field="*{site_web}" required >
                                     </div>
                                 </div>
                                 <div class="control-group">

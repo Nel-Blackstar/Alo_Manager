@@ -35,7 +35,13 @@
                     <form id="formation_form" class="form-horizontal"  data-th-action="@{/admin/update-formation}" method="post"  data-th-object="${formation}">
                         <fieldset>
                             <div class="offset3 box span5">
-                                    <div class="control-group"><br><br>
+                                <div class="control-group"><br><br>
+                                    <label class="control-label" for="Libeller">Libeller<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="libeller" data-th-field="*{libeller}" >
+                                    </div>
+                                </div>
+                                    <div class="control-group">
                                         <label class="control-label" for="delai_dossiers">Delai de depots des dossiers dossiers<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                         	<input type="hidden" class="span6 typeahead" id="id" data-th-field="*{id}" >

@@ -742,7 +742,8 @@ public class PaieController {
             model.addAttribute("info", session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
-        model.addAttribute("personnel", personnelService.findOne(id));
+        Personnel personnel=personnelService.findOne(id);
+        model.addAttribute("personnel", personnel);
 
         return "/administration/paies/bulletin/liste";
     }
