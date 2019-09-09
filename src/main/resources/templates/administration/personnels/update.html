@@ -32,7 +32,13 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <form class="form-horizontal" data-th-action="@{/admin/personnels/modifier-personnel}" method="post"  data-th-object="${personnel}">
+                	<div class="control-group">
+	                    <center>
+	                      		<img data-th-if="${personnel.photo}" class="avatar" width="250" data-th-src="'/admin/personnels/images?pid='+${personnel.id}" alt="..." src="">
+							    <img data-th-unless="${personnel.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
+						</center>
+	                </div>
+                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post"  data-th-object="${personnel}">
                         <fieldset>
                             <div class="box span6">
                                 <div class="control-group">
@@ -53,7 +59,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="date_naissance">Date de naissance<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="date" data-th-value="*{date_naissance}" required class="span6 typeahead input-xlarge datepicker" id="date_naissance" name="date">
+                                        <input type="text" data-th-value="${#dates.format(personnel.date_naissance, 'dd/MM/yyyy')}" required class="span6 typeahead input-xlarge datepicker" id="date_naissance" name="date_naissance">
                                         <span class="text-danger" data-th-errors="${personnel.date_naissance}"></span>
                                     </div>
                                 </div>
@@ -65,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="numero_cni">Numéro CNI<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="numero_cni">Numéro CNI </label>
                                     <div class="controls">
                                         <input type="text" class="span6 typeahead" id="numero_cni" data-th-field="*{numero_cni}" >
                                         <span class="text-danger" data-th-errors="${personnel.numero_cni}"></span>
@@ -76,13 +82,6 @@
                                     <div class="controls">
                                         <input type="email" class="span6 typeahead" id="email" data-th-field="*{email}" >
                                         <span class="text-danger" data-th-errors="${personnel.email}"></span>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="fonction">Fonction<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="fonction" data-th-field="*{fonction}" >
-                                        <span class="text-danger" data-th-errors="${personnel.fonction}"></span>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -101,13 +100,6 @@
                                 </div>
                             </div>
                             <div class="box span6">
-                                <div class="control-group">
-                                    <label class="control-label" for="matricule">Matricule<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="matricule" data-th-field="*{matricule}" >
-                                        <span class="text-danger" data-th-errors="${personnel.matricule}"></span>
-                                    </div>
-                                </div>
                                 <div class="control-group">
                                     <label class="control-label" for="adresse">Adresse<span class="text-danger">*</span> </label>
                                     <div class="controls">
@@ -134,36 +126,36 @@
                                             <option data-th-value="A">Autres</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="nombreEnfant">Nombre d'Enfant<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="nombreEnfant" data-th-field="*{nombreEnfant}" >
-                                        <span class="text-danger" data-th-errors="${personnel.nombreEnfant}"></span>
-                                    </div>
                                 </div><br>
-                                <div class="control-group">
-                                    <label class="control-label" for="compteBancaire">Compte Bancaire<span class="text-danger">*</span> </label>
-                                    <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="compteBancaire" data-th-field="*{compteBancaire}" >
-                                        <span class="text-danger" data-th-errors="${personnel.compteBancaire}"></span>
-                                    </div>
-                                </div><br>
-                                <div class="control-group">
+                                 <div class="control-group">
                                     <label class="control-label" for="numeroCNPS">Numero CNPS<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="text" class="span6 typeahead" id="numeroCNPS" data-th-field="*{numeroCNPS}" >
+                                        <input type="text" class="span12 typeahead" id="numeroCNPS" data-th-field="*{numeroCNPS}" >
                                         <span class="text-danger" data-th-errors="${personnel.numeroCNPS}"></span>
                                     </div>
-                                </div><br>
+                                </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="banque">Banque<span class="text-danger">*</span> </label>
+                                    <label class="control-label" for="banque">Banque </label>
                                     <div class="controls">
-                                        <select id="banque" data-rel="chosen" data-th-field="*{banque}" class="span6 typeahead">
+                                        <select id="banque" data-rel="chosen" data-th-field="*{banque}" class="span12 typeahead">
                                             <option data-th-each="banque: ${banques}" data-th-value="${banque.id}" data-th-text="${banque.nom}"></option>
                                         </select>
                                     </div>
                                 </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="photo">Photo<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="file" class="span12 typeahead" id="photo"  name="pt" >
+                                        <span class="text-danger" data-th-errors="${personnel.photo}"></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="fonction">Fonction<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="fonction" data-th-field="*{fonction}" >
+                                        <span class="text-danger" data-th-errors="${personnel.fonction}"></span>
+                                    </div>
+                                </div><br><br>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-primary">Enregistrer</button>

@@ -36,14 +36,14 @@ public class Personnel extends LiveEntity {
     @OneToMany(targetEntity = Detail.class)
     List<Detail> details;
 
-    @OneToMany(targetEntity = Contrat.class)
-    private List<Contrat> contrats;
+    @OneToOne(targetEntity = Contrat.class)
+    private Contrat contrat;
 
     @OneToMany(targetEntity = Prets.class)
     private List<Prets> prets;
 
-    @ManyToMany(targetEntity = Banque.class)
-    private List<Banque> banque;
+    @ManyToOne(optional = true,targetEntity = Banque.class)
+    private Banque banque;
 
     @OneToMany(targetEntity = Credits.class)
     private List<Credits> credits;
@@ -57,7 +57,7 @@ public class Personnel extends LiveEntity {
     @ManyToMany(targetEntity = PrimesFixes.class)
     private List<PrimesFixes> primesFixes;
     
-    @ManyToMany(targetEntity = Enfants.class)
+    @OneToMany(targetEntity = Enfants.class)
     private List<Enfants> enfants;
 
     @OneToMany(targetEntity = BulletinPaie.class)
@@ -69,14 +69,12 @@ public class Personnel extends LiveEntity {
     @OneToMany(targetEntity = Conge.class)
     private List<Conge> conge;
     
-    @OneToOne(targetEntity = CNPS.class)
-    private CNPS cnps;
     public Personnel() {
     }
 
     public Personnel(String nom, String prenom, String email, String telephone_1, String telephone_2, String numero_cni, Character sexe,
                      String matricule, String adresse, String situationFamiliale,
-                     Date date_naissance, String lieu_naissance, String fonction, String photo) {
+                     Date date_naissance, String lieu_naissance, String fonction, String compteBancaire, String photo) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -91,6 +89,7 @@ public class Personnel extends LiveEntity {
         this.lieu_naissance = lieu_naissance;
         this.fonction = fonction;
         this.photo = photo;
+        this.compteBancaire = compteBancaire;
     }
 
     public String getNom() {
@@ -237,12 +236,12 @@ public class Personnel extends LiveEntity {
         this.numeroCNPS = numeroCNPS;
     }
 
-    public List<Contrat> getContrats() {
-        return contrats;
+    public Contrat getContrat() {
+        return contrat;
     }
 
-    public void setContrats(List<Contrat> contrats) {
-        this.contrats = contrats;
+    public void setContrat(Contrat contrats) {
+        this.contrat = contrats;
     }
 
     public List<Prets> getPrets() {
@@ -253,11 +252,11 @@ public class Personnel extends LiveEntity {
         this.prets = prets;
     }
 
-    public List<Banque> getBanque() {
+    public Banque getBanque() {
 		return banque;
 	}
 
-	public void setBanque(List<Banque> banque) {
+	public void setBanque(Banque banque) {
 		this.banque = banque;
 	}
 
@@ -323,14 +322,6 @@ public class Personnel extends LiveEntity {
 
 	public void setEnfants(List<Enfants> enfants) {
 		this.enfants = enfants;
-	}
-
-	public CNPS getCnps() {
-		return cnps;
-	}
-
-	public void setCnps(CNPS cnps) {
-		this.cnps = cnps;
 	}
     
 }

@@ -5,6 +5,7 @@ import com.live.core.entities.Personnel;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Conge extends LiveEntity {
@@ -13,7 +14,7 @@ public class Conge extends LiveEntity {
     @ManyToOne(optional = true, targetEntity = Personnel.class)
     private Personnel personnel;
 
-    @ManyToOne(optional = true, targetEntity = TypeConge.class)
+    @OneToOne(targetEntity = TypeConge.class)
     private TypeConge typeConge;
 
     public Conge() {

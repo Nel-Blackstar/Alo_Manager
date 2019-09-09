@@ -20,6 +20,9 @@ public class Enfants extends LiveEntity {
     private String  sexe;
     @Temporal(TemporalType.DATE)
     private Date date_naissance;
+    @OneToOne(targetEntity = Personnel.class)
+    private Personnel personnel;
+    
 	public Enfants() {
 	}
 	public String getNom() {
@@ -46,6 +49,11 @@ public class Enfants extends LiveEntity {
 	public void setDate_naissance(Date date_naissance) {
 		this.date_naissance = date_naissance;
 	}
-    
+	public Personnel getPersonnel() {
+		return personnel;
+	}
+	public void setPersonnel(Personnel personnel) {
+		this.personnel = personnel;
+	}
     
 }

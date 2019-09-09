@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Administration</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="">Paies</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a data-th-href="@{/admin/paies/bulletins}">Bulletins</a></li>
+            <li><a data-th-text="${personnel.nom}">Bulletins</a></li>
+        </ul>
+
+        <div class="row-fluid">
+
+            <a class="quick-button span12" data-th-href="@{'/admin/paies/bulletin/print/'+${personnel.id} }">
+
+            </a>
+
+
+            <div class="clearfix"></div>
+        </div><!--/row-->
+    </div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>

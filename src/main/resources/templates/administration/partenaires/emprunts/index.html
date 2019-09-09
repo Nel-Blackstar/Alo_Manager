@@ -51,7 +51,7 @@
 									<img width="200" heigth=150 data-th-if="${live.photo}" class="avatar" data-th-src="'/admin/live/images?lid=1'">
 								</td>
 								<td>
-									ETS: <span data-th-text="${live.nom}"></span>
+									Sté: <span data-th-text="${live.nom}"></span>
 								</td>
 								</tr>
 								<tr>
@@ -66,7 +66,7 @@
 								</tr>
 								<tr>
 								<td>
-								 	Téléphone: <span data-th-text="${live.telephone_1}"></span>
+								 	Téléphone: <span data-th-text="${live.telephone_1}+'/'+${live.telephone_2}"></span>
 								</td>
 								</tr>
 								<tr>

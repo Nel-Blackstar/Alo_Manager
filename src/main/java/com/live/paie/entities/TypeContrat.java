@@ -10,6 +10,8 @@ import java.util.List;
 public class TypeContrat extends LiveEntity {
     private int numeroType;
     private String nomType;
+    private  int duree;
+    private String libeller;
     @OneToMany(targetEntity = Contrat.class)
     private List<Contrat> contrats;
 
@@ -44,5 +46,13 @@ public class TypeContrat extends LiveEntity {
 
     public void setContrats(List<Contrat> contrats) {
         this.contrats = contrats;
+    }
+
+    public String getLibeller() {
+        return libeller;
+    }
+
+    public void setLibeller(String libeller) {
+        this.libeller = libeller;
     }
 }

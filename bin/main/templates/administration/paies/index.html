@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Administration</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a href="">Paies</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><a>Accueil</a></li>
+        </ul>
+
+        <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon cog"></i><span class="break"></span>Configuration</h2>
+                </div>
+                <div class="box-content">
+
+                    <a class="quick-button-small span2" data-th-href="@{/admin/paies/primeFixe}">
+                        <i class="icon-gift"></i>
+                        <p>Primes Fixes</p>
+                    </a>
+
+                    <a class="quick-button-small span2" data-th-href="@{/admin/paies/typeConge}">
+                        <i class="icon-list-alt"></i>
+                        <p>Types de Congés </p>
+                    </a>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+
+
+        <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon retweet"></i><span class="break"></span>Suivie de Payement</h2>
+                </div>
+                <div class="box-content">
+                    <a class="quick-button-small span2" data-th-href="@{/admin/paies/contrats}">
+                        <i class="icon-file"></i>
+                        <p>Contrats</p>
+                    </a>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/paies/conges}">
+                        <i class="icon-road"></i>
+                        <p>Congés</p>
+                    </a>
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="row-fluid">
+            <div class="box span12">
+                <div class="box-header">
+                    <h2><i class="halflings-icon calendar"></i><span class="break"></span>Historique</h2>
+                </div>
+                <div class="box-content">
+                    <a class="quick-button-small span2" data-th-href="@{/admin/formations}">
+                        <i class="icon-list-alt"></i>
+                        <p>Bulletin de paie</p>
+                    </a>
+                    <a class="quick-button-small span2" data-th-href="@{/admin/partenaire}">
+                        <i class="icon-book"></i>
+                        <p>Livre de paie</p>
+                    </a>
+                    <div class="clearfix"></div>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+
+    </div>
+    <!-- end: Content -->
+</div>
+</body>
+</html>

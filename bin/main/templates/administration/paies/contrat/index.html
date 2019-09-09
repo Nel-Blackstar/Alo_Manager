@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Contrats</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/paies/show}">Paies</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Contract</span></li>
+        </ul>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout d'un Contrat</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content">
+                <div class="alert alert-info" data-th-if="${info}">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<strong>Infos: </strong> <span class="fg-green" data-th-text="${info}"></span>
+				  </div>
+             		<form class="form-horizontal" data-th-action="@{/admin/paies/contrat/save}" method="post"  data-th-object="${contrat}">
+                            <fieldset style="text-align:center">
+                                <div class="control-group">
+                                    <label class="control-label" for="personnel">Personnel<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select data-rel="chosen"class="typeahead span6"  id="personnel" data-th-field="${contrat.personnel}">
+	                                                <span data-th-each="personnel : ${personnels}">
+					                                    <option data-th-value="${personnel.id}" data-th-text="${personnel.matricule} +' : '+${personnel.nom} +' '+${personnel.prenom} "></option>
+					                                </span>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="typeContrat">Type de Contrat<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select data-rel="chosen"class="typeahead span6"  id="typeContrat" data-th-field="${contrat.typeContrat}">
+	                                                <span data-th-each="typeContrat : ${typeContrats}">
+					                                    <option data-th-value="${typeContrat.id}" data-th-text="${typeContrat.numeroType} +'  '+${typeContrat.nomType}"></option>
+					                                </span>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="poste">Poste<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select data-rel="chosen"class="typeahead span6"  id="poste" data-th-field="${contrat.profession}">
+	                                                <span data-th-each="profession : ${professions}">
+					                                    <option data-th-value="${profession.id}" data-th-text="${profession.nom} +' -> '+ ${profession.libeller}"></option>
+					                                </span>
+                                        </select>
+                                        <input type="hidden" data-th-field="${contrat.id}" data-th-value="${contrat.id}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="dateEmbauche">Date D'Embauche<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text"  class="span6 typeahead datepicker" id="dateEmbauche" data-th-field="${contrat.dateEmbauche}">
+                                    </div>
+                                </div>
+
+
+                                <div class="control-group">
+                                    <label class="control-label" for="frequence">Frequence de paie<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select  class="span6 typeahead"  data-rel="chosen" id="frequence" data-th-field="${contrat.frequencePaie}">
+                                            <option value="quizaine">Quizaine</option>
+                                            <option value="mensuel">Mensuel</option>
+                                            <option value="semestrielle">Semestrielle</option>
+                                            <option value="annuelle">Annuelle</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="base de Paie">Base de Paie<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <select class="span6 typeahead" id="base de Paie" data-th-field="${contrat.basePaie}" data-rel="chosen">
+                                            <option value="ancune">Aucune</option>
+                                            <option value="heure">Heure</option>
+                                            <option value="performance">Performance</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="modeReglement">Mode Reglement<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="modeReglement" data-th-field="${contrat.modeReglement}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="salaire">Salaire De Base<span class="text-danger">*</span> </label>
+                                    <div class="controls">
+                                        <input type="text" class="span6 typeahead" id="salaire" data-th-field="${contrat.salaireBase}">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="reset" class="btn">Annuler</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="clearfix"></div>
+        <div class="row-fluid sortable">
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Les Contracts</h2>
+                    <div class="box-icon">
+                        <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
+                        <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+                        <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+                    </div>
+                </div>
+                <div class="box-content"> 
+                
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Personnel</th>
+                            <th>Type de Contrat</th>
+                            <th>Poste</th>
+                            <th>Salaire de Base</th>
+                            <th>Frequence de paie</th>
+                            <th>Base de Paie</th>
+                            <th>Mode de Reglements</th>
+                            <th>Date D'Embauche</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="contrat, uStat : ${contrats}">
+                            <td data-th-text="${uStat.count}"></td>
+                            <td data-th-text="${contrat.personnel.nom} + ' ' + ${contrat.personnel.prenom}"></td>
+                            <td data-th-text="${contrat.typeContrat.nomType}"></td>
+                            <td data-th-text="${contrat.profession.nom}"></td>
+                            <td data-th-text="${contrat.salaireBase}"></td>
+                            <td data-th-text="${contrat.frequencePaie}"></td>
+                            <td data-th-text="${contrat.basePaie}"></td>
+                            <td data-th-text="${contrat.modeReglement}"></td>
+                            <td data-th-text="${contrat.dateEmbauche}"></td>
+                            <td>
+                                <a href="#" data-th-href="@{'/admin/paies/contrat/update/'+${contrat.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" data-th-href="@{'/admin/paies/contrat/delete/'+${contrat.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette CNPS ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!--/span-->
+        </div><!--/row-->
+    <!-- end: Content -->
+        </div>
+</div>
+</body>
+</html>

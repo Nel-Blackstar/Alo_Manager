@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 
 @Entity
 public class CNPS extends LiveEntity {
+    private  String nom;
     private float tauxSalarial;
     private float plafondSalarial;
     private float tauxPatronal;
@@ -43,4 +44,11 @@ public class CNPS extends LiveEntity {
         this.tauxPatronal = tauxPatronal;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 }

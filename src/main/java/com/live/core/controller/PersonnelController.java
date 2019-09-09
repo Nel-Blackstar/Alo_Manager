@@ -16,7 +16,11 @@ import com.live.moniteur.entities.SessionFormation;
 import com.live.moniteur.service.DiplomeService;
 import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
+import com.live.paie.entities.Contrat;
 import com.live.paie.service.BanqueService;
+import com.live.paie.service.ContratService;
+import com.live.paie.service.ProfessionService;
+import com.live.paie.service.TypeContratService;
 import com.live.rh.entities.*;
 import com.live.rh.repository.DetailOffreRepository;
 import com.live.rh.service.*;
@@ -50,6 +54,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class PersonnelController extends InitiateController {
+    @Autowired
+    public ProfessionService professionService;
+    @Autowired
+    public ContratService contratService;
     @Autowired
     SortieService sortieService;
     @Autowired
@@ -111,19 +119,32 @@ public class PersonnelController extends InitiateController {
      * @param model
      * @param personnel personnel a ajouter
      * @return
+     * @throws IOException 
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) {
+    public String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/personnels/index";
 	 	}
+        personnel.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+    	Files.write(Paths.get(System.getProperty("user.home")+"/alo/personnels/"+personnel.getPhoto()), photo.getBytes());
         chargerLive(model);
         Personnel personnel1 = personnelService.save(personnel);
+        contrat.setPersonnel(personnel1);
+        Contrat c=contratService.save(contrat);
+        personnel1.setContrat(c);
+        personnel1 = personnelService.save(personnel1);
         model.addAttribute("state", "post");
-        session.setAttribute("infos","Le personnel"+personnel1.getNom()+" - "+personnel1.getEmail()+" vient d'etre cree !!");
+        session.setAttribute("infos"," OpÃ©ration Ã©ffectuer sur "+personnel1.getNom()+" - "+personnel1.getEmail()+" avec succÃ¨s !!");
         model.addAttribute("info",personnel1.getNom()+" - "+personnel1.getEmail());
         return "redirect:/admin/personnels";
     }
+    @ResponseBody
+	 @GetMapping(value = "/personnels/images", produces = MediaType.IMAGE_PNG_VALUE)
+	 public byte[] getPersonnelPhoto(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/personnels/" + p.getPhoto()));
+	 }
 
     /**
      *     <b> Modifiction des information d'un personnel du system  </b>
@@ -158,8 +179,17 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        List<Personnel> ps=personnelService.findAll();
+        int i= ps.size()+1;
+        Personnel Dernier=personnelService.findOne((long) (i));
         model.addAttribute("state", "get");
-        model.addAttribute("personnel", new Personnel());
+        NumberFormat nf = new DecimalFormat("00000");
+        Personnel p=new Personnel();
+        p.setMatricule("ALO-"+nf.format(Dernier.getId()));
+        model.addAttribute("personnel", p);
+        model.addAttribute("contrat", new Contrat());
+        model.addAttribute("contrats",contratService.findAll());
+        model.addAttribute("professions",professionService.findAll());
         model.addAttribute("banques", banqueService.findAll());
         return "administration/personnels/index";
     }
@@ -193,7 +223,7 @@ public class PersonnelController extends InitiateController {
     	Files.write(Paths.get(System.getProperty("user.home")+"/alo/live/"+live.getPhoto()), photo.getBytes());
     	try {
         	liveService.save(live);
-        	session.setAttribute("infos","Actions terminer avec succès!!");
+        	session.setAttribute("infos","Actions terminer avec succÃ¨s!!");
         	return "redirect:/admin/live";
         }catch(Exception $e) {
         	session.setAttribute("infos","Action non terminer!!");
@@ -232,7 +262,7 @@ public class PersonnelController extends InitiateController {
     	personnel.setDate_naissance(date_naissance);
         chargerLive(model);
         personnelService.save(personnel);
-        session.setAttribute("infos","Modification terminer avec succès!!");
+        session.setAttribute("infos","Modification terminer avec succÃ¨s!!");
         return "redirect:/admin/personnels";
 	    }
 	    
@@ -283,7 +313,7 @@ public class PersonnelController extends InitiateController {
             erreur.add("les mots de passe saisie ne sont pas identique \n");
       }
         if (usersService.findByLogin(users.getLogin()) != null){
-            erreur.add("Un utilisateur possedant se login existe dejà dans le systeme \n");
+            erreur.add("Un utilisateur possedant se login existe deja dans le systeme \n");
         }
         if(!erreur.isEmpty()){
             session.setAttribute("infos",erreur);
@@ -297,7 +327,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if(!roles.isEmpty()){
-                // Le rÃ´le selectionné existe dans le systÃ¨me
+                // Le rÃ´le selectionnï¿½ existe dans le systÃ¨me
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -377,7 +407,7 @@ public class PersonnelController extends InitiateController {
             // Enregistrer l'utilisateur
             Users savedUser = usersService.save(user);
             if (!roles.isEmpty()) {
-                // Le rÃ´le selectionné existe dans le systÃ¨me
+                // Le rÃ´le selectionnï¿½ existe dans le systÃ¨me
                 savedUser.setRoles(roles);
                 usersService.save(savedUser);
             }
@@ -405,7 +435,7 @@ public class PersonnelController extends InitiateController {
     public String listUsers(HttpSession session,Model model) {
         model.addAttribute("listeUsers", usersService.findAll());
         chargerLive(model);
-        // Charger la liste des rÃ´les disponibles et déposer dans le model
+        // Charger la liste des rÃ´les disponibles et dÃ©poser dans le model
         model.addAttribute("listeRoles", rolesService.findAll());
         //chargement de la liste du personnel
         if (session.getAttribute("infos") != null){
@@ -435,7 +465,7 @@ public class PersonnelController extends InitiateController {
         return "administration/apprenants/index";
     }
     /**
-     * Mèthode d'ajout d'un Apprenant post
+     * MÃ©thode d'ajout d'un Apprenant post
      * @param model
      * @return
      */
@@ -476,7 +506,7 @@ public class PersonnelController extends InitiateController {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/update";
 	 	}
-		session.setAttribute("infos","Modification terminer avec succès!!");
+		session.setAttribute("infos","Modification terminer avec succÃ¨s!!");
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
@@ -503,7 +533,7 @@ public class PersonnelController extends InitiateController {
     public String deleteApprenant(HttpSession session,@PathVariable long id) {
     	Apprenant apprenant = apprenantService.findOne(id);
     	apprenantService.delete(apprenant);
-    	session.setAttribute("infos","suppréssion terminer avec succès!!");
+    	session.setAttribute("infos","supprÃ©ssion terminer avec succÃ¨s!!");
     	return "redirect:/admin/apprenants";
 
     }
@@ -524,7 +554,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/index";
     }
     /** 
-     * Mèthode d'ajout d'un Apprenant get
+     * MÃ©thode d'ajout d'un Apprenant get
      * @param model
      * @return
      */
@@ -541,7 +571,7 @@ public class PersonnelController extends InitiateController {
         return "administration/formations/create";
      }
      /**
-      * Mèthode d'ajout d'un Apprenant post
+      * MÃ©thode d'ajout d'un Apprenant post
       * @param model
       * @return
       */
@@ -552,7 +582,7 @@ public class PersonnelController extends InitiateController {
 	 		}
          sessionFormationService.save(formation);
          model.addAttribute("state", "post");
-         session.setAttribute("infos","Nouvelle session de formation configuerée avec succès!!");
+         session.setAttribute("infos","Nouvelle session de formation configurÃ© avec succÃ¨s!!");
          return "redirect:/admin/formations";
      }
      /**
@@ -581,7 +611,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/formations/update";
     	}
-    	session.setAttribute("infos","Nouvelle session de formation modifier avec succès!!");
+    	session.setAttribute("infos","Nouvelle session de formation modifier avec succÃ¨s!!");
      	sessionFormationService.save(formation);
      	return"redirect:/admin/formations";
 
@@ -631,7 +661,7 @@ public class PersonnelController extends InitiateController {
         	 }
          }
          if(n==true) {
-        	 session.setAttribute("infos","Echec du procèssus de crèation. Cet apprènant a dèjè ètè inscrit a cette session de formation!");
+        	 session.setAttribute("infos","Echec du procÃ©ssus de crÃ©ation. Cet apprÃ©nant a dÃ©ja ete inscrit a cette session de formation!");
          }else {
         	 Diplome diplome=new Diplome();
              diplome.setStatut(false);
@@ -643,7 +673,7 @@ public class PersonnelController extends InitiateController {
              diplome.setInscrit(inscription);
              diplomeService.save(diplome);
              model.addAttribute("state", "post");
-             session.setAttribute("infos","Procéssus de création terminer avec succès!"); 
+             session.setAttribute("infos","ProcÃ©ssus de crÃ©ation terminer avec succÃ¨s!");
          }
          return "redirect:/admin/formation/apprenant";
      }
@@ -666,11 +696,11 @@ public class PersonnelController extends InitiateController {
          	inscription.setDiplome(diplome);
          	inscriptionService.save(inscription);
          	diplomeService.save(diplome);
-     		session.setAttribute("infos","suppréssion echouer car plusieurs oppérations ont déjà été éffectuers!!");
+     		session.setAttribute("infos","supprÃ©ssion echouer car plusieurs opÃ©rations ont dÃ©j& Ã©tÃ© Ã©ffectuer!!");
      		return "redirect:/admin/formation/apprenant";
      	}
      	diplomeService.delete(diplome);
-     	session.setAttribute("infos","suppréssion terminer avec succès!!");
+     	session.setAttribute("infos","supprÃ©ssion terminer avec succÃ¨s!!");
         return "redirect:/admin/formation/apprenant";
      }
      //modification de l'inscription
@@ -730,7 +760,7 @@ public class PersonnelController extends InitiateController {
     	diplome.setStatut(true);
     	diplome.setInscrit(inscriptionService.findOne(propietaire));
     	diplomeService.save(diplome);
-    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	session.setAttribute("infos","Opï¿½ration terminer avec succï¿½s!!");
     	return "redirect:/admin/formation/diplomes";
 	 }
 	 @RequestMapping("/partenaire")
@@ -759,7 +789,7 @@ public class PersonnelController extends InitiateController {
     	}
     	partenaire.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
     	Files.write(Paths.get(System.getProperty("user.home")+"/alo/partenaires/"+partenaire.getPhoto()), photo.getBytes());
-    	session.setAttribute("infos","Opèration terminer avec succès!!");
+    	session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	partenaireService.save(partenaire);
      	return"redirect:/admin/partenaires/view";
 
@@ -785,9 +815,9 @@ public class PersonnelController extends InitiateController {
 		 Partenaire partenaire=partenaireService.findOne(id);
 		 try {
 			 partenaireService.delete(partenaire);
-			 session.setAttribute("infos","Opération terminer avec succès!!");
+			 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opération non éffectuée ce partenaire existe et est lier a plusieurs opérations!!");
+			 session.setAttribute("infos","OpÃ©ration non Ã©ffectuÃ© ce partenaire existe et est lier a plusieurs opÃ©rations!!");
 		 }
 		 return"redirect:/admin/partenaires/view";
      }
@@ -807,7 +837,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/fournitures/index";
     	}
-    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	fournitureService.save(fourniture);
      	return"redirect:/admin/partenaires/fournitures";
 
@@ -822,9 +852,9 @@ public class PersonnelController extends InitiateController {
 		 Fournitures fourniture=fournitureService.findOne(id);
 		 try {
 			 fournitureService.delete(fourniture);
-			 session.setAttribute("infos","Opération terminer avec succès!!");
+			 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+			 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette fourniture existe et est lier a plusieurs opÃ©rations!!");
 		 }
 		 return"redirect:/admin/partenaires/fournitures";
      }
@@ -851,7 +881,7 @@ public class PersonnelController extends InitiateController {
     		 model.addAttribute("info","Echec de l'operation!!");
            	 return "administration/partenaires/offres/index";
     	}
-    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	offreService.save(offre);
      	List<Offre> offres= new ArrayList<>();
      	offres.add(offre);
@@ -865,7 +895,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Opèration terminer avec succès!!");
+     		session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	}
      	return"redirect:/admin/partenaires/offres";
 
@@ -893,18 +923,18 @@ public class PersonnelController extends InitiateController {
 				 p.setOffres(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opération terminer avec succès!!");
+					 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opération non éffectuer cette prévision existe et est lier a plusieurs opérations!!");
+					 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette prÃ©vision existe et est lier a plusieurs opÃ©rations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 offreService.delete(offre);
-			 session.setAttribute("infos","Opération terminer avec succès!!");
+			 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opération non éffectuer cette offre existe et est lier a plusieurs opérations!!");
+			 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette offre existe et est lier a plusieurs opÃ©rations!!");
 		 }
 		 return"redirect:/admin/partenaires/offres";
      }
@@ -925,7 +955,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/previsions/index";
     	}
-    	session.setAttribute("infos","Opération terminer avec succès!!");
+    	session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	previsionService.save(prevision);
      	List<Prevision> previsions= new ArrayList<>();
      	previsions.add(prevision);
@@ -939,7 +969,7 @@ public class PersonnelController extends InitiateController {
      	try {
      		partenaireService.save(partenaire);
      	}catch(Exception $e) {
-     		session.setAttribute("infos","Opération terminer avec succès!!");
+     		session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	}
      	return"redirect:/admin/partenaires/previsions";
 
@@ -966,18 +996,18 @@ public class PersonnelController extends InitiateController {
 				 p.setPrevisions(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opération terminer avec succès!!");
+					 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opération non éffectuer cette prévision existe et est lier a plusieurs opérations!!");
+					 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette prï¿½vision existe et est lier a plusieurs OpÃ©rations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 previsionService.delete(prevision);
-			 session.setAttribute("infos","Opération terminer avec succès!!");
+			 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opération non èffectuer cette prévisions existe et est lier a plusieurs opérations!!");
+			 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette prÃ©visions existe et est lier a plusieurs OpÃ©rations!!");
 		 }
 		 return"redirect:/admin/partenaires/previsions";
      }
@@ -998,7 +1028,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-    	session.setAttribute("infos","Opèration terminer avec succès!!");
+    	session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	rendezVousService.save(rendezVous);
 		for(Long pId : partenaireId) {
 			List<RendezVous> rendez= new ArrayList<>();
@@ -1013,7 +1043,7 @@ public class PersonnelController extends InitiateController {
     	try {
     		partenaireService.save(partenaire);
 		}catch(Exception $e) {
-     		session.setAttribute("infos","Opération terminer avec succès!!");
+     		session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	}
     	}
      	return"redirect:/admin/partenaires/rendez-vous";
@@ -1031,7 +1061,7 @@ public class PersonnelController extends InitiateController {
     	if (bindingResult.hasErrors()) {
            	 return "administration/partenaires/rendez_vous/index";
     	}
-		session.setAttribute("infos","Opèration terminer avec succès!!");
+		session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
      	rendezVousService.save(rendezVous);
      	return"redirect:/admin/partenaires/rendez-vous";
 
@@ -1052,18 +1082,19 @@ public class PersonnelController extends InitiateController {
 				 p.setRendezVous(rs);
 				 try {
 					 partenaireService.save(p);
-					 session.setAttribute("infos","Opération terminer avec succès!!");
+					 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 				 }catch(Exception $e) {
-					 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opérations!!");
+					 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer ce rendez-vous existe et est lier a plusieurs opÃ©rations!!");
 				 }
 			  }
 		  }
 		 }
 		 try {
 			 rendezVousService.delete(rendezVous);
-			 session.setAttribute("infos","Opération terminer avec succès!!");
+
+			 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
 		 }catch(Exception $e) {
-			 session.setAttribute("infos","Opération non éffectuer ce rendez-vous existe et est lier a plusieurs opérations!!");
+			 session.setAttribute("infos","OpÃ©ration non Ã©ffectuer ce rendez-vous existe et est lier a plusieurs opÃ©rations!!");
 		 }
 		 return"redirect:/admin/partenaires/rendez-vous";
      }
@@ -1130,7 +1161,7 @@ public class PersonnelController extends InitiateController {
                      qte-=sorti.getQuantite();
              }
              if(qte<s.getQuantite()) {
-              	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	session.setAttribute("infos","QuantitÃ© infï¿½rieur au stock!! QuantitÃ© entrÃ©: "+sortie.getQuantite()+" reste stocks: "+qte);
               	return"redirect:/admin/partenaires/sorties";
               }
              try {
@@ -1138,7 +1169,7 @@ public class PersonnelController extends InitiateController {
                  s.setFacture(facture);
                  sortieService.save(s);
              }catch(Exception $e) {
-                 session.setAttribute("infos","Opération terminer avec succès!!");
+                 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
              }
              sts.add(s);
              compteur++;
@@ -1159,7 +1190,7 @@ public class PersonnelController extends InitiateController {
 		try {
 			factureService.save(facture);
         }catch(Exception $e) {
-        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
+        	session.setAttribute("infos","Echec de la crÃ©ation de la facture "+$e.getLocalizedMessage());
         }
 		session.setAttribute("impression",sts);
         session.setAttribute("compteur",compter);
@@ -1173,9 +1204,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","Opération terminer avec succès!!");
+            session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+            session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette fourniture existe et est lier a plusieurs OpÃ©rations!!");
         }
         return"redirect:/admin/partenaires/sorties";
     }
@@ -1191,7 +1222,7 @@ public class PersonnelController extends InitiateController {
          sortie.setType("sortie");
         try {
             sortieService.save(sortie);
-            session.setAttribute("infos","Modification effectuer avec succès "+sortie.getId());
+            session.setAttribute("infos","Modification effectuer avec succï¿½s "+sortie.getId());
         }catch (Exception $e){
             session.setAttribute("infos","Erreur survenue lors de la modification");
         }
@@ -1258,7 +1289,7 @@ public class PersonnelController extends InitiateController {
                      qte-=sorti.getQuantite();
              }
              if(qte<s.getQuantite()) {
-              	session.setAttribute("infos","Quantité inférieur au stock!! quantité entré: "+sortie.getQuantite()+" reste stocks: "+qte);
+              	session.setAttribute("infos","QuantitÃ© infï¿½rieur au stock!! QuantitÃ© entrÃ©: "+sortie.getQuantite()+" reste stocks: "+qte);
               	return"redirect:/admin/partenaires/sorties";
               }
              try {
@@ -1266,7 +1297,7 @@ public class PersonnelController extends InitiateController {
                  s.setFacture(facture);
                  sortieService.save(s);
              }catch(Exception $e) {
-                 session.setAttribute("infos","Opération terminer avec succès!!");
+                 session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
              }
              sts.add(s);
              compteur++;
@@ -1287,7 +1318,7 @@ public class PersonnelController extends InitiateController {
 		try {
 			factureService.save(facture);
         }catch(Exception $e) {
-        	session.setAttribute("infos","Echec de la création de la facture "+$e.getLocalizedMessage());
+        	session.setAttribute("infos","Echec de la crÃ©ation de la facture "+$e.getLocalizedMessage());
         }
 		session.setAttribute("impression",sts);
         session.setAttribute("compteur",compter);
@@ -1301,9 +1332,9 @@ public class PersonnelController extends InitiateController {
         Sortie sortie=sortieService.findOne(id);
         try {
             sortieService.delete(sortie);
-            session.setAttribute("infos","Opération terminer avec succès!!");
+            session.setAttribute("infos","OpÃ©ration terminer avec succÃ¨s!!");
         }catch(Exception $e) {
-            session.setAttribute("infos","Opération non éffectuer cette fourniture existe et est lier a plusieurs opérations!!");
+            session.setAttribute("infos","OpÃ©ration non Ã©ffectuer cette fourniture existe et est lier a plusieurs OpÃ©rations!!");
         }
         return"redirect:/admin/partenaires/Emprunts";
     }
@@ -1360,7 +1391,7 @@ public class PersonnelController extends InitiateController {
                 total+=detail.getValeur();
         }
     	if(total+details.getValeur()>(details.getOffre().getQuantite()*details.getOffre().getPp())) {
-    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entré supérieur a la transaction reste a versé: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
+    		model.addAttribute("info","montant "+details.getValeur()+" FCFA entrÃ© supÃ©rieur a la transaction reste a verser: "+((details.getOffre().getQuantite()*details.getOffre().getPp())-total)+" FCFA");
     		model.addAttribute("detail",details);
             model.addAttribute("offres",offreService.findAll());
     		return  "administration/partenaires/payement/index";
@@ -1415,7 +1446,7 @@ public class PersonnelController extends InitiateController {
         QUINZE(15, "quinze"),SEIZE(16, "seize"),DIXSEPT(17, "dix-sept"),
         DIXHUIT(18, "dix-huit"),DIXNEUF(19, "dix-neuf"),
         
-        //de 20 à 99
+        //de 20 ï¿½ 99
         VINGT(20, 29, "vingt"),
         TRENTE(30, 39, "trente"),
         QUARANTE(40, 49, "quarante"), 
@@ -1425,7 +1456,7 @@ public class PersonnelController extends InitiateController {
         QUATREVINGT(80, 89,"quatre-vingt","s"),
         QUATREVINGTDIX(90, 99, "quatre-vingt-dix",QUATREVINGT),
         
-        //de 10 à X milliard
+        //de 10 ï¿½ X milliard
         DIXAINE(10, 99),
         CENT(100, 999, "cent",DIXAINE),
         MILLE(1000, 999999, "mille", CENT),
@@ -1472,7 +1503,7 @@ public class PersonnelController extends InitiateController {
         protected long min, max;
         protected String label;
         protected Nombre before;
-        // valeur à ajout à la fin d'un nombre entier
+        // valeur ï¿½ ajout ï¿½ la fin d'un nombre entier
         private String addMin;
         /* constructeurs*/
         Nombre() {
@@ -1503,11 +1534,11 @@ public class PersonnelController extends InitiateController {
         }
         
         protected String getValue(long value)throws Exception{
-            throw new Exception("Vous devez appeller la méthode par l'énumération Chiffre.CALCULATE");
+            throw new Exception("Vous devez appeller la mï¿½thode par l'ï¿½numï¿½ration Chiffre.CALCULATE");
         }
 
         protected String getValue(double value,String separator)throws Exception{
-            throw new Exception("Vous devez appeller la méthode par l'énumération Chiffre.CALCULATE");
+            throw new Exception("Vous devez appeller la mï¿½thode par l'ï¿½numï¿½ration Chiffre.CALCULATE");
         }
 
         // fonction de transformation
@@ -1520,7 +1551,7 @@ public class PersonnelController extends InitiateController {
             if(value<20) return values[(int)value].label;
             for (int i = 0; i < values.length; i++) {
                 Nombre nombre = values[i];
-                //si la valeur est inférieur à 100
+                //si la valeur est infï¿½rieur ï¿½ 100
                 if (value < 100 && nombre.min <= value && nombre.max >= value) {
                     //cas des valeurs 20, 30, 40, etc...
                     if (value == nombre.min) return nombre.label+((nombre.addMin!=null)?nombre.addMin:"");
@@ -1540,7 +1571,7 @@ public class PersonnelController extends InitiateController {
                         return sb.toString();
                     }
                 } else if (nombre.min <= v1 && nombre.max >= v1 && value >= 100) {
-                    //première partie du nombre
+                    //premiï¿½re partie du nombre
                     
                     //100 et 1000
                     if ((this.equals(MILLE) || this.equals(CENT))&& Nombre.UN.equals(nombre))
@@ -1549,10 +1580,10 @@ public class PersonnelController extends InitiateController {
                         add.append(nombre.getStringValue(v1));
                         //cas : Million de millard et Milliard de milliard 
                         add.append(((MILLIARD.equals(this)&& (MILLION.equals(nombre) || MILLIARD.equals(nombre)) ? " de" : "")));
-                        //ajout du label si présent
+                        //ajout du label si prï¿½sent
                         add.append(((label != null) ? " " + label : ""));
                     }
-                    //deuxième partie du nombre
+                    //deuxiï¿½me partie du nombre
                     add.append(((value - (v1 * this.min) > 0) ? (" " + before.getStringValue(value - (v1 * this.min))): (v1 > 1) ? "s" : ""));
                     return add.toString();
                 }

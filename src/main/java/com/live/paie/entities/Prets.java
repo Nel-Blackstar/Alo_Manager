@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Prets extends LiveEntity {
     private Long valeur;
+    private String date;
     private Long retenueMensuelle;
     @ManyToOne(optional = true, targetEntity = Personnel.class)
     private Personnel personnel;
@@ -45,5 +46,11 @@ public class Prets extends LiveEntity {
         this.personnel = personnel;
     }
 
+    public String getDate() {
+        return date;
+    }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
 }
