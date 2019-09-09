@@ -24,7 +24,7 @@
 
         <div class="row-fluid sortable">
             <div class="box span12">
-                <div class="box-header" data-original-title>
+                <div class="box-header" data-original-title  style="background-color:#3498db !important;color:white;font-weight:bold;">
                     <h2><i class="halflings-icon building"></i><span class="break"></span>Les Sessions de formations</h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
@@ -51,7 +51,7 @@
                         <tbody>
                         <tr data-th-each="formations, uStat : ${listeFormations}">
                             <td data-th-text="${uStat.count}"></td>
-                            <td data-th-text="${formations.dateDebut}"></td>
+                            <td data-th-text="${formations.libeller}"></td>
                             <td data-th-text="${formations.dateDebut}"></td>
                             <td data-th-text="${formations.dateFin}"></td>
                             <td data-th-text="${formations.delaiDossiers}"></td>

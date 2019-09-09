@@ -24,6 +24,8 @@ public class Live extends LiveEntity {
     private String numero_rc;
     private String boite_postale;
     private String fax;
+    private String code_postal;
+    private  String numero_contribuable;
 
     // List Detail
     @OneToMany(targetEntity = Detail.class)
@@ -32,8 +34,7 @@ public class Live extends LiveEntity {
     public Live() {
     }
 
-    public Live(String nom, String localisation, String slogan, String adresse, String telephone_1, String telephone_2, String email,
-                Double latitude, Double longitude, String site_web, String numero_rc, String boite_postale, String fax) {
+    public Live(String nom, String photo, String localisation, String slogan, String adresse, String telephone_1, String telephone_2, String email, Double latitude, Double longitude, String site_web, String numero_rc, String boite_postale, String fax, String code_postal, String numero_contribuable, List<Detail> details) {
         this.nom = nom;
         this.localisation = localisation;
         this.slogan = slogan;
@@ -47,6 +48,9 @@ public class Live extends LiveEntity {
         this.numero_rc = numero_rc;
         this.boite_postale = boite_postale;
         this.fax = fax;
+        this.code_postal = code_postal;
+        this.numero_contribuable = numero_contribuable;
+        this.details = details;
     }
 
     public String getNom() {
@@ -168,6 +172,20 @@ public class Live extends LiveEntity {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-    
-   
+
+    public String getCode_postal() {
+        return code_postal;
+    }
+
+    public void setCode_postal(String code_postal) {
+        this.code_postal = code_postal;
+    }
+
+    public String getNumero_contribuable() {
+        return numero_contribuable;
+    }
+
+    public void setNumero_contribuable(String numero_contribuable) {
+        this.numero_contribuable = numero_contribuable;
+    }
 }

@@ -2,6 +2,7 @@ package com.live.rh.entities;
 
 import com.live.common.entities.LiveEntity;
 import com.live.core.entities.Partenaire;
+import com.live.moniteur.entities.Inscription;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -22,6 +23,10 @@ public class Details extends LiveEntity {
     @ManyToOne
     @JoinColumn(name = "id_offre")
     private Offre offre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_inscription")
+    private Inscription inscription;
 
 
     public Details() {
@@ -64,5 +69,13 @@ public class Details extends LiveEntity {
 
     public void setOffre(Offre offre) {
         this.offre = offre;
+    }
+
+    public Inscription getInscription() {
+        return inscription;
+    }
+
+    public void setInscription(Inscription inscription) {
+        this.inscription = inscription;
     }
 }

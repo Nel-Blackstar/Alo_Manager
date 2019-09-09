@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -432,7 +433,12 @@ public class AdministrationController {
             session.setAttribute("infos","L'apprenant a deja suivie se cours, Merci de verifier vous informations");
         }else{
             Inscription inscrit = suivre.getInscription();
-            List<Suivre> suivs=inscrit.getSuivres();
+            List<Suivre> suivs=null;
+            try {
+                suivs=inscrit.getSuivres();
+            }catch (Exception e){
+                suivs=new ArrayList<Suivre>();
+            }
             suivs.add(suivreService.save(suivre));
             inscrit.setSuivres(suivs);
             inscriptionService.save(inscrit);
@@ -443,7 +449,12 @@ public class AdministrationController {
     @PostMapping("/cours/ajouter-evaluation")
     public String addEvaluation(HttpSession session, Evaluation evaluation){
             Inscription inscrit=evaluation.getInscription();
-            List<Evaluation> evals=inscrit.getEvaluations();
+            List<Evaluation> evals=null;
+            try {
+                evals=inscrit.getEvaluations();
+            }catch (Exception e){
+                evals=new ArrayList<Evaluation>();
+            }
             evals.add(evaluationService.save(evaluation));
             inscrit.setEvaluations(evals);
             inscriptionService.save(inscrit);

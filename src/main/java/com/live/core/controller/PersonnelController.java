@@ -459,9 +459,15 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        List<Apprenant> ps=apprenantService.findAll();
+        int i= ps.size()+1;
+        Apprenant Dernier=apprenantService.findOne((long) (i));
+        NumberFormat nf = new DecimalFormat("00000");
+        Apprenant app=new Apprenant();
+        app.setMatricule("ALOLDD"+nf.format(Dernier.getId()));
         model.addAttribute("state", "get");
     	model.addAttribute("listeApprenant", apprenantService.findAll());
-        model.addAttribute("apprenant", new Apprenant());
+        model.addAttribute("apprenant", app);
         return "administration/apprenants/index";
     }
     /**
@@ -1652,5 +1658,60 @@ public class PersonnelController extends InitiateController {
     model.addAttribute("lettre",lettre);
     model.addAttribute("live",liveService.findOne((long) 1));
     return  "administration/partenaires/factures/show";
+    }
+
+    /*
+    *Les payement relatif a la formation
+     * @param session
+     * @param model
+     * @return
+     */
+
+    @GetMapping("/formation/payements")
+    public String payements(HttpSession session,Model model) {
+        if(session.getAttribute("formationCourante")==null) {
+            return "redirect:/admin/formations";
+        }
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
+        model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation(formation));
+        model.addAttribute("formation", formation);
+        model.addAttribute("detail", new Detail());
+        return "administration/formations/payement/index";
+    }
+
+    @PostMapping("formation/payement/save")
+    public String saveInsPayement(Model model, Details details,HttpSession session){
+        double total =0.0;
+        for (Details detail: details.getInscription().getDetails()) {
+            total+=detail.getValeur();
+        }
+        detailOffreRepository.save(details);
+        Inscription inscription=inscriptionService.findOne(details.getInscription().getId());
+        List<Details> details2=inscription.getDetails();
+        details2.add(details);
+        inscription.setDetails(details2);
+        inscriptionService.save(inscription);
+        session.setAttribute("infos","Enregistrement effectuer");
+        return "redirect:/admin/formation/payements";
+    }
+
+    @GetMapping("formation/payements/show/{id}")
+    public String inscriptionPayements(HttpSession session,Model model,@PathVariable("id")  long id){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        Inscription inscription=inscriptionService.findOne(id);
+        double total =0.0;
+        for (Details detail: inscription.getDetails()) {
+            total+=detail.getValeur();
+        }
+        model.addAttribute("total",total);
+        model.addAttribute("inscription",inscription);
+        return  "administration/formations/payement/show";
     }
 }
