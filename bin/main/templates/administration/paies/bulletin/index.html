@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <title>Administration</title>
+    <title>Bulletins</title>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -13,18 +13,19 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="">Paies</a>
+                <a data-th-href="@{/admin/paies/show}">Paies</a>
                 <i class="icon-angle-right"></i>
             </li>
-            <li><a>Bulletins</a></li>
+            <li><a href="">Bulletins</a></li>
         </ul>
 
         <div class="row-fluid">
 
                     <a class="quick-button metro blue span2" data-th-each="personnel : ${personnels}" data-th-href="@{'/admin/paies/bulletin/personnel/'+${personnel.id} }">
                         <i class="icon-user"></i>
-                        <p style="text-align:center"><small data-th-text="${personnel.matricule}"></small></p>
-                        <p style="text-align:center"><span data-th-text="${personnel.nom} +' '+${personnel.prenom} "></span></p>
+                        <p style="text-align:center">Matricule : <small data-th-text="${personnel.matricule}"></small></p>
+                        <p style="text-align:center">Nom : <small data-th-text="${personnel.nom} +' '+${personnel.prenom} "></small></p>
+                        <p style="text-align:center">Poste : <small data-th-text="${personnel.getContrat().getProfession().getNom()}"></small></p>
                     </a>
 
 

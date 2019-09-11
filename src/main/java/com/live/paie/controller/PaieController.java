@@ -538,26 +538,233 @@ public class PaieController {
 
     }
 	
-    /*
     @ResponseBody
 	 @GetMapping(value = "/conges/personnel")
 	 public String getPersonnelConge(@RequestParam("pid") Long id) throws IOException {
 	      Personnel p=personnelService.findOne(id);
-	      Date personnelCreated= p.getCreatedAt();
-	      LocalDate date = LocalDate.now();
-	      LocalDate arrive=p.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	      LocalDate naissance= p.getDate_naissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-	      int year=arrive.getYear();
-	      int mont=arrive.getMonthValue();
-	      int thisYear=date.getYear();
-	      int thisMont=date.getMonthValue();
-	      int personnelNaisance=naissance.getYear();
-	      int personnelMont=naissance.getMonthValue();
-	      int ageActuel=thisYear-personnelNaisance;
-	      return " Age: "+ageActuel+" date naissance: "+personnelNaisance;
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      int nombreDeCongeNormale=nobreTotalEnMois*2;
+	      //congé enfant de moins de 5ans
+	      List<Enfants> enfants=p.getEnfants();
+	      int nombresDeCongeEnfants=0;
+	      if(!enfants.isEmpty()){
+	    	  for(Enfants e: enfants) {
+	    		  LocalDate dateNaissanceEnfant=e.getDate_naissance();
+	    		  int anneNaisEnfant=dateNaissanceEnfant.getYear();
+	    		  int moisNaisEnfant=dateNaissanceEnfant.getMonthValue();
+	    		  int ageAnneeEnfant=thisYear-anneNaisEnfant;
+	    		  int moisEnfant=thisMont-moisNaisEnfant;
+	    		  int totalMoisEnfant=ageAnneeEnfant*12+moisEnfant;
+	    		  if(totalMoisEnfant<60) {
+	    			  nombresDeCongeEnfants+=2*totalMoisEnfant;  
+	    		  }
+	    	  }
+	      }
+	      //recupération des congés du personnel
+	      List<Conge> conges=p.getConge();
+	      Long nombreDeCongePris=(long) 0;
+	      if(!conges.isEmpty()) {
+	    	  for(Conge c : conges) {
+	    		  Long jours=c.getDuree();
+	    		  //on exclut les congés de type id 2 martenité
+	    		  if(c.getTypeConge().getId()!=(long)2) {
+	    		  nombreDeCongePris+=jours;
+	    		  }
+	    	  }
+	      }
+	      //nombre de jours prix: nombreDeCongePris;
+	      //nombre de jours dont il a droit depuis son embauche: int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+	      int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+	      //nombre de jours de congés a prendre encore depuis le début: float nombreAprendre=nombre-nombreDeCongePris;
+	      float nombreAprendre=nombre-nombreDeCongePris;
+	      //test : http://localhost:8085/admin/paies/conges/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre de congé normal : "+nombreDeCongeNormale+",<br> Nombre  de congé enfant: "+nombresDeCongeEnfants+",<br> Nombre total de jours de congé : "+nombre+",<br> nombre de jours pris : "+nombreDeCongePris+",<br> nombre restant a prendre : "+nombreAprendre;
 	 }
-
-     */
+    @ResponseBody
+	 @GetMapping(value = "/prets/personnel")
+	 public String getPersonnelPrets(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      List<Prets> pretses=p.getPrets();
+	      float valeurs=0;
+	      float retenues=0;
+	      int nombre=0;
+	      float aRetenir=0;
+	      if(!pretses.isEmpty()) {
+	    	  for(Prets prets : pretses) {
+	    		  valeurs+= prets.getValeur();
+	    		  nombre++;	 
+	    		  retenues+=prets.getRetenueMensuelle();
+	    	  }
+	    	  aRetenir=valeurs*retenues/100;
+	      }
+	      //valeurs total : valeurs
+	      //retenues total: retenues
+	      //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : aRetenir
+	      
+	      //test : http://localhost:8085/admin/paies/prets/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre de prêts : "+nombre+",<br> Valeur total des prets : "+valeurs+",<br> retenu total des prets :"+retenues+",<br> A retenir ce mois : "+aRetenir;
+	 }
+    @ResponseBody
+	 @GetMapping(value = "/credits/personnel")
+	 public String getPersonnelCredits(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      List<Credits> credits=p.getCredits();
+	      float valeurs=0;
+	      float retenues=0;
+	      float interet=0;
+	      int nombre=0;
+	      float aRetenir=0;
+	      if(!credits.isEmpty()) {
+	    	  for(Credits c : credits) {
+	    		  valeurs+= c.getValeur();
+	    		  nombre++;	 
+	    		  retenues+=c.getRetenue();
+	    		  interet+=c.getTauxInteret();
+	    	  }
+	    	  valeurs+=interet;
+	    	  interet=(interet*valeurs)/100;
+	    	  aRetenir=(valeurs*retenues/100);
+	      }
+	      //valeurs total : valeurs
+	      //retenues total: retenues
+	      //interets total: interet
+	      //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : aRetenir
+	      
+	      //test : http://localhost:8085/admin/paies/credits/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre de prêts : "+nombre+",<br> Valeur total des credits : "+valeurs+",<br> retenu total des credits :"+retenues+",<br> montant total des interets :"+interet+",<br> A retenir ce mois : "+aRetenir;
+	 }
+    @ResponseBody
+	 @GetMapping(value = "/avances/personnel")
+	 public String getPersonnelAvances(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      List<Avances> avances=p.getAvances();
+	      float valeurs=0;
+	      int nombre=0;
+	      if(!avances.isEmpty()) {
+	    	  for(Avances a : avances) {
+	    		  valeurs+= a.getValeur();
+	    		  nombre++;
+	    	  }
+	      }
+	      //valeurs total des avances: valeurs
+	      
+	      //test : http://localhost:8085/admin/paies/avances/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre des avances : "+nombre+",<br> Valeur total des avances : "+valeurs;
+	 }
+    @ResponseBody
+	 @GetMapping(value = "/primes-variables/personnel")
+	 public String getPersonnelPrimes(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      List<PrimesVariables> primes=p.getPrimesVariables();
+	      float valeurs=0;
+	      int nombre=0;
+	      if(!primes.isEmpty()) {
+	    	  for(PrimesVariables pv : primes) {
+	    		  valeurs+= pv.getValeur();
+	    		  nombre++;
+	    	  }
+	      }
+	      //valeurs total des avances: valeurs
+	      
+	      //test : http://localhost:8085/admin/paies/primes-variables/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre de primes variables : "+nombre+",<br> Valeur total des primes variables : "+valeurs;
+	 }
+    
+    @ResponseBody
+	 @GetMapping(value = "/primes-fixes/personnel")
+	 public String getPersonnelPrimesFixes(@RequestParam("pid") Long id) throws IOException {
+	      Personnel p=personnelService.findOne(id);
+	      //congé normale tous les employers
+	      Contrat contrat=p.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      List<PrimesFixes> primes=p.getPrimesFixes();
+	      float valeurs=0;
+	      int nombre=0;
+	      if(!primes.isEmpty()) {
+	    	  for(PrimesFixes pv : primes) {
+	    		  valeurs+= pv.getValeur();
+	    		  nombre++;
+	    	  }
+	      }
+	      //valeurs total des avances: valeurs
+	      
+	      //test : http://localhost:8085/admin/paies/primes-fixes/personnel?pid=1
+	      return "Nombre de mois au travail: "+nombreDeMoisDeTravail+",<br> Nombre d'années au travail:"+nombreAnneeTravail+",<br> nombre total en mois "+nobreTotalEnMois+",<br> Arriver année: "+thisEmbaucheYear+",<br> Moi d'arriver : "+thisEmbaucheMont+",<br> Nombre de primes fixes : "+nombre+",<br> Valeur total des primes fixes : "+valeurs;
+	 }
 
 
     /*

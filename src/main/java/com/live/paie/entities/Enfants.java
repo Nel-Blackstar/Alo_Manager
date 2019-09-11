@@ -5,6 +5,7 @@ import com.live.core.entities.Personnel;
 
 import antlr.collections.List;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,14 +13,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Enfants extends LiveEntity {
     private String nom;
     private String prenom;
     private String  sexe;
-    @Temporal(TemporalType.DATE)
-    private Date date_naissance;
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date_naissance;
     @OneToOne(targetEntity = Personnel.class)
     private Personnel personnel;
     
@@ -43,10 +48,10 @@ public class Enfants extends LiveEntity {
 	public void setSexe(String sexe) {
 		this.sexe = sexe;
 	}
-	public Date getDate_naissance() {
+	public LocalDate getDate_naissance() {
 		return date_naissance;
 	}
-	public void setDate_naissance(Date date_naissance) {
+	public void setDate_naissance(LocalDate date_naissance) {
 		this.date_naissance = date_naissance;
 	}
 	public Personnel getPersonnel() {

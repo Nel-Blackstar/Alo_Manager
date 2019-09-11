@@ -122,7 +122,7 @@ public class PersonnelController extends InitiateController {
      * @throws IOException 
      */
     @PostMapping(value = "/personnels/ajouter-personnel")
-    public String ajouterPersonnel(@RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
+    public String ajouterPersonnel( @RequestParam("pt") MultipartFile photo,HttpSession session,Model model,Contrat contrat,@Valid Personnel personnel, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/personnels/index";
 	 	}

@@ -7,12 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
 public class Contrat extends LiveEntity {
-    @Temporal(TemporalType.DATE)
-    private Date dateEmbauche;
+	@NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateEmbauche;
     private String frequencePaie;
     private  String basePaie;
     private String modeReglement;
@@ -30,7 +36,7 @@ public class Contrat extends LiveEntity {
     public Contrat() {
     }
 
-    public Contrat(Date dateEmbauche, String frequencePaie, String basePaie, String modeReglement, float salaireBase) {
+    public Contrat(LocalDate dateEmbauche, String frequencePaie, String basePaie, String modeReglement, float salaireBase) {
         this.dateEmbauche = dateEmbauche;
         this.frequencePaie = frequencePaie;
         this.basePaie = basePaie;
@@ -38,11 +44,11 @@ public class Contrat extends LiveEntity {
         this.salaireBase = salaireBase;
     }
 
-    public Date getDateEmbauche() {
+    public LocalDate getDateEmbauche() {
         return dateEmbauche;
     }
 
-    public void setDateEmbauche(Date dateEmbauche) {
+    public void setDateEmbauche(LocalDate dateEmbauche) {
         this.dateEmbauche = dateEmbauche;
     }
 
