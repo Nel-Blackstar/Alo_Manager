@@ -103,3 +103,12 @@ background-color:#2980b9;
 .dropdown-toggle:active{
     background-color:#2980b9 !important;
 }
+.navbar-inner{
+    border-bottom : 1px solid #2980b9;
+}
+.nav-tabs.nav-stacked > li > a, .nav-tabs.nav-stacked > li > ul > li > a{
+    border-bottom : 1px solid #2980b9;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle{
+    background-color: #2960b3;
+}
