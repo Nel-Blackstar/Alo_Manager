@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      data-layout-decorate="~{layouts/layout-admin}">
+<head>
+    <title>Distribution</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <!-- start: Content -->
+    <div id="content" class="span10">
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home"></i>
+                <a data-th-href="@{/admin/}">Administration</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/paies/show}">Paie</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a data-th-href="@{/admin/paies/primeFixe}">Prime Fixe</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li><span>Distribution</span></li>
+        </ul>
+        <br><br><br>
+        <h2>RECAPITULATIF SUR LA PRIME</h2>
+        <ul>
+            <li>Nom : <b data-th-text="${primeFixe.nom}"></b></li>
+            <li>Type: <b data-th-text="${primeFixe.type}"></b></li>
+            <li>Code : <b data-th-text="${primeFixe.code}"></b></li>
+            <li>Valeur : <b data-th-text="${primeFixe.valeur}+' FCFA'"></b></li>
+        </ul>
+
+        <br><br><br>
+
+        <center>
+            <table class="table table-striped table-bordered" style="text-align:center !important;width:70%;">
+            <thead>
+            <tr>
+                <th><b  style="text-align:center !important;">Cocher les Employers  Beneficiants de la prime</b>
+                </th>
+                <th>
+                    <b><button type="button" class="btn btn-success" onclick="checkall()">Tout Cocher</button></b>
+                </th>
+            </tr>
+            </thead>
+                <form  method="post" data-th-action="@{/admin/paies/primeFixe/distribuer}">
+            <tbody>
+                <input type="hidden" name="primeFixe" data-th-value="${primeFixe.id}">
+            <tr data-th-each="personnel : ${personnels}">
+                <td><b data-th-text="${personnel.matricule}+' : '+${personnel.nom}+' '+${personnel.prenom}"></b></td>
+                <td>
+                    <input type="checkbox" name="primes" data-th-value="${personnel.id}">
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <td colspan="2"><button type="submit" class="btn btn-primary">Enregistré</button></td>
+            </tfoot>
+                </form>
+        </table>
+        </center>
+
+        <!-- end: Content -->
+    </div>
+</div>
+<div data-layout-fragment="extra-js">
+    <script type="text/javascript">
+  function checkall(){
+    $(".prime").each(function(){
+    $(this).attr('checked',true)
+    });
+    $(".checker  span").addClass("checked");
+    }
+    </script>
+</div>
+</body>
+</html>

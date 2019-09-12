@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
 @Controller
 @RequestMapping(value = "/admin/paies")
@@ -397,6 +398,22 @@ public class PaieController {
         }
         return "redirect:/admin/paies/primeFixe";
 
+    }
+
+    //distribution de la prime
+    @RequestMapping("/primeFixe/distribuer/{id}")
+    public String distributePrimeFixe(HttpSession session, Model model, @PathVariable long id) {
+        PrimesFixes primeFixe = primesFixesService.findOne(id);
+        model.addAttribute("primeFixe", primeFixe);
+        model.addAttribute("personnels",personnelService.findAll());
+        return "/administration/paies/primeFixe/show";
+
+    }
+
+    @RequestMapping("/primeFixe/distribuer")
+    public @ResponseBody List<Long> saveDistribution(@RequestParam(value="primes",required = false) List<Long> primers, @RequestParam("primeFixe") Long prime){
+        PrimesFixes primesFixes=primesFixesService.findOne(prime);
+        return primers;
     }
 
 

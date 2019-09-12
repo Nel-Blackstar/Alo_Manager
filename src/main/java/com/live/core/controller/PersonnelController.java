@@ -11,8 +11,10 @@ import com.live.core.repository.PersonnelRepository;
 import com.live.core.repository.UsersRepository;
 import com.live.core.service.*;
 import com.live.moniteur.entities.Diplome;
+import com.live.moniteur.entities.Dossier;
 import com.live.moniteur.entities.Inscription;
 import com.live.moniteur.entities.SessionFormation;
+import com.live.moniteur.repository.DossierRepository;
 import com.live.moniteur.service.DiplomeService;
 import com.live.moniteur.service.InscriptionService;
 import com.live.moniteur.service.SessionFormationService;
@@ -39,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,6 +57,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class PersonnelController extends InitiateController {
+    @Autowired
+    public DossierRepository dossierRepository;
     @Autowired
     public ProfessionService professionService;
     @Autowired
@@ -1713,5 +1718,129 @@ public class PersonnelController extends InitiateController {
         model.addAttribute("total",total);
         model.addAttribute("inscription",inscription);
         return  "administration/formations/payement/show";
+    }
+
+    @GetMapping("exament/voir")
+    public String examentFinal(HttpSession session,Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("inscriptions", inscriptionService.findInscriptionsByFormation((SessionFormation) session.getAttribute("formationCourante")));
+        return  "administration/formations/exament/index";
+    }
+
+    @PostMapping("exament/save")
+    public String examentSavel(HttpSession session,Model model,@RequestParam("theoriques") List<String> theoriques,@RequestParam("pratiques") List<String> pratiques){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        int i=0;
+        for (Inscription inscription : inscriptionService.findInscriptionsByFormation((SessionFormation) session.getAttribute("formationCourante"))){
+            switch (pratiques.get(i)){
+                case "true":
+                    inscription.setEpreuvePratique(true);
+                    break;
+                case "false":
+                    inscription.setEpreuvePratique(false);
+                    break;
+                default:
+                    inscription.setEpreuvePratique(null);
+                    break;
+            }
+            switch (theoriques.get(i)){
+                case "true":
+                    inscription.setEpreuveTheorique(true);
+                    break;
+                case "false":
+                    inscription.setEpreuveTheorique(false);
+                    inscription.setEpreuvePratique(false);
+                    break;
+                default:
+                    inscription.setEpreuveTheorique(null);
+                    inscription.setEpreuvePratique(null);
+                    break;
+            }
+                i++;
+                inscriptionService.save(inscription);
+        }
+        return  "redirect:/admin/exament/voir";
+    }
+
+    @GetMapping("/formation/dossiers")
+    public String dossiers(HttpSession session,Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation((SessionFormation) session.getAttribute("formationCourante")));
+        return  "administration/formations/dossiers/index";
+    }
+
+    @GetMapping("/formation/dossiers/create/{id}")
+    public  String createDossier(HttpSession session,Model model,@PathVariable("id") Long id){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("inscription",inscriptionService.findOne(id));
+        model.addAttribute("dossier",new Dossier());
+        return  "administration/formations/dossiers/show";
+    }
+
+    @PostMapping("/formation/dossier/save")
+    public  String saveDossier(Model model,Dossier dossier,@RequestParam("inscription") Long id){
+        if (dossier.getId() != null){
+            dossier.setId((Long) dossier.getId());
+        }
+        Inscription inscription=inscriptionService.findOne(id);
+        dossier.setInscrit(inscription);
+        inscription.setDossier(dossierRepository.save(dossier));
+        inscriptionService.save(inscription);
+        return "redirect:/admin/formation/dossiers";
+    }
+    @PostMapping("/formation/dossier/update")
+    public String updateDossier(Model model,Dossier dossier,@RequestParam("inscription") Long id){
+        Inscription inscription=inscriptionService.findOne(id);
+        dossier.setId((Long) dossier.getId());
+        dossier.setInscrit(inscription);
+        dossierRepository.save(dossier);
+       return "redirect:/admin/formation/dossiers";
+    }
+
+    @GetMapping("/formation/dossiers/edit/{id}")
+    public  String editDossier(HttpSession session,Model model,@PathVariable("id") Long id){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("inscription",inscriptionService.findOne(id));
+        model.addAttribute("edit",new Dossier());
+        return  "administration/formations/dossiers/show";
+    }
+
+    @GetMapping("/formation/recipices")
+    public String recipicicer(HttpSession session,Model model){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation((SessionFormation) session.getAttribute("formationCourante")));
+        return  "administration/formations/recipice/index";
+    }
+
+    @PostMapping("/formation/recipice/save")
+    public String saverecipicicer(HttpSession session,Model model,@RequestParam("numero") String numero,@RequestParam("dateExpiration") String expiration,@RequestParam("inscription") Long inscriptionId){
+        if (session.getAttribute("infos") != null){
+            model.addAttribute("info",session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        Inscription inscription=inscriptionService.findOne(inscriptionId);
+        Dossier dossier=inscription.getDossier();
+        dossier.setCodeRecipicer(numero);
+        dossier.setDataExpiration(expiration);
+        dossierRepository.save(dossier);
+        return  "redirect:/admin/formation/recipices";
     }
 }

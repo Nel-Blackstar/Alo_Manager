@@ -96,7 +96,6 @@
                             <th>Type</th>
                             <th>Code</th>
                             <th> Valeur</th>
-                            <th>Exoneree</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -107,10 +106,10 @@
                             <td data-th-text="${primeFixe.type}"></td>
                             <td data-th-text="${primeFixe.code}"></td>
                             <td data-th-text="${primeFixe.valeur}"></td>
-                            <td data-th-text="${primeFixe.exoneree}"></td>
                             <td>
-                                <a href="#" data-th-href="@{'/admin/paies/primeFixe/update/'+${primeFixe.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/paies/primeFixe/delete/'+${primeFixe.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette Prime ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                <a href="#" title="Distribuer" data-th-href="@{'/admin/paies/primeFixe/distribuer/'+${primeFixe.id} }"  class="btn btn-small btn-primary"><i class="halflings-icon white tags"></i></a>
+                                <a href="#" title="modifier" data-th-href="@{'/admin/paies/primeFixe/update/'+${primeFixe.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
+                                <a href="#" title="Supprimer" data-th-href="@{'/admin/paies/primeFixe/delete/'+${primeFixe.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette Prime ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

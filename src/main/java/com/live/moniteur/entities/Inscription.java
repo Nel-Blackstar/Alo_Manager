@@ -34,10 +34,15 @@ public class Inscription extends LiveEntity {
     private Apprenant apprenant;
     @OneToOne
     private Diplome diplome;
+    @OneToOne
+    private Dossier dossier;
 
     @OneToMany
     @JoinColumn(name = "id_inscription")
     private List<Details> details;
+
+    private  Boolean epreuveTheorique;
+    private  Boolean epreuvePratique;
     
     
 	public float getPaiement() {
@@ -110,5 +115,29 @@ public class Inscription extends LiveEntity {
 
     public void setDetails(List<Details> details) {
         this.details = details;
+    }
+
+    public Boolean getEpreuveTheorique() {
+        return epreuveTheorique;
+    }
+
+    public void setEpreuveTheorique(Boolean epreuveTheorique) {
+        this.epreuveTheorique = epreuveTheorique;
+    }
+
+    public Boolean getEpreuvePratique() {
+        return epreuvePratique;
+    }
+
+    public void setEpreuvePratique(Boolean epreuvePratique) {
+        this.epreuvePratique = epreuvePratique;
+    }
+
+    public Dossier getDossier() {
+        return dossier;
+    }
+
+    public void setDossier(Dossier dossier) {
+        this.dossier = dossier;
     }
 }

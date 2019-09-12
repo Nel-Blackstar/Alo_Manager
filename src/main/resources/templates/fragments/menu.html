@@ -1,7 +1,7 @@
 <!-- Menu d'administration -->
-<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="admin">
+<ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="admin" xmlns:sec="http://www.w3.org/1999/xhtml">
     <li><a data-th-href="@{/admin}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
-    <li>
+    <li sec:authorize="hasRole('ROLE_ADMIN')">
         <a class="dropmenu" href="#"><i class="icon-cogs"></i><span class="hidden-tablet"> Configurations </span></a>
         <ul>
         	<li><a class="submenu" data-th-href="@{/admin/live}"><i class="icon-angle-right"></i><span class="hidden-tablet"> Entreprise </span></a></li>
@@ -17,7 +17,7 @@
     <li>
         <a data-th-href="@{/admin/partenaire}"><i class="icon-user"></i><span class="hidden-tablet">Partenaire</span></a>
     </li>
-    <li>
+    <li sec:authorize="hasRole('ROLE_ADMIN')">
         <a data-th-href="@{/admin/paies/show}"><i class="icon-calendar"></i><span class="hidden-tablet">Paie</span></a>
     </li>
 </ul>
@@ -41,8 +41,10 @@
 <!-- Menu du personnel -->
 <ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="personnel">
     <li><a data-th-href="@{/personnels}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
-    <li><a data-th-href="@{/reception/reservations}"><i class="icon-building"></i><span class="hidden-tablet"> Formations</span></a></li>
-</ul>
+    <li><a data-th-href="@{/admin/formations}"><i class="icon-briefcase"></i><span class="hidden-tablet"> Formations</span></a></li>
+    <li>
+        <a data-th-href="@{/admin/partenaire}"><i class="icon-user"></i><span class="hidden-tablet">Partenaire</span></a>
+    </li></ul>
 <!-- Fin menu du personnel -->
 
 <!-- Menu du moniteur -->
