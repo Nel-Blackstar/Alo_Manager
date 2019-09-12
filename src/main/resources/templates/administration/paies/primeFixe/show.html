@@ -53,7 +53,8 @@
             <tr data-th-each="personnel : ${personnels}">
                 <td><b data-th-text="${personnel.matricule}+' : '+${personnel.nom}+' '+${personnel.prenom}"></b></td>
                 <td>
-                    <input type="checkbox" name="primes" data-th-value="${personnel.id}">
+                    <input type="hidden" name="primes" data-th-value="${personnel.id}" disabled data-th-attr="id='pr'+${personnel.id}">
+                    <input type="checkbox" class="prime"  data-th-value="'pr'+${personnel.id}" name="check[]" onclick="if(document.getElementById(this.value).disabled==false){document.getElementById(this.value).disabled=true;}else{document.getElementById(this.value).disabled=false}">
                 </td>
             </tr>
             </tbody>
@@ -71,6 +72,7 @@
     <script type="text/javascript">
   function checkall(){
     $(".prime").each(function(){
+    $(this).trigger("click");
     $(this).attr('checked',true)
     });
     $(".checker  span").addClass("checked");

@@ -411,9 +411,25 @@ public class PaieController {
     }
 
     @RequestMapping("/primeFixe/distribuer")
-    public @ResponseBody List<Long> saveDistribution(@RequestParam(value="primes",required = false) List<Long> primers, @RequestParam("primeFixe") Long prime){
+    public String saveDistribution(HttpSession session,@RequestParam(value="primes",required = false) List<Long> primers, @RequestParam("primeFixe") Long prime){
         PrimesFixes primesFixes=primesFixesService.findOne(prime);
-        return primers;
+        for (Long primer : primers){
+           Personnel personnel = personnelService.findOne(primer);
+            if (personnel.getPrimesFixes() != null){
+                List<PrimesFixes> allPrimes = personnel.getPrimesFixes();
+                if(!allPrimes.contains(primesFixes)){
+                    allPrimes.add(primesFixes);
+                    personnel.setPrimesFixes(allPrimes);
+                }
+            }else{
+                List<PrimesFixes> allPrimes = new ArrayList<PrimesFixes>();
+                allPrimes.add(primesFixes);
+                personnel.setPrimesFixes(allPrimes);
+            }
+            personnelService.save(personnel);
+        }
+        session.setAttribute("infos","Distribution de prime effectuer");
+        return "redirect:/admin/paies/primeFixe";
     }
 
 
