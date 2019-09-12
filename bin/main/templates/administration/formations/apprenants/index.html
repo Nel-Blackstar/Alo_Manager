@@ -41,6 +41,13 @@
 	                            <a data-th-href="@{/admin/apprenants}" class="btn btn-primary">Cliquez pour ajouter un apprenant qui n'existe pas</a>
 	                            <fieldset>
 	                                <div class="box"><br>
+                                        <div class="control-group">
+                                            <label class="control-label" for="date">Date d'inscription<span class="text-danger">*</span> </label>
+                                            <div class="controls">
+                                                <input type="text" class="typeahead datepicker" id="date" data-th-field="*{date}">
+                                            </div>
+                                        </div>
+                                        <br>
 	                                  <div class="control-group">
 	                                        <label class="control-label" for="type_apprenan">Apprenant<span class="text-danger">*</span> </label>
 	                                        <input type="hidden" data-th-value="${formation.id}" data-th-field="*{formation}">
@@ -50,7 +57,9 @@
 					                                    <option data-th-value="${apprenant.id}" data-th-text="${apprenant.nom}+' '+${apprenant.prenom}"></option>
 					                                </span>
 	                                            </select>
-	                                        </div><br>
+	                                        </div>
+                                      </div><br>
+                                        <div class="control-group">
 	                                        <label class="control-label" for="type_apprenan">Catégorie de permi<span class="text-danger">*</span> </label>
 	                                        <div class="controls">
 	                                            <select data-rel="chosen"class="typeahead" name="categoriePermis">
@@ -59,14 +68,19 @@
 					                                </span>
 	                                            </select>
 	                                        </div>
+                                        </div>
+                                        <br>
+                                        <div class="control-group">
+                                            <label class="control-label" for="lieu_examen">Lieu d'exament<span class="text-danger">*</span> </label>
+                                            <div class="controls">
+                                                <input type="text" class="typeahead" id="lieu_examen" data-th-field="*{lieu_examen}">
+                                            </div>
+                                        </div>
 	                                    <br>
+                                        <div class="control-group">
 	                                    <label class="control-label" for="paiement">Frais d'inscriptions<span class="text-danger">*</span> </label>
 	                                        <div class="controls">
-	                                            <select data-rel="chosen"class="typeahead" id="paiement" data-th-field="*{paiement}">
-					                                   <option value="Une tranche">Une tranche</option>
-					                                   <option value="Deux tranches">Deux tranches</option>
-					                                   <option value="Tatalité">Tatalité</option>
-	                                            </select>
+                                                <input type="text" class="typeahead" id="paiement" data-th-field="*{paiement}">
 	                                        </div>
 	                                    </div>
 	                                    <div class="form-actions">
@@ -98,8 +112,10 @@
                             <th>Adrèsse</th>
                             <th>Téléphone</th>
                             <th>email</th>
-                            <th>Paiement des frais</th>
+                            <th>Date d'inscription</th>
+                            <th>Frais D'inscription</th>
                             <th>Permis</th>
+                            <th>Lieu d'examen</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -111,8 +127,10 @@
                             <td data-th-text="${inscription.getApprenant().adresse}"></td>
                             <td data-th-text="${inscription.getApprenant().telephone_1}"></td>
                             <td data-th-text="${inscription.getApprenant().email}"></td>
+                            <td data-th-text="${inscription.date}"></td>
                             <td><span data-th-text="${inscription.paiement}"></span></td>
                             <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
+                            <td><span data-th-text="${inscription.lieu_examen}"></span></td>
                             <td>
                                 <a data-th-href="@{/admin/formation/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
                             </td>
