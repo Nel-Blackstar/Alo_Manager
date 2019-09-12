@@ -982,10 +982,28 @@ public class PaieController {
             model.addAttribute("info", session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
+        model.addAttribute("bulletin", new BulletinPaie());
         Personnel personnel=personnelService.findOne(id);
         model.addAttribute("personnel", personnel);
 
         return "/administration/paies/bulletin/liste";
+    }
+    
+    @PostMapping("/createBulletinPaie/save")
+    public String saveBulletinPaie(HttpSession session, @Valid BulletinPaie bulletin,@RequestParam("personnel") Personnel personnel){
+        List<BulletinPaie> blts=new ArrayList<BulletinPaie>();
+        for (BulletinPaie b : personnel.getBulletinPaie()){
+        	blts.add(b);
+        }
+        if (!blts.contains(bulletin)){
+        	blts.add(bulletin);
+            session.setAttribute("infos","Enregistrement effectuer");
+        }else {
+            session.setAttribute("infos","Ce bulletin a déjà été attribuer à "+personnel.getNom());
+        }
+        personnel.setBulletinPaie(blts);
+        personnelService.save(personnel);
+        return "redirect:/admin/paies/bulletin/personnel/"+personnel.getId();
     }
 
 
