@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"
       xmlns="http://www.w3.org/1999/xhtml"
-      data-layout-decorate="~{layouts/layout-admin}">
+      data-layout-decorate="~{layouts/layout-admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Personnels</title>
 </head>
@@ -110,7 +110,7 @@
                             <th>Quantité</th>
 							<th>Prix de vente partenaire</th>
 							<th>Prix de vente public</th>
-                            <th>Actions</th>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -121,7 +121,7 @@
 							<td data-th-text="${offre.quantite}"></td>
 							<td data-th-text="${offre.pp}+' FCFA'"></td>
 							<td data-th-text="${offre.pvp}+' FCFA'"></td>
-                            <td>  
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
                             	<!--<a href="#" data-th-href="@{'/admin/partenaires/update/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>-->
                                 <a href="#" data-th-href="@{'/admin/offres/update/'+${offre.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
                                 <a href="#" data-th-href="@{'/admin/offres/delete/'+${offre.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer cette offre ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>

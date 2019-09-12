@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"
       xmlns="http://www.w3.org/1999/xhtml"
-      data-layout-decorate="~{layouts/layout-admin}">
+      data-layout-decorate="~{layouts/layout-admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Utilisateurs</title>
 </head>
@@ -104,7 +104,7 @@
                             <td>
                                 <a href="#" data-th-href="@{'/admin/consulter-cours/'+${cours.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
                                 <a href="#" data-th-href="@{'/admin/update-cours/'+${cours.id} }"  class="btn btn-small btn-success"><i class="halflings-icon white edit"></i></a>
-                                <a href="#" data-th-href="@{'/admin/cours/delete-cours/'+${cours.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
+                                <a sec:authorize="hasRole('ROLE_ADMIN')" href="#" data-th-href="@{'/admin/cours/delete-cours/'+${cours.id} }"  class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>
