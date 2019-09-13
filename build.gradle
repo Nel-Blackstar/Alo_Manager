@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.4'
+	compile "net.sf.jasperreports:jasperreports:6.6.0"
 
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
