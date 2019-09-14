@@ -1774,7 +1774,7 @@ public class PersonnelController extends InitiateController {
             model.addAttribute("info",session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
-        model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormation((SessionFormation) session.getAttribute("formationCourante")));
+        model.addAttribute("listeInscriptions", inscriptionService.findInscriptionsByFormationEpreuvePratique((SessionFormation) session.getAttribute("formationCourante"),true));
         return  "administration/formations/dossiers/index";
     }
 

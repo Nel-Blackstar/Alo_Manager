@@ -34,7 +34,7 @@
                 </div>
                 <div class="box-content">
 
-                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable" id="datatable-buttons">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -64,10 +64,10 @@
                             </td>
                             <td>
                                 <span data-th-if="${inscription.dossier} == null">
-                                    <a href="#" data-th-href="@{'/admin/formation/dossiers/create/'+${inscription.id} }" class="btn btn-small btn-primary">Crée un Dossier</a>
+                                    <a href="#" data-th-href="@{'/admin/formation/dossiers/create/'+${inscription.id} }" title="Enregister  le Dossier" class="btn btn-small btn-primary"><i class="halflings-icon white pencil"></i></a>
                                 </span>
                                 <span data-th-if="${inscription.dossier} != null">
-                                    <a href="#" data-th-href="@{'/admin/formation/dossiers/edit/'+${inscription.id} }" class="btn btn-small btn-warning">Modifier</a>
+                                    <a href="#" data-th-href="@{'/admin/formation/dossiers/edit/'+${inscription.id} }" title="modifier de Dossier" class="btn btn-small btn-warning"><i class="halflings-icon white edit"></i></a>
                                 </span>
                                   </td>
                         </tr>

@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <title>Utilisateurs</title>
+    <title>suivie des evaluations</title>
     <style>
         ul{
         list-style-type:square;
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table table-striped table-bordered bootstrap-datatable datatable"  data-th-each="cours, uStat : ${listeCours}">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable"  data-th-each="cours, uStat : ${listeCours}" id="datatable-buttons">
                         <h2 data-th-text="${uStat.count}+' - '+${cours.module}" align="center"></h2>
                         <thead>
                         <tr>
