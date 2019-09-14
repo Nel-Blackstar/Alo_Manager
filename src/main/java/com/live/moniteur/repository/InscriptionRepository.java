@@ -12,4 +12,6 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Long> 
 	List<Inscription> findAllByFormation(SessionFormation formation);
 
     List<Inscription> findByApprenant(Apprenant apprenant);
+
+    List<Inscription> findInscriptionsByFormationAndEpreuvePratique(SessionFormation formationCourante, boolean b);
 }

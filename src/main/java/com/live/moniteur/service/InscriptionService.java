@@ -13,4 +13,6 @@ public interface InscriptionService {
     List<Inscription> findAll();
     List<Inscription> findInscriptionsByFormation(SessionFormation formation);
     List<Inscription> findInscriptionsByApprenant(Apprenant apprenant);
+
+    List<Inscription> findInscriptionsByFormationEpreuvePratique(SessionFormation formationCourante, boolean b);
 }
