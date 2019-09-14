@@ -19,16 +19,12 @@
             <li>
                 <a data-th-href="@{/admin/paies/bulletins}">Bulletins</a>
                 <i class="icon-angle-right"></i>
-                <a data-th-text="${personnel.nom}+' '+${personnel.prenom}">Bulletins</a>
+                <a data-th-if="${personnel}" data-th-text="${personnel.nom}+' '+${personnel.prenom}">Bulletins</a>
             </li>
         </ul>
 
         <div class="row-fluid">
-
-            <a class="quick-button span12" data-th-href="@{'/admin/paies/bulletin/print/'+${personnel.id} }">
-
-            </a>
-			 <div class="row-fluid sortable">
+			 <div class="row-fluid sortable" data-th-if="${bulletin}">
             <div class="box span12">
                 <div class="box-header" data-original-title>
                     <h2><i class="halflings-icon edit"></i><span class="break"></span>Ajout de bulletin de paie</h2>
@@ -49,7 +45,8 @@
 									<label class="control-label" for="description">Description<span class="text-danger">*</span> </label>
 									<div class="controls">
 										<input type="text" required class="span10" id="description" data-th-field="*{description}">
-										<input type="hidden" required class="span10" id="personnel" name="personnel" data-th-value="${personnel.id}">
+										<input type="hidden" required class="span10" id="personnel" name="per" data-th-value="${personnel.id}">
+										<input type="hidden" class="span10" id="id" data-th-field="*{id}">
 										<span class="text-danger" data-th-errors="${bulletin.description}"></span>
 									</div>
 								</div>
@@ -86,7 +83,7 @@
 			<div class="row-fluid sortable">
             <div class="box span12">
                 <div class="box-header" data-original-title>
-                    <h2><i class="halflings-icon building"></i><span class="break"></span>Liste des bulletins de paie du personnel</h2>
+                    <h2><i class="halflings-icon building"></i><span class="break"></span>Liste des bulletins de paie de <span data-th-text="${personnel.nom}+' '+${personnel.prenom}"></span></h2>
                     <div class="box-icon">
                         <a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
                         <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -113,8 +110,8 @@
                             <td data-th-text="${bulletin.nbreJoursFeries}"></td>
                             <td data-th-text="${bulletin.nbreCongesPayes}"></td>
                             <td>
-                                <a data-th-href="@{/admin/paies/voir-personnel/{id}(id = ${bulletin.getId()})}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white folder-open"></i></a>
-                                <a data-th-href="@{/admin/personnels/modifier-personnel/{id}(id = ${bulletin.getId()})}" class="btn btn-small btn-success" title="Modifier le personnel"><i class="halflings-icon white edit"></i></a>
+                                <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white print"></i></a>
+                                <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-success" title="Modifier le personnel"><i class="halflings-icon white edit"></i></a>
                             </td>
                         </tr>
                         </tbody>

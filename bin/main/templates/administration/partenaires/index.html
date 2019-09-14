@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"
       xmlns="http://www.w3.org/1999/xhtml"
-      data-layout-decorate="~{layouts/layout-admin}">
+      data-layout-decorate="~{layouts/layout-admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Accueil</title>
 </head>
@@ -63,14 +63,9 @@
                         <p>Gestion des prévisions</p>
                         <span class="notification blue"> </span>
                     </a>
-                    <a class="quick-button-small span2" data-th-href="@{'/admin/partenaires/payement'}">
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" class="quick-button-small span2" data-th-href="@{'/admin/partenaires/payement'}">
                         <i class="glyphicons-icon credit_card"></i>
                         <p>Gestion des Payements</p>
-                        <span class="notification green"></span>
-                    </a>
-                    <a class="quick-button-small span2" data-th-href="@{'/admin/formation/apprenant'}">
-                        <i class="glyphicons-icon pie_chart"></i>
-                        <p>Rapport des offres</p>
                         <span class="notification green"></span>
                     </a>
                     

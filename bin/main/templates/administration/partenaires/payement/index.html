@@ -116,7 +116,6 @@
                             <td data-th-text="${offre.quantite}*${offre.pp} + ' FCFA'"></td>
                             <td>
                                 <a href="#" data-th-href="@{'/admin/payements/show/'+${offre.id} }" class="btn btn-small btn-primary"><i class="halflings-icon white folder-open"></i></a>
-                                <a href="#" data-th-href="@{'/admin/offres/delete/'+${offre.id} }" onclick="return confirm('Etes vous sure de vouloir supprimer ce payement ?')" class="btn btn-small btn-danger"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>
                         </tbody>

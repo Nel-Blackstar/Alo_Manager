@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"
       xmlns="http://www.w3.org/1999/xhtml"
-      data-layout-decorate="~{layouts/layout-admin}">
+      data-layout-decorate="~{layouts/layout-admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Apprenants</title>
 </head>
@@ -116,7 +116,7 @@
                             <th>Frais D'inscription</th>
                             <th>Permis</th>
                             <th>Lieu d'examen</th>
-                            <th>Action</th>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -131,7 +131,7 @@
                             <td><span data-th-text="${inscription.paiement}"></span></td>
                             <td><span data-th-each="code, aStat : ${inscription.getDiplome().categoriePermis}" data-th-text="${code.description}"></span></td>
                             <td><span data-th-text="${inscription.lieu_examen}"></span></td>
-                            <td>
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
                                 <a data-th-href="@{/admin/formation/delete-Inscription/{id}(id = ${inscription.getId()})}" class="btn btn-small btn-danger" title="Supprimer l'apprenant"><i class="halflings-icon white trash"></i></a>
                             </td>
                         </tr>

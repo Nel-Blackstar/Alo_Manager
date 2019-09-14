@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -982,30 +984,119 @@ public class PaieController {
             model.addAttribute("info", session.getAttribute("infos"));
             session.removeAttribute("infos");
         }
-        model.addAttribute("bulletin", new BulletinPaie());
+        
         Personnel personnel=personnelService.findOne(id);
-        model.addAttribute("personnel", personnel);
+        Contrat contrat=personnel.getContrat();
+	      LocalDate date =contrat.getDateEmbauche();
+	      LocalDate auDay = LocalDate.now();
+	      int thisYear=auDay.getYear();
+	      int thisMont=auDay.getMonthValue();
+	      int thisEmbaucheYear=date.getYear();
+	      int thisEmbaucheMont=date.getMonthValue();
+	      int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+	      int nombreDeMoisDeTravail=0;
+	      nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+	      
+	      int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+	      int nombreDeCongeNormale=nobreTotalEnMois*2;
+	      //congé enfant de moins de 5ans
+	      List<Enfants> enfants=personnel.getEnfants();
+	      int nombresDeCongeEnfants=0;
+	      if(!enfants.isEmpty()){
+	    	  for(Enfants e: enfants) {
+	    		  LocalDate dateNaissanceEnfant=e.getDate_naissance();
+	    		  int anneNaisEnfant=dateNaissanceEnfant.getYear();
+	    		  int moisNaisEnfant=dateNaissanceEnfant.getMonthValue();
+	    		  int ageAnneeEnfant=thisYear-anneNaisEnfant;
+	    		  int moisEnfant=thisMont-moisNaisEnfant;
+	    		  int totalMoisEnfant=ageAnneeEnfant*12+moisEnfant;
+	    		  if(totalMoisEnfant<60) {
+	    			  nombresDeCongeEnfants+=2*totalMoisEnfant;  
+	    		  }
+	    	  }
+	      }
+	      //recupération des congés du personnel
+	      List<Conge> conges=personnel.getConge();
+	      Long nombreDeCongePris=(long) 0;
+	      if(!conges.isEmpty()) {
+	    	  for(Conge c : conges) {
+	    		  Long jours=c.getDuree();
+	    		  //on exclut les congés de type id 2 martenité
+	    		  if(c.getTypeConge().getId()!=(long)2) {
+	    		  nombreDeCongePris+=jours;
+	    		  }
+	    	  }
+	      }
+	      //nombre de jours prix: nombreDeCongePris;
+	      //nombre de jours dont il a droit depuis son embauche: int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+	      int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+	      //nombre de jours de congés a prendre encore depuis le début: float nombreAprendre=nombre-nombreDeCongePris;
+	      float nombreAprendre=nombre-nombreDeCongePris;
+	      float nombreHeurs=30*9;
+	      BulletinPaie b=new BulletinPaie();
+	      b.setNbreCongesPayes(nombreDeCongePris);
+	      b.setNbreHeureTravaillees(nombreHeurs);
+	      NumberFormat nf = new DecimalFormat("00");
+	      b.setNbreJoursFeries((long) 0);
+	      b.setDescription("Du "+LocalDate.now().getYear()+"-"+nf.format(LocalDate.now().getMonthValue())+"-00 au "+LocalDate.now());
+	      List<BulletinPaie> bulletins=bulletinPaieService.findAll();
+	      int nombreBuletin=bulletins.size();
+	      if(nombreBuletin<nobreTotalEnMois) {
+	    	  model.addAttribute("bulletin", b); 
+	      }
+          model.addAttribute("personnel", personnel);
 
         return "/administration/paies/bulletin/liste";
     }
     
     @PostMapping("/createBulletinPaie/save")
-    public String saveBulletinPaie(HttpSession session, @Valid BulletinPaie bulletin,@RequestParam("personnel") Personnel personnel){
-        List<BulletinPaie> blts=new ArrayList<BulletinPaie>();
+    public String saveBulletinPaie(HttpSession session, @Valid BulletinPaie bulletin,@RequestParam("per") Long pID){
+        List<BulletinPaie> blts=new ArrayList<>();
+        Personnel personnel=personnelService.findOne(pID);
         for (BulletinPaie b : personnel.getBulletinPaie()){
         	blts.add(b);
         }
+        bulletinPaieService.save(bulletin);
         if (!blts.contains(bulletin)){
         	blts.add(bulletin);
-            session.setAttribute("infos","Enregistrement effectuer");
-        }else {
-            session.setAttribute("infos","Ce bulletin a déjà été attribuer à "+personnel.getNom());
         }
+        session.setAttribute("infos","Enregistrement effectuer");
         personnel.setBulletinPaie(blts);
+        //Gestion des éléments de la fiche de paie
+        //prêts
+          List<Prets> pretss=personnel.getPrets();
+          float valeurs=0;
+	      float retenues=0;
+	      int nombre=0;
+	      float aRetenir=0;
+	      if(!pretss.isEmpty()) {
+	    	  for(Prets prets : pretss) {
+	    		  valeurs+= prets.getValeur();
+	    		  nombre++;	 
+	    		  retenues+=prets.getRetenueMensuelle();
+	    	  }
+	    	  aRetenir=valeurs*retenues/100;
+	      }
+	      //valeurs total : valeurs
+	      //retenues total: retenues
+	      //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : aRetenir
+        
         personnelService.save(personnel);
+        
         return "redirect:/admin/paies/bulletin/personnel/"+personnel.getId();
     }
 
+    @GetMapping("/bulletin/update/personnel/{id}/{pid}")
+    public String updateBulletinPaie(HttpSession session, Model model,@PathVariable("id") Long id,@PathVariable("pid") Long pid) {
+        if (session.getAttribute("infos") != null) {
+            model.addAttribute("info", session.getAttribute("infos"));
+            session.removeAttribute("infos");
+        }
+        model.addAttribute("bulletin", bulletinPaieService.findOne(id));
+        Personnel personnel=personnelService.findOne(pid);
+        model.addAttribute("personnel", personnel);
 
+        return "/administration/paies/bulletin/liste";
+    }
 
 }
