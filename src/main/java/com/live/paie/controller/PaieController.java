@@ -4,6 +4,8 @@ import com.live.core.entities.Personnel;
 import com.live.core.service.PersonnelService;
 import com.live.paie.entities.*;
 import com.live.paie.service.*;
+import com.live.reports.BulletinsReportService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -63,6 +65,8 @@ public class PaieController {
     public CongeService congeService;
     @Autowired
     public BulletinPaieService bulletinPaieService;
+    @Autowired
+    public BulletinsReportService bulletinsReportService;
 
     /*
      *******************************
@@ -1082,7 +1086,7 @@ public class PaieController {
 	      //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : aRetenir
         
         personnelService.save(personnel);
-        
+        bulletinsReportService.generateBulletinsPdfReport(personnel.getBulletinPaie());
         return "redirect:/admin/paies/bulletin/personnel/"+personnel.getId();
     }
 
