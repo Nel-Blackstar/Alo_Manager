@@ -32,6 +32,16 @@ dependencies {
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.4'
 	compile 'net.sf.jasperreports:jasperreports:6.6.0'
 	compile 'org.springframework:spring-support:2.0.8'
+    compile 'com.itextpdf:barcodes:7.0.1'
+    compile 'com.itextpdf:font-asian:7.0.1'
+    compile 'com.itextpdf:forms:7.0.1'
+    compile 'com.itextpdf:hyph:7.0.1'
+    compile 'com.itextpdf:io:7.0.1'
+    compile 'com.itextpdf:kernel:7.0.1'
+    compile 'com.itextpdf:layout:7.0.1'
+    compile 'com.itextpdf:pdfa:7.0.1'
+    compile 'com.itextpdf:sign:7.0.1'
+	compile group: 'com.lowagie', name: 'itext', version: '2.1.7'
 
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
