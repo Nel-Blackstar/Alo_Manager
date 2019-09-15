@@ -12,9 +12,9 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="description" class="java.lang.String"/>
-	<field name="nbre_conges_payes" class="java.lang.String"/>
-	<field name="nbre_heure_travaillees" class="java.lang.String"/>
-	<field name="nbre_jours_feries" class="java.lang.String"/>
+	<field name="nbreCongesPayes" class="java.lang.Long"/>
+	<field name="nbreHeureTravaillees" class="java.lang.Float"/>
+	<field name="nbreJoursFeries" class="java.lang.Long"/>
 	<columnHeader>
 		<band height="30">
 			<staticText>
@@ -111,7 +111,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{nbre_conges_payes}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nbreCongesPayes}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement stretchType="RelativeToBandHeight" x="300" y="0" width="120" height="30" uuid="69f678f4-27b7-425a-a350-72420563e5bb">
@@ -126,7 +126,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{nbre_heure_travaillees}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nbreHeureTravaillees}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement stretchType="RelativeToBandHeight" x="420" y="0" width="120" height="30" uuid="82106c09-ee63-4d0f-81c8-88f701e863b0">
@@ -141,7 +141,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{nbre_jours_feries}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nbreJoursFeries}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

@@ -14,17 +14,14 @@ import java.util.Map;
 @Service
 public class BulletinsReportService {
 	public void generateBulletinsPdfReport(List<BulletinPaie> bulletinList) {
+	    //test
         try {
-            // Compile the Jasper report from .jrxml to .japser
-            //JasperReport jasperReport = JasperCompileManager.compileReport("src/main/resources/static/reports/employee-rpt.jrxml");
-            InputStream bulletinsReportStream = getClass().getResourceAsStream("/static/reports/bulletins.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(bulletinsReportStream);
+            InputStream bsReportStream = getClass().getResourceAsStream("/static/reports/bulletins.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(bsReportStream);
             JRSaver.saveObject(jasperReport, "bulletins.jasper");
-            // Get your data source
             JasperPrint jasperPrint = pointCommun(jasperReport, bulletinList);
-            /* Export the report to a PDF file*/
             JasperExportManager.exportReportToPdfFile(jasperPrint,  System.getProperty("user.home")+"/alo/rapports/bulletin.pdf");
-        } catch (Exception e) {
+        }  catch (Exception e) {
             e.printStackTrace();
         }
     }
