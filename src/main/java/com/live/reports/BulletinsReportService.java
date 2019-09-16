@@ -28,6 +28,7 @@ public class BulletinsReportService {
 	private JasperPrint pointCommun(JasperReport jasperReport, List<BulletinPaie> bulletins) throws JRException {
         JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(bulletins);
         Map<String, Object> parameters = new HashMap<>();
+        parameters.put("image","C:/Users/Blondin/alo/rapports/desk.png");
         return JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
     }
 	

@@ -8,6 +8,7 @@
 			<![CDATA[]]>
 		</queryString>
 	</subDataset>
+	<parameter name="image" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -16,7 +17,7 @@
 	<field name="nbreHeureTravaillees" class="java.lang.Float"/>
 	<field name="nbreJoursFeries" class="java.lang.Long"/>
 	<columnHeader>
-		<band height="30">
+		<band height="51">
 			<staticText>
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="40" y="0" width="120" height="30" backcolor="#33CC00" uuid="51699b20-d3b3-4b35-a8d1-b25a2b36ce9a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bb1295bd-fe5d-490a-ab9a-14cbe71cb7e2"/>
@@ -80,7 +81,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="131" splitType="Stretch">
 			<frame>
 				<reportElement x="-20" y="0" width="595" height="30" uuid="689ff35d-16de-4c6d-817f-bf7fcfca84d6"/>
 				<textField>
@@ -144,6 +145,10 @@
 					<textFieldExpression><![CDATA[$F{nbreJoursFeries}]]></textFieldExpression>
 				</textField>
 			</frame>
+			<image>
+				<reportElement x="250" y="50" width="60" height="81" uuid="c1aee6c0-1df1-411d-82e4-e5c6ce1681e9"/>
+				<imageExpression><![CDATA[$P{image}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>
