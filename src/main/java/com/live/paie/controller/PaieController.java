@@ -1055,6 +1055,7 @@ public class PaieController {
 	      if(nombreBuletin<nobreTotalEnMois) {
 	    	  model.addAttribute("bulletin", b); 
 	      }
+	      model.addAttribute("dossier",System.getProperty("user.home"));
           model.addAttribute("personnel", personnel);
 
         return "/administration/paies/bulletin/liste";
@@ -1201,7 +1202,7 @@ public class PaieController {
         float nombreAprendre=nombre-nombreDeCongePris;
         Live live=liveService.findOne((long) 1);
         personnelService.save(personnel);
-        ficheReportService.generateBulletinsPdfReport(""+live.getNom(),""+live.getAdresse(),""+live.getBoite_postale(),""+live.getTelephone_1(),personnel.getMatricule(),personnel.getNom(),personnel.getPrenom(),""+personnel.getSexe(),""+bulletin.getDescription(),""+personnel.getContrat().getProfession().getNom(),""+bulletin.getNbreHeureTravaillees(),""+personnel.getContrat().getDateEmbauche().toString(),""+personnel.getContrat().getSalaireBase(),""+pvaleurs,""+paRetenir,"-"+paRetenir,""+cvaleurs,""+cretenues,"-"+cretenues,""+avaleurs,""+avaleurs,"-"+avaleurs,""+pfvaleurs,"0",""+pfvaleurs,""+ pvvaleurs,"0",""+ pvvaleurs,personnel.getContrat().getModeReglement(),""+netApayer,""+nombre,""+nombreDeCongeNormale,""+nombresDeCongeEnfants,""+nombreDeCongePris,""+nombreAprendre,live,personnel,personnel.getBulletinPaie());
+        ficheReportService.generateBulletinsPdfReport(""+live.getNom(),""+live.getAdresse(),""+live.getBoite_postale(),""+live.getTelephone_1(),personnel.getMatricule(),personnel.getNom(),personnel.getPrenom(),""+personnel.getSexe(),""+bulletin.getDescription(),""+personnel.getContrat().getProfession().getNom(),""+bulletin.getNbreHeureTravaillees(),""+personnel.getContrat().getDateEmbauche().toString(),""+personnel.getContrat().getSalaireBase(),""+pvaleurs,""+paRetenir,"-"+paRetenir,""+cvaleurs,""+cretenues,"-"+cretenues,""+avaleurs,""+avaleurs,"-"+avaleurs,""+pfvaleurs,"0",""+pfvaleurs,""+ pvvaleurs,"0",""+ pvvaleurs,personnel.getContrat().getModeReglement(),""+netApayer,""+nombre,""+nombreDeCongeNormale,""+nombresDeCongeEnfants,""+nombreDeCongePris,""+nombreAprendre,live,personnel,bulletin,personnel.getBulletinPaie());
         bulletinsReportService.generateBulletinsPdfReport(personnel.getBulletinPaie());
         return "redirect:/admin/paies/bulletin/personnel/"+personnel.getId();
     }
@@ -1217,6 +1218,13 @@ public class PaieController {
         model.addAttribute("personnel", personnel);
 
         return "/administration/paies/bulletin/liste";
+    }
+    //la methode qui permet d'afficher le pdf
+    @ResponseBody
+    @GetMapping(value = "/bulletins/fiche", produces = MediaType.APPLICATION_PDF_VALUE)
+    public byte[] getFichePDF(@RequestParam("lid") Long id) throws IOException {
+        BulletinPaie b=bulletinPaieService.findOne(id);
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/rapports/fiche"+b.getId()+".pdf"));
     }
 
 }

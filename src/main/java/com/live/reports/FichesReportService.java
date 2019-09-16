@@ -15,14 +15,14 @@ import java.util.Map;
 
 @Service
 public class FichesReportService {
-    public void generateBulletinsPdfReport(String entreprise, String adresse, String boitePostale, String telephone, String matricule, String nomEmployer, String prenomEmployer, String sexe, String description, String poste, String heurs, String entree, String base, String pvaleur, String pretenue, String ppayer, String dvaleurs, String dretenue, String dpayer, String avaleurs, String aretenue, String apayer, String pfvaleurs, String pfretenue, String pfpayer, String pvvaleurs, String pvretenue, String pvpayer, String reglement, String net, String nomConges, String congesNormale, String congesPlus, String congesPris, String congesRestant, Live live, Personnel personnel, List<BulletinPaie> bulletinList) {
+    public void generateBulletinsPdfReport(String entreprise, String adresse, String boitePostale, String telephone, String matricule, String nomEmployer, String prenomEmployer, String sexe, String description, String poste, String heurs, String entree, String base, String pvaleur, String pretenue, String ppayer, String dvaleurs, String dretenue, String dpayer, String avaleurs, String aretenue, String apayer, String pfvaleurs, String pfretenue, String pfpayer, String pvvaleurs, String pvretenue, String pvpayer, String reglement, String net, String nomConges, String congesNormale, String congesPlus, String congesPris, String congesRestant, Live live, Personnel personnel,BulletinPaie bulletinPaie, List<BulletinPaie> bulletinList) {
         //test
         try {
             InputStream bsReportStream = getClass().getResourceAsStream("/static/reports/fiche.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(bsReportStream);
             JRSaver.saveObject(jasperReport, "fiche.jasper");
             JasperPrint jasperPrint = pointCommun(entreprise, adresse,boitePostale,telephone,matricule,nomEmployer,prenomEmployer, sexe, description, poste, heurs, entree, base,pvaleur,pretenue,ppayer, dvaleurs, dretenue, dpayer,avaleurs,aretenue,apayer,pfvaleurs,pfretenue,pfpayer,pvvaleurs,pvretenue,pvpayer, reglement, net, nomConges, congesNormale, congesPlus, congesPris, congesRestant,live,personnel, jasperReport, bulletinList);
-            JasperExportManager.exportReportToPdfFile(jasperPrint,  System.getProperty("user.home")+"/alo/rapports/fiche.pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint,  System.getProperty("user.home")+"/alo/rapports/fiche"+bulletinPaie.getId()+".pdf");
         }  catch (Exception e) {
             e.printStackTrace();
         }

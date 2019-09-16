@@ -110,7 +110,7 @@
                             <td data-th-text="${bulletin.nbreJoursFeries}"></td>
                             <td data-th-text="${bulletin.nbreCongesPayes}"></td>
                             <td>
-                                <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white print"></i></a>
+                                <a data-th-href="@{/admin/paies/bulletins/fiche?lid={id}(id = ${bulletin.getId()})}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white print"></i></a>
                                 <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-success" title="Modifier le personnel"><i class="halflings-icon white edit"></i></a>
                             </td>
                         </tr>
