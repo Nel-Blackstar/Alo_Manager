@@ -6,7 +6,6 @@ import com.live.core.service.LiveService;
 import com.live.core.service.PersonnelService;
 import com.live.paie.entities.*;
 import com.live.paie.service.*;
-import com.live.reports.BulletinsReportService;
 
 import com.live.reports.FichesReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,11 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 
 @Controller
 @RequestMapping(value = "/admin/paies")
@@ -68,8 +63,6 @@ public class PaieController {
     public CongeService congeService;
     @Autowired
     public BulletinPaieService bulletinPaieService;
-    @Autowired
-    public BulletinsReportService bulletinsReportService;
     @Autowired
     public FichesReportService ficheReportService;
     @Autowired
@@ -1072,138 +1065,137 @@ public class PaieController {
         if (!blts.contains(bulletin)){
             bulletin.setPersonnel(personnel);
         	blts.add(bulletin);
+            //Gestion des éléments de la fiche de paie
+            //prêts
+            float netApayer=personnel.getContrat().getSalaireBase();
+            List<Prets> pretses=personnel.getPrets();
+            float pvaleurs=0;
+            float pretenues=0;
+            int pnombre=0;
+            float paRetenir=0;
+            if(!pretses.isEmpty()) {
+                for(Prets prets : pretses) {
+                    pvaleurs+= prets.getValeur();
+                    pnombre++;
+                    pretenues+=prets.getRetenueMensuelle();
+                }
+                paRetenir=pretenues;
+            }
+            netApayer-=paRetenir;
+            //valeurs total : pvaleurs
+            //retenues total: pretenues
+            //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : paRetenir
+
+            //dêttes
+            List<Credits> credits=personnel.getCredits();
+            float cvaleurs=0;
+            float cretenues=0;
+            int cnombre=0;
+            float caRetenir=0;
+            if(!credits.isEmpty()) {
+                for(Credits c : credits) {
+                    cvaleurs+= c.getValeur();
+                    cnombre++;
+                    cretenues+=c.getRetenue();
+                }
+                caRetenir=cretenues;
+            }
+            netApayer-=caRetenir;
+            //valeurs total : cvaleurs
+            //retenues total: cretenues
+            //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : caRetenir
+
+            //avances
+            List<Avances> avances=personnel.getAvances();
+            float avaleurs=0;
+            int anombre=0;
+            if(!avances.isEmpty()) {
+                for(Avances a : avances) {
+                    avaleurs+= a.getValeur();
+                    anombre++;
+                }
+            }
+            //valeurs total des avances: avaleurs
+
+            //primes fixes
+            List<PrimesFixes> primes=personnel.getPrimesFixes();
+            float pfvaleurs=0;
+            int pfnombre=0;
+            if(!primes.isEmpty()) {
+                for(PrimesFixes pf : primes) {
+                    pfvaleurs+= pf.getValeur();
+                    pfnombre++;
+                }
+            }
+            netApayer+=pfvaleurs;
+            //valeurs total des primes fixes: pfvaleurs
+
+            //primes variables
+
+            List<PrimesVariables> primesV=personnel.getPrimesVariables();
+            float pvvaleurs=0;
+            int pvnombre=0;
+            if(!primesV.isEmpty()) {
+                for(PrimesVariables pv : primesV) {
+                    pvvaleurs+= pv.getValeur();
+                    pvnombre++;
+                }
+            }
+            netApayer+=pvvaleurs;
+            //valeurs total des primes variables: pvvaleurs
+
+            //conges
+            LocalDate date =personnel.getContrat().getDateEmbauche();
+            LocalDate auDay = LocalDate.now();
+            int thisYear=auDay.getYear();
+            int thisMont=auDay.getMonthValue();
+            int thisEmbaucheYear=date.getYear();
+            int thisEmbaucheMont=date.getMonthValue();
+            int nombreAnneeTravail=thisYear-thisEmbaucheYear;
+            int nombreDeMoisDeTravail=0;
+            nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
+
+            int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
+            int nombreDeCongeNormale=nobreTotalEnMois*2;
+            //congé enfant de moins de 5ans
+            List<Enfants> enfants=personnel.getEnfants();
+            int nombresDeCongeEnfants=0;
+            if(!enfants.isEmpty()){
+                for(Enfants e: enfants) {
+                    LocalDate dateNaissanceEnfant=e.getDate_naissance();
+                    int anneNaisEnfant=dateNaissanceEnfant.getYear();
+                    int moisNaisEnfant=dateNaissanceEnfant.getMonthValue();
+                    int ageAnneeEnfant=thisYear-anneNaisEnfant;
+                    int moisEnfant=thisMont-moisNaisEnfant;
+                    int totalMoisEnfant=ageAnneeEnfant*12+moisEnfant;
+                    if(totalMoisEnfant<60) {
+                        nombresDeCongeEnfants+=2*totalMoisEnfant;
+                    }
+                }
+            }
+            //recupération des congés du personnel
+            List<Conge> conges=personnel.getConge();
+            Long nombreDeCongePris=(long) 0;
+            if(!conges.isEmpty()) {
+                for(Conge c : conges) {
+                    Long jours=c.getDuree();
+                    //on exclut les congés de type id 2 martenité
+                    if(c.getTypeConge().getId()!=(long)2) {
+                        nombreDeCongePris+=jours;
+                    }
+                }
+            }
+            //nombre de jours prix: nombreDeCongePris;
+            //nombre de jours dont il a droit depuis son embauche: int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+            int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
+            //nombre de jours de congés a prendre encore depuis le début: float nombreAprendre=nombre-nombreDeCongePris;
+            float nombreAprendre=nombre-nombreDeCongePris;
+            Live live=liveService.findOne((long) 1);
+            ficheReportService.generateBulletinsPdfReport(""+live.getNom(),""+live.getAdresse(),""+live.getBoite_postale(),""+live.getTelephone_1(),personnel.getMatricule(),personnel.getNom(),personnel.getPrenom(),""+personnel.getSexe(),""+bulletin.getDescription(),""+personnel.getContrat().getProfession().getNom(),""+bulletin.getNbreHeureTravaillees(),""+personnel.getContrat().getDateEmbauche().toString(),""+personnel.getContrat().getSalaireBase(),""+pvaleurs,""+paRetenir,"-"+paRetenir,""+cvaleurs,""+cretenues,"-"+cretenues,""+avaleurs,""+avaleurs,"-"+avaleurs,""+pfvaleurs,"0",""+pfvaleurs,""+ pvvaleurs,"0",""+ pvvaleurs,personnel.getContrat().getModeReglement(),""+netApayer,""+nombre,""+nombreDeCongeNormale,""+nombresDeCongeEnfants,""+nombreDeCongePris,""+nombreAprendre,live,personnel,bulletin,personnel.getBulletinPaie());
         }
         session.setAttribute("infos","Enregistrement effectuer");
         personnel.setBulletinPaie(blts);
-        //Gestion des éléments de la fiche de paie
-        //prêts
-        float netApayer=personnel.getContrat().getSalaireBase();
-        List<Prets> pretses=personnel.getPrets();
-        float pvaleurs=0;
-        float pretenues=0;
-        int pnombre=0;
-        float paRetenir=0;
-        if(!pretses.isEmpty()) {
-            for(Prets prets : pretses) {
-                pvaleurs+= prets.getValeur();
-                pnombre++;
-                pretenues+=prets.getRetenueMensuelle();
-            }
-            paRetenir=pretenues;
-        }
-        netApayer-=paRetenir;
-        //valeurs total : pvaleurs
-        //retenues total: pretenues
-        //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : paRetenir
-
-        //dêttes
-        List<Credits> credits=personnel.getCredits();
-        float cvaleurs=0;
-        float cretenues=0;
-        int cnombre=0;
-        float caRetenir=0;
-        if(!credits.isEmpty()) {
-            for(Credits c : credits) {
-                cvaleurs+= c.getValeur();
-                cnombre++;
-                cretenues+=c.getRetenue();
-            }
-            caRetenir=cretenues;
-        }
-        netApayer-=caRetenir;
-        //valeurs total : cvaleurs
-        //retenues total: cretenues
-        //montant a retenir le mois c'est la moyenne sommes des valeurs sur la sommes des retenus : caRetenir
-
-        //avances
-        List<Avances> avances=personnel.getAvances();
-        float avaleurs=0;
-        int anombre=0;
-        if(!avances.isEmpty()) {
-            for(Avances a : avances) {
-                avaleurs+= a.getValeur();
-                anombre++;
-            }
-        }
-        //valeurs total des avances: avaleurs
-
-        //primes fixes
-        List<PrimesFixes> primes=personnel.getPrimesFixes();
-        float pfvaleurs=0;
-        int pfnombre=0;
-        if(!primes.isEmpty()) {
-            for(PrimesFixes pf : primes) {
-                pfvaleurs+= pf.getValeur();
-                pfnombre++;
-            }
-        }
-        netApayer+=pfvaleurs;
-        //valeurs total des primes fixes: pfvaleurs
-
-        //primes variables
-
-        List<PrimesVariables> primesV=personnel.getPrimesVariables();
-        float pvvaleurs=0;
-        int pvnombre=0;
-        if(!primesV.isEmpty()) {
-            for(PrimesVariables pv : primesV) {
-                pvvaleurs+= pv.getValeur();
-                pvnombre++;
-            }
-        }
-        netApayer+=pvvaleurs;
-        //valeurs total des primes variables: pvvaleurs
-
-        //conges
-        LocalDate date =personnel.getContrat().getDateEmbauche();
-        LocalDate auDay = LocalDate.now();
-        int thisYear=auDay.getYear();
-        int thisMont=auDay.getMonthValue();
-        int thisEmbaucheYear=date.getYear();
-        int thisEmbaucheMont=date.getMonthValue();
-        int nombreAnneeTravail=thisYear-thisEmbaucheYear;
-        int nombreDeMoisDeTravail=0;
-        nombreDeMoisDeTravail=thisMont-thisEmbaucheMont;
-
-        int nobreTotalEnMois=nombreAnneeTravail*12+nombreDeMoisDeTravail;
-        int nombreDeCongeNormale=nobreTotalEnMois*2;
-        //congé enfant de moins de 5ans
-        List<Enfants> enfants=personnel.getEnfants();
-        int nombresDeCongeEnfants=0;
-        if(!enfants.isEmpty()){
-            for(Enfants e: enfants) {
-                LocalDate dateNaissanceEnfant=e.getDate_naissance();
-                int anneNaisEnfant=dateNaissanceEnfant.getYear();
-                int moisNaisEnfant=dateNaissanceEnfant.getMonthValue();
-                int ageAnneeEnfant=thisYear-anneNaisEnfant;
-                int moisEnfant=thisMont-moisNaisEnfant;
-                int totalMoisEnfant=ageAnneeEnfant*12+moisEnfant;
-                if(totalMoisEnfant<60) {
-                    nombresDeCongeEnfants+=2*totalMoisEnfant;
-                }
-            }
-        }
-        //recupération des congés du personnel
-        List<Conge> conges=personnel.getConge();
-        Long nombreDeCongePris=(long) 0;
-        if(!conges.isEmpty()) {
-            for(Conge c : conges) {
-                Long jours=c.getDuree();
-                //on exclut les congés de type id 2 martenité
-                if(c.getTypeConge().getId()!=(long)2) {
-                    nombreDeCongePris+=jours;
-                }
-            }
-        }
-        //nombre de jours prix: nombreDeCongePris;
-        //nombre de jours dont il a droit depuis son embauche: int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
-        int nombre=nombreDeCongeNormale+nombresDeCongeEnfants;
-        //nombre de jours de congés a prendre encore depuis le début: float nombreAprendre=nombre-nombreDeCongePris;
-        float nombreAprendre=nombre-nombreDeCongePris;
-        Live live=liveService.findOne((long) 1);
         personnelService.save(personnel);
-        ficheReportService.generateBulletinsPdfReport(""+live.getNom(),""+live.getAdresse(),""+live.getBoite_postale(),""+live.getTelephone_1(),personnel.getMatricule(),personnel.getNom(),personnel.getPrenom(),""+personnel.getSexe(),""+bulletin.getDescription(),""+personnel.getContrat().getProfession().getNom(),""+bulletin.getNbreHeureTravaillees(),""+personnel.getContrat().getDateEmbauche().toString(),""+personnel.getContrat().getSalaireBase(),""+pvaleurs,""+paRetenir,"-"+paRetenir,""+cvaleurs,""+cretenues,"-"+cretenues,""+avaleurs,""+avaleurs,"-"+avaleurs,""+pfvaleurs,"0",""+pfvaleurs,""+ pvvaleurs,"0",""+ pvvaleurs,personnel.getContrat().getModeReglement(),""+netApayer,""+nombre,""+nombreDeCongeNormale,""+nombresDeCongeEnfants,""+nombreDeCongePris,""+nombreAprendre,live,personnel,bulletin,personnel.getBulletinPaie());
-        bulletinsReportService.generateBulletinsPdfReport(personnel.getBulletinPaie());
         return "redirect:/admin/paies/bulletin/personnel/"+personnel.getId();
     }
 
