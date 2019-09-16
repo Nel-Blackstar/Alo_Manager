@@ -1114,6 +1114,9 @@ public class PaieController {
                     avaleurs+= a.getValeur();
                     anombre++;
                 }
+                for(Avances a : avances) {
+                    avancesService.delete(a);
+                }
             }
             //valeurs total des avances: avaleurs
 
@@ -1139,6 +1142,9 @@ public class PaieController {
                 for(PrimesVariables pv : primesV) {
                     pvvaleurs+= pv.getValeur();
                     pvnombre++;
+                }
+                for(PrimesVariables pv : primesV) {
+                    primeVariableService.delete(pv);
                 }
             }
             netApayer+=pvvaleurs;
