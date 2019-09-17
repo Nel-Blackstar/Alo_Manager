@@ -77,7 +77,6 @@
 <!--<script src="/js/jquery-3.3.1.min.js"></script>-->
 
 <script src="/js/jquery-1.9.1.min.js"></script>
-<script src="/js/argon/jquery.min.js"></script>
 <script src="/js/jquery-migrate-1.0.0.min.js"></script>
 <script src="/js/jquery-ui-1.10.0.custom.min.js"></script>
 <script src="/js/jquery.ui.touch-punch.js"></script>
@@ -107,7 +106,6 @@
 <script src="/js/counter.js"></script>
 <script src="/js/retina.js"></script>
 <script src="/js/datetimepicker.js"></script>
-<script src="/js/custom.js"></script>
 <script src="/js/knockout-3.5.0.js"></script>
 <!--script src="/js/editor-up.js"></script-->
 <script src="/js/argon/js.cookie.js"></script>
@@ -120,22 +118,8 @@
 <script src="/js/argon/buttons.print.min.js"></script>
 <!-- Argon JS -->
 <script src="/js/argon/argon.min.js?v=1.1.0"></script>
+<script src="/js/custom.js"></script>
 
-<script>
-
-    $(".buttons-print").hover(function(e){
-
-             $("#datatable-buttons tr  th:last-child").each(function(){$(this).empty()});
-            // Get the column API object
-            var table=$("#datatable-buttons").DataTable();
-           var i=0;
-           $("#datatable-buttons th").each(function(){i++});
-           var column = table.column(i-1);
-            // Toggle the visibility
-             //column.visible( ! column.visible() );
-             //column.remove();
-        });
-</script>
 <!-- end: JavaScript-->
 
 <!-- Begin addon js -->

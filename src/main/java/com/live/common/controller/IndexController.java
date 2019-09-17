@@ -49,6 +49,6 @@ public class IndexController {
     // Acces à l'interface de comptabilité
     @GetMapping("/comptabilites")
     public String comptabilite(Model model) {
-        return "comptables/comptabilite";
+        return "comptables/comptable";
     }
 }

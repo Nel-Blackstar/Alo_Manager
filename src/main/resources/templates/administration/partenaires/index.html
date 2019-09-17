@@ -63,7 +63,7 @@
                         <p>Gestion des prévisions</p>
                         <span class="notification blue"> </span>
                     </a>
-                    <a sec:authorize="hasRole('ROLE_ADMIN')" class="quick-button-small span2" data-th-href="@{'/admin/partenaires/payement'}">
+                    <a sec:authorize="hasAnyRole('ADMIN','COMPTABLE')" class="quick-button-small span2" data-th-href="@{'/admin/partenaires/payement'}">
                         <i class="glyphicons-icon credit_card"></i>
                         <p>Gestion des Payements</p>
                         <span class="notification green"></span>

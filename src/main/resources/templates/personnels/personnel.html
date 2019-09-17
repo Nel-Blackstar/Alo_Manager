@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-personnel}">
 <head>
-    <title>Administration</title>
+    <title>Personnel</title>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -13,67 +13,31 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home"></i>
-                <a href="../../index.html">Administration</a>
+                <a href="#">Personnels</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li><a href="#">Accueil</a></li>
         </ul>
 
-        <div class="row-fluid">
-            <div class="box span12">
-                <div class="box-header">
-                    <h2><i class="halflings-icon cogs"></i><span class="break"></span>Configurations</h2>
-                </div>
-                <div class="box-content">
+                    <div class="row-fluid">
+                        <div class="box span12">
+                            <div class="box-header">
+                                <h2><i class="halflings-icon shopping-cart"></i><span class="break"></span>Gestions</h2>
+                            </div>
+                            <div class="box-content">
 
-                    <a class="quick-button-small span2">
-                        <i class="icon-building"></i>
-                        <p>L'hotel</p>
-                    </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-home"></i>
-                        <p>Batiments</p>
-                        <span class="notification blue">3</span>
-                    </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-step-forward"></i>
-                        <p>Etages</p>
-                        <span class="notification green">15</span>
-                    </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-folder-open"></i>
-                        <p>Logements</p>
-                        <span class="notification green">230</span>
-                    </a>
-
-                    <div class="clearfix"></div>
-                </div>
-            </div><!--/span-->
-        </div><!--/row-->
-
-
-        <div class="row-fluid">
-            <div class="box span12">
-                <div class="box-header">
-                    <h2><i class="halflings-icon shopping-cart"></i><span class="break"></span>Gestion de stock</h2>
-                </div>
-                <div class="box-content">
-
-                    <a class="quick-button-small span2">
-                        <i class="icon-building"></i>
-                        <p>Produits</p>
-                        <span class="notification green">120</span>
-                    </a>
-                    <a class="quick-button-small span2">
-                        <i class="icon-folder-open"></i>
-                        <p>Fournisseurs</p>
-                        <span class="notification green">10</span>
-                    </a>
-
-                    <div class="clearfix"></div>
-                </div>
-            </div><!--/span-->
-        </div><!--/row-->
+                                <a class="quick-button-small span2" data-th-href="@{/admin/formations}">
+                                    <i class="glyphicons-icon vcard"></i>
+                                    <p>Formations</p>
+                                </a>
+                                <a class="quick-button-small span2" data-th-href="@{/admin/partenaire}">
+                                    <i class="glyphicons-icon old_man"></i>
+                                    <p>Partenaires</p>
+                                </a>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div><!--/span-->
+                    </div><!--/row-->
 
     </div>
     <!-- end: Content -->
