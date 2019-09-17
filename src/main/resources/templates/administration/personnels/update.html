@@ -39,6 +39,21 @@
 						</center>
 	                </div>
                     <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/modifier-personnel}" method="post"  data-th-object="${personnel}">
+                        <input type="hidden" data-th-field="*{matricule}">
+                        <input type="hidden" data-th-field="*{compteBancaire}">
+                        <input type="hidden" data-th-field="*{photo}">
+                        <input type="hidden" data-th-field="*{user}">
+                        <input type="hidden" data-th-field="*{details}">
+                        <input type="hidden" data-th-field="*{contrat}">
+                        <input type="hidden" data-th-field="*{prets}">
+                        <input type="hidden" data-th-field="*{credits}">
+                        <input type="hidden" data-th-field="*{avances}">
+                        <input type="hidden" data-th-field="*{primesVariables}">
+                        <input type="hidden" data-th-field="*{primesFixes}">
+                        <input type="hidden" data-th-field="*{enfants}">
+                        <input type="hidden" data-th-field="*{bulletinPaie}">
+                        <input type="hidden" data-th-field="*{entreprise}">
+                        <input type="hidden" data-th-field="*{conge}">
                         <fieldset>
                             <div class="box span6">
                                 <div class="control-group">
