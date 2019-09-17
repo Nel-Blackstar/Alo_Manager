@@ -20,6 +20,7 @@ public class LiveApplication {
         File file3 = new File(System.getProperty("user.home")+"/alo/partenaires");
         File file4 = new File(System.getProperty("user.home")+"/alo/live");
         File file5 = new File(System.getProperty("user.home")+"/alo/personnels");
+        File file6 = new File(System.getProperty("user.home")+"/alo/apprenants");
         if (!file1.exists()) {
              isCreate = file1.mkdirs();
         }
@@ -34,6 +35,9 @@ public class LiveApplication {
         }
         if (!file5.exists()) {
             isCreate = file5.mkdirs();
+        }
+        if (!file6.exists()) {
+            isCreate = file6.mkdirs();
         }
         return isCreate;
     }

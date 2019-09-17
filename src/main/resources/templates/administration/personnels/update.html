@@ -38,7 +38,7 @@
 							    <img data-th-unless="${personnel.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
 						</center>
 	                </div>
-                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/ajouter-personnel}" method="post"  data-th-object="${personnel}">
+                    <form class="form-horizontal" enctype="multipart/form-data" data-th-action="@{/admin/personnels/modifier-personnel}" method="post"  data-th-object="${personnel}">
                         <fieldset>
                             <div class="box span6">
                                 <div class="control-group">
@@ -59,7 +59,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="date_naissance">Date de naissance<span class="text-danger">*</span> </label>
                                     <div class="controls">
-                                        <input type="date" data-th-value="${personnel.date_naissance}" required class="span6 typeahead input-xlarge datepicker" id="date_naissance" name="date_naissance">
+                                        <input type="text" data-th-value="${#dates.format(personnel.date_naissance, 'dd/MM/yyyy')}" required class="span6 typeahead input-xlarge datepicker" id="date_naissance" name="date_naissance">
                                         <span class="text-danger" data-th-errors="${personnel.date_naissance}"></span>
                                     </div>
                                 </div>

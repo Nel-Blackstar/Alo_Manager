@@ -446,6 +446,7 @@ public class PaieController {
      */
     @PostMapping("/credit/save")
     public String saveCredit(HttpSession session, Credits credit) {
+        credit.setValeur(credit.getValeur()+(credit.getValeur()*credit.getTauxInteret()/100));
         Personnel perso = credit.getPersonnel();
         Personnel p = credit.getPersonnel();
         List<Credits> credits = new ArrayList<Credits>();
@@ -1043,7 +1044,7 @@ public class PaieController {
 	      NumberFormat nf = new DecimalFormat("00");
 	      b.setNbreJoursFeries((long) 0);
 	      b.setDescription("Du "+LocalDate.now().getYear()+"-"+nf.format(LocalDate.now().getMonthValue())+"-01 au "+LocalDate.now());
-	      List<BulletinPaie> bulletins=bulletinPaieService.findAll();
+	      List<BulletinPaie> bulletins=personnel.getBulletinPaie();
 	      int nombreBuletin=bulletins.size();
 	      if(nombreBuletin<nobreTotalEnMois) {
 	    	  model.addAttribute("bulletin", b); 
@@ -1079,6 +1080,28 @@ public class PaieController {
                     pnombre++;
                     pretenues+=prets.getRetenueMensuelle();
                 }
+                List<Prets> pe=new ArrayList<>();
+                for(Prets prts : pretses) {
+                    if(prts.getValeur()>=prts.getRetenueMensuelle()){
+                        prts.setValeur(prts.getValeur()-prts.getRetenueMensuelle());
+                        pretsService.save(prts);
+                    }else{
+                        try {
+                            pretenues-=prts.getRetenueMensuelle()-prts.getValeur();
+                            pe.add(prts);
+                        }catch (Exception $e){
+                            System.out.println($e.getMessage());
+                        }
+                    }
+                }
+                if(!pe.isEmpty()){
+                    for (Prets pts : pe){
+                    pretses.remove(pts);
+                    personnel.setPrets(pretses);
+                    personnelService.save(personnel);
+                    pretsService.delete(pts);
+                    }
+                }
                 paRetenir=pretenues;
             }
             netApayer-=paRetenir;
@@ -1098,6 +1121,31 @@ public class PaieController {
                     cnombre++;
                     cretenues+=c.getRetenue();
                 }
+            }
+            if(!credits.isEmpty()) {
+                List<Credits> cd=new ArrayList<>();
+                for(Credits c : credits) {
+                    if(c.getValeur()>=c.getRetenue()){
+                        c.setValeur(c.getValeur()-c.getRetenue());
+                        creditsService.save(c);
+                    }else{
+                        try{
+                            cretenues-=c.getRetenue()-c.getValeur();
+                            cd.add(c);
+                        }catch (Exception $e){
+                            System.out.println($e.getMessage());
+                        }
+
+                    }
+                }
+                if (!cd.isEmpty()){
+                    for (Credits cdt : cd){
+                    credits.remove(cdt);
+                    personnel.setCredits(credits);
+                    personnelService.save(personnel);
+                    creditsService.delete(cdt);
+                    }
+                }
                 caRetenir=cretenues;
             }
             netApayer-=caRetenir;
@@ -1113,6 +1161,13 @@ public class PaieController {
                 for(Avances a : avances) {
                     avaleurs+= a.getValeur();
                     anombre++;
+                }
+            }
+            if(!avances.isEmpty()) {
+                personnel.setAvances(null);
+                personnelService.save(personnel);
+                for(Avances a : avances) {
+                    avancesService.delete(a);
                 }
             }
             //valeurs total des avances: avaleurs
@@ -1142,6 +1197,13 @@ public class PaieController {
                 }
             }
             netApayer+=pvvaleurs;
+            if(!primesV.isEmpty()) {
+                personnel.setPrimesVariables(null);
+                personnelService.save(personnel);
+                for(PrimesVariables pv : primesV) {
+                    primeVariableService.delete(pv);
+                }
+            }
             //valeurs total des primes variables: pvvaleurs
 
             //conges

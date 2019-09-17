@@ -249,9 +249,13 @@ public class AdministrationController {
      */
     @RequestMapping("/delete-banque/{id}")
     public String deleteBanque(HttpSession session,@PathVariable long id) {
-    	Banque banque = banqueService.findOne(id);
-    	banqueService.delete(banque);
-    	session.setAttribute("infos","suppression terminer avec succes!!");
+        try {
+            Banque banque = banqueService.findOne(id);
+            banqueService.delete(banque);
+            session.setAttribute("infos","suppression terminer avec succes!!");
+        }catch (Exception $e) {
+            session.setAttribute("infos","suppression non terminer plusieurs éléments ont été lier a cette banque!!");
+        }
     	return "redirect:/admin/banques";
 
     }
@@ -326,8 +330,14 @@ public class AdministrationController {
     		return "redirect:/admin/formations";
     	}
         Cours cours = coursRepository.findOne(id);
-        coursRepository.delete(cours);
-        session.setAttribute("infos","suppression terminer avec succes!!");
+    	try {
+            coursRepository.delete(cours);
+            session.setAttribute("infos","suppression terminer avec succes!!");
+        }catch (Exception $e){
+    	    System.out.println($e.getMessage());
+            session.setAttribute("infos","suppression non terminer car des actions y ont été éffectuées!!");
+        }
+
         return "redirect:/admin/cours";
     }
     /**

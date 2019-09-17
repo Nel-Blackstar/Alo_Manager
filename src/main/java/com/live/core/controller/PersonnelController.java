@@ -252,19 +252,11 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/personnels/modifier-personnel")
-    public String modifierPersonnel(HttpSession session,Model model,@Valid Personnel personnel,String date, BindingResult bindingResult) {
+    public String modifierPersonnel(HttpSession session,Model model,@Valid Personnel personnel, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
        	 	return "administration/personnels/update";
 	 		}
-    	@SuppressWarnings("deprecation")
-		Date date_naissance=new Date();
-		try {
-			date_naissance = new SimpleDateFormat("dd/MM/yyyy").parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-    	personnel.setDate_naissance(date_naissance);
+    	//Personnel p=personnelService.findOne(personnel.getId());
         chargerLive(model);
         personnelService.save(personnel);
         session.setAttribute("infos","Modification terminer avec succès!!");
@@ -279,8 +271,13 @@ public class PersonnelController extends InitiateController {
 	    */
 	   @RequestMapping("/personnels/supprimer-personnel/{id}")
 	   public String supprimerPersonnel(HttpSession session,Model model, @PathVariable("id") long id) {
-	       personnelService.delete(personnelService.findOne(id));
-	       session.setAttribute("infos","suppression terminer avec succes!!");
+	       try {
+               personnelService.delete(personnelService.findOne(id));
+               session.setAttribute("infos","suppression terminer avec succes!!");
+           }catch (Exception $e){
+               session.setAttribute("infos","suppression non terminer car plusieurs oppérations ont été éffectuées. supprimer lès puis réessayer!!");
+           }
+
 	       return "redirect:/admin/personnels";
 	   }
 
@@ -481,10 +478,13 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/ajouter-apprenant")
-    public String ajouterApprenant(HttpSession session,Model model,@Valid Apprenant apprenant, BindingResult bindingResult) {
+    public String ajouterApprenant(@RequestParam("ph")  MultipartFile photo,HttpSession session,Model model,@Valid Apprenant apprenant, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/index";
 	 	}
+        apprenant.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+        Files.write(Paths.get(System.getProperty("user.home")+"/alo/apprenants/"+apprenant.getPhoto()), photo.getBytes());
+
         Apprenant apprenantToSave = apprenantService.save(apprenant);
         model.addAttribute("state", "post");
         model.addAttribute("info",apprenantToSave.getNom()+" - "+apprenantToSave.getTelephone_1());
@@ -513,14 +513,23 @@ public class PersonnelController extends InitiateController {
      * @return
      */
     @PostMapping(value = "/update-apprenant")
-    public String saveUpdateApprenant(HttpSession session,@Valid Apprenant apprenant, BindingResult bindingResult) {
+    public String saveUpdateApprenant(@RequestParam("ph")  MultipartFile photo,HttpSession session,@Valid Apprenant apprenant, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
        	 return "administration/apprenants/update";
 	 	}
-		session.setAttribute("infos","Modification terminer avec succès!!");
+        apprenant.setPhoto(RandomString.make(10)+photo.getOriginalFilename());
+        Files.write(Paths.get(System.getProperty("user.home")+"/alo/apprenants/"+apprenant.getPhoto()), photo.getBytes());
+
+        session.setAttribute("infos","Modification terminer avec succès!!");
     	apprenantService.save(apprenant);
     	return "redirect:/admin/apprenants";
 
+    }
+    @ResponseBody
+    @GetMapping(value = "/apprenants/images", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getApprenantsPhoto(@RequestParam("aid") Long id) throws IOException {
+        Apprenant a=apprenantService.findOne(id);
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/alo/apprenants/" + a.getPhoto()));
     }
 
     @GetMapping("/apprenants/view/{id}")
@@ -627,6 +636,19 @@ public class PersonnelController extends InitiateController {
      	return"redirect:/admin/formations";
 
      }
+    //Affichage de la session de formation
+    @RequestMapping("/supprimer-formation/{id}")
+    public String supprimerFormation(Model model,@PathVariable long id,HttpSession session) {
+        SessionFormation formation = sessionFormationService.findOne(id);
+        try {
+            sessionFormationService.delete(formation);
+            session.setAttribute("infos","session de formation supprimer avec succès!!");
+        }catch (Exception $e){
+            System.out.println($e.getMessage());
+            session.setAttribute("infos","session de formation non supprimer car des actions y ont été éffectuées. Supprimer lès puis réesayer!!!");
+        }
+        return"redirect:/admin/formations";
+    }
      //Affichage de la session de formation 
      @RequestMapping("/consulter-formation/{id}")
      public String ConsulterPeriode(Model model,@PathVariable long id,HttpSession session) {
@@ -707,7 +729,7 @@ public class PersonnelController extends InitiateController {
          	inscription.setDiplome(diplome);
          	inscriptionService.save(inscription);
          	diplomeService.save(diplome);
-     		session.setAttribute("infos","suppréssion echouer car plusieurs opérations ont déj& été éffectuer!!");
+     		session.setAttribute("infos","suppréssion echouer car plusieurs opérations ont déjà été éffectuées!!");
      		return "redirect:/admin/formation/apprenant";
      	}
      	diplomeService.delete(diplome);
@@ -771,7 +793,7 @@ public class PersonnelController extends InitiateController {
     	diplome.setStatut(true);
     	diplome.setInscrit(inscriptionService.findOne(propietaire));
     	diplomeService.save(diplome);
-    	session.setAttribute("infos","Op�ration terminer avec succ�s!!");
+    	session.setAttribute("infos","Opération terminer avec succès!!");
     	return "redirect:/admin/formation/diplomes";
 	 }
 	 @RequestMapping("/partenaire")

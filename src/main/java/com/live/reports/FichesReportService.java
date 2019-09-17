@@ -28,6 +28,14 @@ public class FichesReportService {
         }
     }
     private JasperPrint pointCommun(String entreprise, String adresse,String boitePostale,String telephone,String matricule,String nomEmployer,String prenomEmployer, String sexe,String description,String poste,String heurs,String entree,String base,String pvaleurs,String pretenue,String ppayer,String dvaleurs,String dretenue,String dpayer,String avaleurs,String aretenue,String apayer,String pfvaleurs,String pfretenue,String pfpayer,String pvvaleurs,String pvretenue,String pvpayer,String reglement,String net,String nomConges,String congesNormale,String congesPlus,String congesPris,String congesRestant, Live live, Personnel personnel,JasperReport jasperReport, List<BulletinPaie> bulletins) throws JRException {
+        if(bulletins.isEmpty()){
+            BulletinPaie b=new BulletinPaie();
+            b.setDescription("test");
+            b.setNbreCongesPayes((long) 0);
+            b.setNbreHeureTravaillees(0);
+            b.setNbreJoursFeries((long) 0);
+            bulletins.add(b);
+        }
         JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(bulletins);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("entreprise", entreprise);

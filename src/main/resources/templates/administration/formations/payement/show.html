@@ -16,14 +16,14 @@
                 <i class="icon-angle-right"></i>
             </li>
             <li>
-                <a data-th-href="@{/admin/partenaire}">formation</a>
+                <a data-th-href="@{/admin/formations/}">formation</a>
                 <i class="icon-angle-right"></i>
             </li>
             <li><span>Payements</span></li>
         </ul>
         <br><br><br>
         <h2>RECAPITULATIF SUR LE CANDIDAT</h2>
-        <img data-th-if="${inscription.apprenant.photo}" class="avatar" width="250" data-th-src="'/admin/apprenants/images?pid='+${inscription.apprenant.id}" alt="..." src="">
+        <img data-th-if="${inscription.apprenant.photo}" class="avatar" width="250" data-th-src="'/admin/apprenants/images?aid='+${inscription.apprenant.id}" alt="..." src="">
         <img data-th-unless="${inscription.apprenant.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
         <ul>
             <li>Matricule : <b data-th-text="${inscription.apprenant.matricule}"></b></li>
