@@ -164,7 +164,7 @@ public class AdministrationController {
         }else{
             // Aucun hotel n'est enregistré
             Live live_fictif = new Live();
-            live_fictif.setNom("Auto ecole par defaut");
+            live_fictif.setNom("Auto-école par défaut");
             model.addAttribute("live", live_fictif);
         }
 
@@ -206,7 +206,7 @@ public class AdministrationController {
         Banque banqueToSave = banqueService.save(banque);
         model.addAttribute("state", "post");
         model.addAttribute("info",banqueToSave.getNom()+" - "+banqueToSave.getTelephone());
-        session.setAttribute("infos","La nouvelle banque vien d'�tre cr�e!!");
+        session.setAttribute("infos","La nouvelle banque vient d'être crée !!");
         return "redirect:/admin/banques";
     }
     /**
@@ -238,7 +238,7 @@ public class AdministrationController {
     		return "administration/banques/update";
 		}
 	   	banqueService.save(banque);
-	   	session.setAttribute("infos","Modification terminer avec succes!!");
+	   	session.setAttribute("infos","Modification terminer avec succès !!");
 	   	return "redirect:/admin/banques";
 
    }
@@ -252,9 +252,9 @@ public class AdministrationController {
         try {
             Banque banque = banqueService.findOne(id);
             banqueService.delete(banque);
-            session.setAttribute("infos","suppression terminer avec succes!!");
+            session.setAttribute("infos","Suppression terminer avec succès !!");
         }catch (Exception $e) {
-            session.setAttribute("infos","suppression non terminer plusieurs éléments ont été lier a cette banque!!");
+            session.setAttribute("infos","Suppression non terminer plusieurs éléments ont été lier à cette banque !!");
         }
     	return "redirect:/admin/banques";
 
@@ -295,7 +295,7 @@ public class AdministrationController {
     	SessionFormation formation = (SessionFormation) session.getAttribute("formationCourante");
     	cours.setFormation(formation);
         coursRepository.save(cours);
-        session.setAttribute("infos","Enregistrement du cours effectuer avec success");
+        session.setAttribute("infos","Enregistrement du cours effectuer avec succès.");
         return "redirect:/admin/cours";
     }
     @RequestMapping("/update-cours/{id}")
@@ -321,7 +321,7 @@ public class AdministrationController {
     		return "redirect:/admin/formations";
     	}
         coursRepository.save(cours);
-        session.setAttribute("infos","Modification terminer avec succes!!");
+        session.setAttribute("infos","Modification terminer avec succès !!");
         return "redirect:/admin/cours";
     }
     @RequestMapping("/cours/delete-cours/{id}")
@@ -332,10 +332,10 @@ public class AdministrationController {
         Cours cours = coursRepository.findOne(id);
     	try {
             coursRepository.delete(cours);
-            session.setAttribute("infos","suppression terminer avec succes!!");
+            session.setAttribute("infos","Suppression terminer avec succès !!");
         }catch (Exception $e){
     	    System.out.println($e.getMessage());
-            session.setAttribute("infos","suppression non terminer car des actions y ont été éffectuées!!");
+            session.setAttribute("infos","Suppression non terminer car des actions y ont été effectuées !!");
         }
 
         return "redirect:/admin/cours";
@@ -376,7 +376,7 @@ public class AdministrationController {
             chapitres.add(chapitre);
             cour.setChapitres(chapitres);
             coursRepository.save(cour);
-            session.setAttribute("infos","Nouveau chapitre enregistré");
+            session.setAttribute("infos","Nouveau chapitre enregistré avec succès !!");
         return "redirect:/admin/consulter-cours/"+cours;
     }
     @RequestMapping("/cours/delete-chap/{id}/{courId}")
@@ -386,9 +386,14 @@ public class AdministrationController {
         List<Chapitre> chaps=cours.getChapitres();
         chaps.remove(chapitre);
         cours.setChapitres(chaps);
-        coursRepository.save(cours);
-        chapitreRepository.delete(chapitre);
-        session.setAttribute("infos","suppression terminer avec succes!!");
+        try{
+            coursRepository.save(cours);
+            chapitreRepository.delete(chapitre);
+            session.setAttribute("infos","Suppression terminer avec succès !!");
+        }catch (Exception $e) {
+            System.out.println($e.getMessage());
+            session.setAttribute("infos","Suppression non terminer car des opérations ont eu lieu sur ce chapitre !!");
+        }
         return "redirect:/admin/consulter-cours/"+id_cour;
     }
 
@@ -440,7 +445,7 @@ public class AdministrationController {
                 }
         }
         if(verif){
-            session.setAttribute("infos","L'apprenant a deja suivie se cours, Merci de verifier vous informations");
+            session.setAttribute("infos","L'apprenant a déjà suivie ce cours, Merci de vérifier vous informations.");
         }else{
             Inscription inscrit = suivre.getInscription();
             List<Suivre> suivs=null;
@@ -452,7 +457,7 @@ public class AdministrationController {
             suivs.add(suivreService.save(suivre));
             inscrit.setSuivres(suivs);
             inscriptionService.save(inscrit);
-            session.setAttribute("infos","enregistrement du suivie de cours effectuer");
+            session.setAttribute("infos","Enregistrement du suivie de cours effectuer.");
         }
         return "redirect:/admin/cours/suivie";
     }
@@ -468,7 +473,7 @@ public class AdministrationController {
             evals.add(evaluationService.save(evaluation));
             inscrit.setEvaluations(evals);
             inscriptionService.save(inscrit);
-            session.setAttribute("infos","enregistrement de l'evaluation de cours effectuer");
+            session.setAttribute("infos","Enregistrement de l'évaluation de cours effectuer.");
         return "redirect:/admin/cours/evaluation";
     }
 }

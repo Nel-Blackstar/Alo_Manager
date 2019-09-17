@@ -196,7 +196,7 @@ public class PaieController {
             Profession profession = professionService.findOne(id);
             this.professionService.delete(profession);
         } catch (Exception e) {
-            session.setAttribute("infos", "Suppression Impossible , Le Personnel Exerce cette Profession, Supprimer le Personnel occupant cette Profession et Réessayer");
+            session.setAttribute("infos", "Suppression Impossible, Le Personnel Exerce cette Profession, Supprimer le Personnel occupant cette Profession et Réessayer");
         }
         session.setAttribute("infos", "Suppression Effectuer !");
         return "redirect:/admin/paies/professions";
@@ -298,7 +298,7 @@ public class PaieController {
             this.typeCongeService.delete(typeConge);
             session.setAttribute("infos", "Suppression Effectuer !");
         } catch (Exception e) {
-            session.setAttribute("infos", "Suppression impossible, Ce type de conger est Utilisé Pour le Personnel");
+            session.setAttribute("infos", "Suppression impossible, Ce type de congé est Utilisé Pour le Personnel");
         }
         return "redirect:/admin/paies/typeConge";
 
@@ -349,7 +349,7 @@ public class PaieController {
             this.typeContratService.delete(typeContrat);
             session.setAttribute("infos", "Suppression Effectuer !");
         } catch (Exception e) {
-            session.setAttribute("infos", "Suppression impossible, Ce type de Contrat est Utilisé Pour des Contract avec le personnel");
+            session.setAttribute("infos", "Suppression impossible, Ce type de Contrat est Utilisé Pour des Contrats avec le personnel");
         }
         return "redirect:/admin/paies/typeContrat";
 
@@ -400,7 +400,7 @@ public class PaieController {
             this.primesFixesService.delete(primeFixe);
             session.setAttribute("infos", "Suppression Effectuer !");
         } catch (Exception e) {
-            session.setAttribute("infos", "Suppression impossible, Cette Prime est Attribuer a un ou plusieur personnel");
+            session.setAttribute("infos", "Suppression impossible, Cette Prime est Attribuer à un ou plusieurs personnels.");
         }
         return "redirect:/admin/paies/primeFixe";
 
