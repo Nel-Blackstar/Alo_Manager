@@ -32,7 +32,7 @@
                     <p class="fg-green" data-th-text="${info}">Info</p>
                 </div>
                 <div class="box-content">
-                        <form class="form-horizontal" data-th-action="@{/admin/ajouter-apprenant}" method="post"  data-th-object="${apprenant}">
+                        <form class="form-horizontal" data-th-action="@{/admin/ajouter-apprenant}" method="post" enctype="multipart/form-data" data-th-object="${apprenant}">
                             <fieldset>
                                 <div class="box span6">
                                     <div class="control-group">
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" for="type_apprenan">Sexe<span class="text-danger">*</span> </label>
+                                        <label class="control-label" for="sexe">Sexe<span class="text-danger">*</span> </label>
                                         <div class="controls">
                                             <select id="sexe" data-rel="chosen" data-th-field="*{sexe}" class="span6 typeahead">
                                                 <option data-th-value="M">Homme</option>
@@ -130,7 +130,7 @@
                                     <div class="control-group">
                                         <label class="control-label" for="photo">Photo<span class="text-danger">*</span> </label>
                                         <div class="controls">
-                                            <input type="file" class="span6 typeahead" id="photo" data-th-field="*{photo}" >
+                                            <input type="file" class="span6 typeahead" required id="photo" name="ph" >
                                             <span class="text-danger" data-th-errors="${apprenant.photo}"></span>
                                         </div>
                                     </div>
@@ -188,6 +188,9 @@
         </div><!--/row-->
     </div>
     <!-- end: Content -->
+
+
+</div>
 </div>
 </body>
 </html>

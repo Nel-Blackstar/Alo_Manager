@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"
       xmlns="http://www.w3.org/1999/xhtml"
-      data-layout-decorate="~{layouts/layout-admin}">
+      data-layout-decorate="~{layouts/layout-admin}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Administration</title>
 </head>
@@ -19,7 +19,7 @@
             <li><a>Accueil</a></li>
         </ul>
 
-        <div class="row-fluid">
+        <div class="row-fluid" sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="box span12">
                 <div class="box-header">
                     <h2><i class="halflings-icon cogs"></i><span class="break"></span>Configurations</h2>
@@ -55,7 +55,7 @@
         <div class="row-fluid">
             <div class="box span12">
                 <div class="box-header">
-                    <h2><i class="halflings-icon shopping-cart"></i><span class="break"></span>Gestion</h2>
+                    <h2><i class="halflings-icon shopping-cart"></i><span class="break"></span>Gestions</h2>
                 </div>
                 <div class="box-content">
 
@@ -63,12 +63,12 @@
                         <i class="glyphicons-icon vcard"></i>
                         <p>Formations</p>
                     </a>
-                    <a class="quick-button-small span2" data-th-href="@{/admin/partenaire}">
+                    <a class="quick-button-small span2" data-th-href="@{/admin/partenaire}" sec:authorize="hasAnyRole('ADMIN','PERSONNEL','RH')">
                         <i class="glyphicons-icon old_man"></i>
                         <p>Partenaires</p>
                     </a>
 
-                    <a class="quick-button-small span2" data-th-href="@{/admin/paie}">
+                    <a class="quick-button-small span2" data-th-href="@{/admin/paies/show}" sec:authorize="hasAnyRole('ADMIN','COMPTABLE','RH')">
                         <i class="glyphicons-icon wallet"></i>
                         <p>Paie</p>
                     </a>

@@ -14,7 +14,7 @@
         </ul>
     </li>
     <li><a data-th-href="@{/admin/formations}"><i class="icon-briefcase"></i><span class="hidden-tablet"> Formations</span></a></li>
-    <li>
+    <li sec:authorize="hasAnyRole('ADMIN','PERSONNEL')">
         <a data-th-href="@{/admin/partenaire}"><i class="icon-user"></i><span class="hidden-tablet">Partenaire</span></a>
     </li>
     <li sec:authorize="hasRole('ROLE_ADMIN')">
@@ -25,17 +25,12 @@
 
 <!-- Menu de ressources humaines -->
 <ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="rh">
-    <li><a data-th-href="@{/reception}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
-    <li><a data-th-href="@{/reception/reservations}"><i class="icon-building"></i><span class="hidden-tablet"> Apprenant</span></a></li>
-    <li><a data-th-href="@{/reception/logements}"><i class="icon-adjust"></i><span class="hidden-tablet"> Personnels</span></a></li>
-    <li><a data-th-href="@{/reception/factures}"><i class="icon-file-alt"></i><span class="hidden-tablet"> Comptable</span></a></li>
+    <li><a data-th-href="@{/admin/formations}"><i class="icon-briefcase"></i><span class="hidden-tablet"> Formations</span></a></li>
     <li>
-        <a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Statistiques </span></a>
-        <ul>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Journalier </span></a></li>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Hebdomadaire </span></a></li>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Mensuel </span></a></li>
-        </ul>
+        <a data-th-href="@{/admin/partenaire}"><i class="icon-user"></i><span class="hidden-tablet">Partenaire</span></a>
+    </li>
+    <li>
+        <a data-th-href="@{/admin/paies/show}"><i class="icon-calendar"></i><span class="hidden-tablet">Paie</span></a>
     </li>
 </ul>
 <!-- Menu du personnel -->
@@ -50,6 +45,7 @@
 <!-- Menu du moniteur -->
 <ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="moniteur">
     <li><a data-th-href="@{/moniteurs}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
+    <li><a data-th-href="@{/admin/formations}"><i class="icon-briefcase"></i><span class="hidden-tablet"> Formations</span></a></li>
 </ul>
 <!-- Fin menu du moniteur -->
 
@@ -57,16 +53,5 @@
 <!-- Menu de comptable -->
 <ul class="nav nav-tabs nav-stacked main-menu" data-th-fragment="comptabilite">
     <li><a data-th-href="@{/restaurant}"><i class="icon-home"></i><span class="hidden-tablet"> Accueil</span></a></li>
-    <li><a data-th-href="@{/restaurant/ligne-ventes}"><i class="icon-building"></i><span class="hidden-tablet"> Lignes de Ventes</span></a></li>
-    <li><a data-th-href="@{/restaurant/ventes}"><i class="icon-adjust"></i><span class="hidden-tablet"> Ventes</span></a></li>
-    <li><a data-th-href="@{/restaurant/factures}"><i class="icon-file-alt"></i><span class="hidden-tablet"> Factures</span></a></li>
-    <li>
-        <a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Statistiques </span></a>
-        <ul>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Journalier </span></a></li>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Hebdomadaire </span></a></li>
-            <li><a class="submenu" ><i class="icon-angle-right"></i><span class="hidden-tablet"> Mensuel </span></a></li>
-        </ul>
-    </li>
 </ul>
 <!-- Fin menu de comptable -->

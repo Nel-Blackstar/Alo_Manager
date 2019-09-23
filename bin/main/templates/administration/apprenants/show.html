@@ -27,6 +27,12 @@
                 </div>
             </div>
             <div class="box-content">
+                <div class="control-group">
+                    <center>
+                        <img data-th-if="${apprenant.photo}" class="avatar" width="250" data-th-src="'/admin/apprenants/images?aid='+${apprenant.getId()}" alt="..." src="">
+                        <img data-th-unless="${apprenant.photo}" class="avatar border-gray" data-th-src="'/assets/img/faces/user.png'" alt="..." src="">
+                    </center>
+                </div>
                 <table class="table table-striped table-bordered" data-th-each="inscription, iStat : ${inscriptions}">
                     <thead>
                     <tr>
@@ -41,9 +47,9 @@
                     <tbody>
                     <tr>
                         <td data-th-text="${iStat.count}"></td>
-                        <td> <b>Du </b>
+                        <td><a data-th-href="@{'/admin/consulter-formation/'+${inscription.getFormation().getId()}}"> <b>Du </b>
                             <span  data-th-text="${inscription.getFormation().getDateDebut()}"></span> <b>Au</b>
-                            <span  data-th-text="${inscription.getFormation().getDateFin()}"></span>
+                            <span  data-th-text="${inscription.getFormation().getDateFin()}"></span> (visiter)</a>
                         </td>
                         <td>
                             <ul>
@@ -71,5 +77,6 @@
         </div>
         <!-- end: Content -->
     </div>
+</div>
 </body>
 </html>

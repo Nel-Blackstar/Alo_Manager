@@ -25,10 +25,10 @@
             </a>
         </div>
 
-        <div class="tiles-grid tiles-group size-1 fg-teal" data-group-title="Apprenant"  sec:authorize="hasRole('ROLE_APPRENANT')">
-            <a data-role="tile" class="bg-teal" data-th-href="@{/admin/apprenants}">
+        <div class="tiles-grid tiles-group size-1 fg-teal" data-group-title="MONITEUR"  sec:authorize="hasRole('ROLE_MONITEUR')">
+            <a data-role="tile" class="bg-teal" data-th-href="@{/moniteurs}">
                 <span class="mif-users icon mif-4x"></span><br>
-                <span class="branding-bar">Apprenant</span>
+                <span class="branding-bar">MONITEUR</span>
             </a>
         </div>
 
@@ -39,10 +39,16 @@
             </a>
         </div>
 
-        <div class="tiles-grid tiles-group size-1 fg-amber" data-group-title="Comptabilité"  sec:authorize="hasRole('ROLE_COMPTABLE')">
+        <div class="tiles-grid tiles-group size-1 fg-amber" data-group-title="Comptable"  sec:authorize="hasRole('ROLE_COMPTABLE')">
             <a data-role="tile" class="bg-amber" data-th-href="@{/comptabilites}">
                 <span class="mif-list-numbered icon mif-4x"></span><br>
-                <span class="branding-bar">Comptabilté</span>
+                <span class="branding-bar">COMPTABLE</span>
+            </a>
+        </div>
+        <div class="tiles-grid tiles-group size-1 fg-green" data-group-title="Ressourse Humaines" sec:authorize="hasRole('ROLE_RH')">
+            <a data-role="tile" class="bg-green" data-th-href="@{/admin}">
+                <span class="mif-list icon users"></span><br>
+                <span class="branding-bar">RH</span>
             </a>
         </div>
     </div>

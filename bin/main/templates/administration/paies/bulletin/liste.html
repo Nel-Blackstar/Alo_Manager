@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       data-layout-decorate="~{layouts/layout-admin}">
 <head>
-    <title>Administration</title>
+    <title>Administration Liste des bulletins de<span data-th-text="${personnel.nom}+' '+${personnel.prenom}"></span></title>
 </head>
 <body>
 <div data-layout-fragment="content">
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="box-content">
-                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable" id="datatable-buttons">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -110,7 +110,7 @@
                             <td data-th-text="${bulletin.nbreJoursFeries}"></td>
                             <td data-th-text="${bulletin.nbreCongesPayes}"></td>
                             <td>
-                                <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white print"></i></a>
+                                <a data-th-href="@{/admin/paies/bulletins/fiche?lid={id}(id = ${bulletin.getId()})}" class="btn btn-small btn-primary" title="Voir le personnel"><i class="halflings-icon white print"></i></a>
                                 <a data-th-href="@{/admin/paies/bulletin/update/personnel/{id}/(id = ${bulletin.getId()})}+${personnel.id}" class="btn btn-small btn-success" title="Modifier le personnel"><i class="halflings-icon white edit"></i></a>
                             </td>
                         </tr>
