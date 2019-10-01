@@ -699,7 +699,7 @@ public class PersonnelController extends InitiateController {
         	 Diplome diplome=new Diplome();
              diplome.setStatut(false);
              diplome.setCategoriePermis(categorie);
-             diplomeService.save(diplome);
+             diplome=diplomeService.save(diplome);
              inscription.setDiplome(diplome);
              inscription.setFormation(formation);
              inscriptionService.save(inscription);
