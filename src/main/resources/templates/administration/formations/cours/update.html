@@ -54,6 +54,8 @@
                                     <label class="control-label"  for="libelle">Libellé<span class="text-danger">*</span> </label>
                                     <div class="controls">
                                         <input type="text" required class="span6 typeahead" id="libelle" data-th-field="*{libelle}" >
+                                        <input type="hidden" data-th-field="*{id}">
+                                        <input type="hidden" data-th-value="${cours.formation.id}" name="idform">
                                         <span class="fg-danger fg-red"data-th-errors="${cours.libelle}"></span>
                                     </div>
                                 </div>
