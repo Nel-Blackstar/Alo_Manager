@@ -313,13 +313,15 @@ public class AdministrationController {
 
     }
     @PostMapping(value = "/cours/update-cours")
-    public String UpdateCours(HttpSession session,@Valid Cours cours, BindingResult bindingResult) {
+    public String UpdateCours(HttpSession session,@Valid Cours cours, BindingResult bindingResult,@RequestParam("idform") Long  idform) {
     	if (bindingResult.hasErrors()) {
     		return "administration/formations/cours/update";
 		}
     	if(session.getAttribute("formationCourante")==null) {
     		return "redirect:/admin/formations";
     	}
+    	cours.setId((Long) cours.getId());
+        cours.setFormation(sessionFormationService.findOne(idform));
         coursRepository.save(cours);
         session.setAttribute("infos","Modification terminer avec succès !!");
         return "redirect:/admin/cours";
